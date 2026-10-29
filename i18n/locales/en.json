@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "homes": "Homes",
+    "about": "About",
+    "contact": "Contact",
+    "book": "Book",
+    "menu": "Menu",
+    "houses": "Homes"
+  },
+  "home": {
+    "brand": "Hello Group",
+    "welcome": "Welcome to Hello Group",
+    "headline": "Five homes. Five corners of Asturias.",
+    "sub": "Rural escapes with the same care, in different locations.",
+    "ctaHomes": "View homes",
+    "ctaContact": "Get in touch",
+    "previewTitle": "Our homes",
+    "previewSub": "Each house has its own character and landscape.",
+    "aboutBandTitle": "Five homes, one standard of care.",
+    "aboutBandCta": "About Hello Group"
+  },
+  "homes": {
+    "title": "Our homes",
+    "subtitle": "Five rural stays in different locations across Asturias.",
+    "capacity": "{n} guests",
+    "bedrooms": "{n} bedrooms",
+    "view": "View home",
+    "amenities": "Amenities",
+    "location": "Location",
+    "gallery": "Gallery",
+    "ask": "Ask about dates",
+    "bookSlot": "Bookings",
+    "bookHint": "The RoomRaccoon booking widget will be embedded here."
+  },
+  "about": {
+    "title": "About us",
+    "lead": "Hello Group brings together five rural homes under one idea: warm hospitality and authentic Asturias.",
+    "body": "Each house sits in a different location, made for guests who want quiet, landscape and a comfortable base to explore from. One team looks after everything, with the same standard of care."
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Tell us what you need and we will get back to you soon.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "house": "Home (optional)",
+    "houseAny": "No preference",
+    "message": "Message",
+    "submit": "Send enquiry",
+    "sending": "Sending…",
+    "success": "Enquiry sent. We will reply soon.",
+    "error": "Could not send. Please try again."
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "tagline": "Rural homes in Asturias"
+  },
+  "admin": {
+    "login": "Admin access",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "dashboard": "Dashboard",
+    "houses": "Homes",
+    "inquiries": "Enquiries",
+    "unread": "Unread",
+    "markRead": "Mark as read",
+    "save": "Save",
+    "saved": "Saved",
+    "newHouse": "New home",
+    "published": "Published",
+    "cover": "Cover image",
+    "upload": "Upload image",
+    "delete": "Delete",
+    "noInquiries": "No enquiries yet.",
+    "back": "Back"
+  },
+  "common": {
+    "loading": "Loading…",
+    "notFound": "Not found",
+    "error": "Something went wrong"
+  }
+}

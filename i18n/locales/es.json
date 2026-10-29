@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "homes": "Casas",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "book": "Reserva",
+    "menu": "Menú",
+    "houses": "Casas"
+  },
+  "home": {
+    "brand": "Hello Group",
+    "welcome": "Bienvenido a Hello Group",
+    "headline": "Cinco casas. Cinco rincones de Asturias.",
+    "sub": "Escapadas rurales con el mismo cuidado, en localizaciones distintas.",
+    "ctaHomes": "Ver casas",
+    "ctaContact": "Contactar",
+    "previewTitle": "Nuestras casas",
+    "previewSub": "Cada casa tiene su propio carácter y paisaje.",
+    "aboutBandTitle": "Cinco casas, un mismo cuidado.",
+    "aboutBandCta": "Conocer Hello Group"
+  },
+  "homes": {
+    "title": "Nuestras casas",
+    "subtitle": "Cinco alojamientos rurales en localizaciones diferentes de Asturias.",
+    "capacity": "{n} personas",
+    "bedrooms": "{n} dormitorios",
+    "view": "Ver casa",
+    "amenities": "Servicios",
+    "location": "Ubicación",
+    "gallery": "Galería",
+    "ask": "Consultar disponibilidad",
+    "bookSlot": "Reservas",
+    "bookHint": "El motor de reservas (RoomRaccoon) se integrará aquí."
+  },
+  "about": {
+    "title": "Nosotros",
+    "lead": "Hello Group reúne cinco casas rurales bajo una misma idea: hospitalidad cercana y Asturias auténtica.",
+    "body": "Cada casa está en una localización distinta, pensada para quienes buscan silencio, paisaje y una base cómoda desde la que explorar. Gestionamos todo desde un mismo equipo, con el mismo estándar de cuidado."
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Cuéntanos qué buscas y te respondemos lo antes posible.",
+    "name": "Nombre",
+    "email": "Email",
+    "phone": "Teléfono",
+    "house": "Casa (opcional)",
+    "houseAny": "Sin preferencia",
+    "message": "Mensaje",
+    "submit": "Enviar consulta",
+    "sending": "Enviando…",
+    "success": "Consulta enviada. Te responderemos pronto.",
+    "error": "No se pudo enviar. Inténtalo de nuevo."
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "tagline": "Casas rurales en Asturias"
+  },
+  "admin": {
+    "login": "Acceso admin",
+    "email": "Email",
+    "password": "Contraseña",
+    "signIn": "Entrar",
+    "signOut": "Salir",
+    "dashboard": "Panel",
+    "houses": "Casas",
+    "inquiries": "Consultas",
+    "unread": "Sin leer",
+    "markRead": "Marcar leída",
+    "save": "Guardar",
+    "saved": "Guardado",
+    "newHouse": "Nueva casa",
+    "published": "Publicada",
+    "cover": "Imagen de portada",
+    "upload": "Subir imagen",
+    "delete": "Eliminar",
+    "noInquiries": "No hay consultas todavía.",
+    "back": "Volver"
+  },
+  "common": {
+    "loading": "Cargando…",
+    "notFound": "No encontrado",
+    "error": "Algo salió mal"
+  }
+}

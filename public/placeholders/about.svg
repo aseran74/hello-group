@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#2f4a3a"/>
+  <path d="M0 360 C160 300 260 420 400 340 C560 250 680 390 800 320 L800 600 L0 600 Z" fill="#1e3228"/>
+  <circle cx="620" cy="140" r="48" fill="#8b9e6b" opacity="0.35"/>
+  <text x="40" y="560" fill="#eef2ef" font-family="Georgia, serif" font-size="28" opacity="0.7">Asturias</text>
+</svg>

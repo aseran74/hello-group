@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#2f4a3a"/>
+  <path d="M0 380 C180 300 320 450 480 360 C620 280 720 400 800 340 L800 600 L0 600 Z" fill="#1e3228" opacity="0.85"/>
+  <rect x="280" y="220" width="240" height="180" fill="#eef2ef" opacity="0.12"/>
+  <text x="40" y="560" fill="#eef2ef" font-family="Georgia, serif" font-size="28" opacity="0.75">Casa 3</text>
+</svg>
