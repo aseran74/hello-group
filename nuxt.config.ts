@@ -6,7 +6,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
-    '@nuxtjs/supabase',
   ],
 
   css: ['~/assets/css/main.css'],
@@ -51,11 +50,6 @@ export default defineNuxtConfig({
     },
   },
 
-  supabase: {
-    redirect: false,
-    types: '~/types/database.types.ts',
-  },
-
   runtimeConfig: {
     resendApiKey: process.env.RESEND_API_KEY || '',
     adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || '',
@@ -74,4 +68,3 @@ export default defineNuxtConfig({
     },
   },
 })
-

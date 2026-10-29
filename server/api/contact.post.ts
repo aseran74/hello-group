@@ -1,4 +1,3 @@
-import { createClient } from '@supabase/supabase-js'
 import { SEED_HOUSES } from '../../app/data/seed-houses'
 import { serverInquiries } from '../utils/server-inquiries'
 
@@ -27,66 +26,24 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid email' })
   }
 
+  const seedHouse = SEED_HOUSES.find((h) => h.id === houseId)
+  const houseName = seedHouse?.name_es || null
+  const inquiryId = `local-${Date.now()}`
+
+  serverInquiries.unshift({
+    id: inquiryId,
+    name,
+    email,
+    phone,
+    message,
+    house_id: houseId,
+    house_name: houseName,
+    locale,
+    status: 'new',
+    created_at: new Date().toISOString(),
+  })
+
   const config = useRuntimeConfig()
-  const supabaseUrl = config.public.supabaseUrl
-  const serviceKey = config.supabaseServiceKey || config.public.supabaseKey
-
-  let inquiryId = `local-${Date.now()}`
-  let houseName: string | null = null
-
-  const configured =
-    Boolean(supabaseUrl && serviceKey)
-    && !supabaseUrl.includes('placeholder')
-    && !String(serviceKey).includes('placeholder')
-
-  if (configured) {
-    const admin = createClient(supabaseUrl, serviceKey)
-    const { data, error } = await admin
-      .from('inquiries')
-      .insert({
-        name,
-        email,
-        phone,
-        message,
-        house_id: houseId,
-        locale,
-        status: 'new',
-      })
-      .select('id, house_id')
-      .single()
-
-    if (error) {
-      throw createError({ statusCode: 500, statusMessage: error.message })
-    }
-    inquiryId = data.id
-
-    if (data.house_id) {
-      const { data: house } = await admin
-        .from('houses')
-        .select('name_es')
-        .eq('id', data.house_id)
-        .maybeSingle()
-      houseName = house?.name_es || null
-    }
-  }
-  else {
-    // Dev fallback without Supabase
-    const seedHouse = SEED_HOUSES.find((h) => h.id === houseId)
-    houseName = seedHouse?.name_es || null
-    serverInquiries.push({
-      id: inquiryId,
-      name,
-      email,
-      phone,
-      message,
-      house_id: houseId,
-      house_name: houseName,
-      locale,
-      status: 'new',
-      created_at: new Date().toISOString(),
-    })
-  }
-
   const notifyTo = config.adminNotifyEmail
   const resendKey = config.resendApiKey
 
@@ -121,12 +78,7 @@ export default defineEventHandler(async (event) => {
     }
   }
   else {
-    console.info('[contact] inquiry received (email skipped — missing RESEND_API_KEY or ADMIN_NOTIFY_EMAIL)', {
-      inquiryId,
-      name,
-      email,
-      houseName,
-    })
+    console.info('[contact] inquiry stored (email skipped)', { inquiryId, name, email, houseName })
   }
 
   return { ok: true, id: inquiryId }

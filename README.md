@@ -1,28 +1,25 @@
 # Hello Group
 
-Web escaparate de casas rurales (Nuxt + Supabase). Cinco casas, i18n ES/EN, panel admin y formulario de consultas.
+Web escaparate de casas rurales (Nuxt). Cinco casas, i18n ES/EN, formulario de consultas y panel admin en modo demo.
 
 ## Desarrollo
 
 ```bash
 npm install
-cp .env.example .env   # rellena claves reales de Supabase
 npm run dev
 ```
 
-Sin Supabase real, la web usa datos seed (`app/data/seed-houses.ts`) y el formulario guarda consultas en memoria del servidor.
+**Supabase no es necesario por ahora.** El contenido de casas sale de `app/data/seed-houses.ts` y las consultas se guardan en memoria del servidor.
 
-## Supabase
+## Cuando actives Supabase
 
-1. Crea un proyecto en Supabase.
-2. Aplica `supabase/migrations/20260329120000_init.sql` (SQL Editor o CLI).
-3. Crea un usuario admin en Authentication.
-4. Rellena `.env` con URL, anon key y service role key.
-5. (Opcional) Resend: `RESEND_API_KEY` + `ADMIN_NOTIFY_EMAIL`.
+1. Descomenta / añade claves en `.env` (ver `.env.example`).
+2. Aplica `supabase/migrations/20260329120000_init.sql`.
+3. Volveremos a conectar Auth, CRUD y Storage.
 
 ## Assets
 
-- Logo: `public/brand/logo.svg` (origen: `public/gemini-svg.svg`)
+- Logo: `public/brand/logo.png`
 - Vídeo, fotos y RoomRaccoon: ver [docs/ASSETS.md](docs/ASSETS.md)
 
 ## Scripts
@@ -33,12 +30,10 @@ Sin Supabase real, la web usa datos seed (`app/data/seed-houses.ts`) y el formul
 
 ## Vercel
 
-El preset Nitro es `vercel`. Variables de entorno en el proyecto Vercel:
+Preset Nitro: `vercel`. Repo: `aseran74/hello-group`.
 
-- `SUPABASE_URL`
-- `SUPABASE_KEY` (anon)
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `RESEND_API_KEY` (opcional)
-- `ADMIN_NOTIFY_EMAIL` (opcional)
+Variables opcionales en Vercel:
 
-Sin Supabase real, la web usa seed local. Conecta el repo `aseran74/hello-group` en Vercel para deploys automáticos en cada push.
+- `RESEND_API_KEY`
+- `ADMIN_NOTIFY_EMAIL`
+- (más adelante) `SUPABASE_URL`, `SUPABASE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
