@@ -2,7 +2,7 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const VIDEO_SRC = '/Apple/gemini_generated_video_3ae6ed2e.mp4'
+const VIDEO_SRC = '/Apple/Video-hero.mp4'
 const TOTAL_FRAMES = 10
 const FRAME_SEQUENCE = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
   const n = String(i + 1).padStart(3, '0')
