@@ -2,6 +2,8 @@
   "nav": {
     "homes": "Homes",
     "about": "About",
+    "features": "Features",
+    "blog": "Blog",
     "contact": "Contact",
     "book": "Book",
     "menu": "Menu",
@@ -27,11 +29,15 @@
     "bathrooms": "{n} baths",
     "view": "View home",
     "amenities": "Amenities",
+    "nearbyServices": "Nearby services",
+    "nearbyServicesSub": "Activities and ideas close to the stay.",
     "features": "Features",
     "description": "Description",
     "location": "Location",
     "gallery": "Gallery",
     "viewMap": "View map",
+    "mapPending": "The Google map will activate once you add the API key.",
+    "mapUnavailable": "The map could not be loaded.",
     "ask": "Ask about dates",
     "bookSlot": "Bookings",
     "bookHint": "The RoomRaccoon booking widget will be embedded here.",
@@ -49,6 +55,75 @@
     "title": "About us",
     "lead": "Hello Group brings together charming rural homes under one idea: warm hospitality and stays with character.",
     "body": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo. Each home sits in a different location, with the same standard of care and one team behind it all."
+  },
+  "featuresPage": {
+    "title": "Features",
+    "lead": "What you will find in our homes: comforts designed for an easy, flexible stay with character.",
+    "items": [
+      {
+        "title": "Pet friendly",
+        "body": "Your pets are welcome. Let us know when you book so we can prepare everything calmly."
+      },
+      {
+        "title": "Wi‑Fi",
+        "body": "Connection in every home for remote work or everyday life on the road."
+      },
+      {
+        "title": "Equipped kitchen",
+        "body": "Everything you need to cook as you would at home."
+      },
+      {
+        "title": "Parking / garage",
+        "body": "Convenient parking space, depending on the home."
+      },
+      {
+        "title": "Heating",
+        "body": "A warm atmosphere at any time of year."
+      },
+      {
+        "title": "Garden or terrace",
+        "body": "Outdoor spaces to unwind in the open air."
+      }
+    ]
+  },
+  "blog": {
+    "title": "Blog",
+    "lead": "Ideas, destinations and life around our charming rural homes.",
+    "readMore": "Read more",
+    "back": "Back to blog",
+    "posts": [
+      {
+        "slug": "casas-rurales-con-encanto",
+        "title": "Charming rural homes: how we like to travel",
+        "excerpt": "Why we choose stays with character and how Hello Group looks after every detail.",
+        "date": "2026-03-12",
+        "body": [
+          "A rural stay is more than sleeping elsewhere: it is a change of pace, a look at the landscape and the feeling of home away from home.",
+          "Hello Group brings together distinctive stays — Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo — under the same warm hospitality.",
+          "If you want a getaway with character, start by choosing the home that fits your plan and tell us what you need."
+        ]
+      },
+      {
+        "slug": "viajar-con-mascota",
+        "title": "Travelling with a pet: what to keep in mind",
+        "excerpt": "Practical tips for a stress-free pet-friendly escape for you and your four-legged companion.",
+        "date": "2026-02-20",
+        "body": [
+          "Travelling with a pet works best with a little planning: tell us when you book, bring their bed or blanket, and respect each home’s house rules.",
+          "Our pet-friendly stays are meant so nobody is left out of the plan. If you have questions about outdoor space or rules, write to us before you arrive."
+        ]
+      },
+      {
+        "slug": "fin-de-semana-en-asturias",
+        "title": "A weekend in Asturias",
+        "excerpt": "Hiking, coast and good food around Hello Astur.",
+        "date": "2026-01-18",
+        "body": [
+          "Asturias invites you to mix mountains and sea within a short drive. From Hello Astur you can plan trails, nearby beaches and local food worth the stop.",
+          "Leave room to do nothing: often the best plan is simply staying in."
+        ]
+      }
+    ]
   },
   "contact": {
     "title": "Contact",

@@ -1,10 +1,15 @@
-import type { House, HouseAmenity, LocalizedHouse } from '~/types/house'
+import type { House, HouseActivity, HouseAmenity, LocalizedHouse } from '~/types/house'
 
 export function localizeHouse(house: House, locale: string): LocalizedHouse {
   const isEn = locale.startsWith('en')
   const amenities = (house.amenities || []).map((a: HouseAmenity) => ({
     key: a.key,
     label: isEn ? a.label_en : a.label_es,
+  }))
+  const activities = (house.activities || []).map((a: HouseActivity) => ({
+    key: a.key,
+    label: isEn ? a.label_en : a.label_es,
+    detail: isEn ? a.detail_en : a.detail_es,
   }))
 
   const map_url =
@@ -27,6 +32,7 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
     price_label: isEn ? house.price_label_en : house.price_label_es,
     garage: house.garage,
     amenities,
+    activities,
     cover_image_url: house.cover_image_url,
     lat: house.lat,
     lng: house.lng,

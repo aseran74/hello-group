@@ -36,4 +36,5 @@ Variables opcionales en Vercel:
 
 - `RESEND_API_KEY`
 - `ADMIN_NOTIFY_EMAIL`
+- `NUXT_PUBLIC_GOOGLE_MAPS_API_KEY` (mapa en fichas)
 - (más adelante) `SUPABASE_URL`, `SUPABASE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`

@@ -15,6 +15,8 @@ const year = new Date().getFullYear()
       </div>
       <nav class="flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/75">
         <NuxtLink :to="localePath('/casas')" class="transition hover:text-white">{{ t('nav.homes') }}</NuxtLink>
+        <NuxtLink :to="localePath('/caracteristicas')" class="transition hover:text-white">{{ t('nav.features') }}</NuxtLink>
+        <NuxtLink :to="localePath('/blog')" class="transition hover:text-white">{{ t('nav.blog') }}</NuxtLink>
         <NuxtLink :to="localePath('/nosotros')" class="transition hover:text-white">{{ t('nav.about') }}</NuxtLink>
         <NuxtLink :to="localePath('/contacto')" class="transition hover:text-white">{{ t('nav.contact') }}</NuxtLink>
         <NuxtLink

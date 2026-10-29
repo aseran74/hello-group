@@ -1,9 +1,23 @@
-import type { House, HouseImage } from '~/types/house'
+import type { House, HouseActivity, HouseImage } from '~/types/house'
 
 const amenity = (key: string, label_es: string, label_en: string) => ({
   key,
   label_es,
   label_en,
+})
+
+const activity = (
+  key: string,
+  label_es: string,
+  label_en: string,
+  detail_es?: string,
+  detail_en?: string,
+): HouseActivity => ({
+  key,
+  label_es,
+  label_en,
+  detail_es,
+  detail_en,
 })
 
 function gallery(houseId: string, paths: string[]): HouseImage[] {
@@ -16,6 +30,37 @@ function gallery(houseId: string, paths: string[]): HouseImage[] {
     sort_order: i + 1,
   }))
 }
+
+const ASTURIAS_ACTIVITIES: HouseActivity[] = [
+  activity('mtb', 'Mountain bike', 'Mountain bike', 'Rutas por montaña y costa', 'Mountain and coastal trails'),
+  activity('surf', 'Surf', 'Surf', 'Playas del Cantábrico cercanas', 'Nearby Cantabrian beaches'),
+  activity('hiking', 'Senderismo', 'Hiking', 'Senda costera y valles', 'Coastal path and valleys'),
+  activity('canoe', 'Piragüismo', 'Canoeing', 'Ríos y descensos suaves', 'Rivers and gentle descents'),
+  activity('food', 'Gastronomía local', 'Local food', 'Sidra, marisco y cocina asturiana', 'Cider, seafood and Asturian cuisine'),
+]
+
+const CANILLAS_ACTIVITIES: HouseActivity[] = [
+  activity('hiking', 'Senderismo', 'Hiking', 'Sierras y pueblos blancos', 'Hills and white villages'),
+  activity('beach', 'Playa', 'Beach', 'Costa del Sol a poca distancia', 'Costa del Sol nearby'),
+  activity('mtb', 'Mountain bike', 'Mountain bike', 'Pistas y caminos rurales', 'Rural tracks and trails'),
+  activity('wine', 'Enoturismo', 'Wine tourism', 'Bodegas y miradores', 'Wineries and viewpoints'),
+  activity('food', 'Gastronomía', 'Food', 'Cocina andaluza y mercados', 'Andalusian cuisine and markets'),
+]
+
+const MADRID_ACTIVITIES: HouseActivity[] = [
+  activity('museum', 'Visita al Prado', 'Visit El Prado', 'Museo Nacional del Prado', 'Museo Nacional del Prado'),
+  activity('museum', 'Reina Sofía / Thyssen', 'Reina Sofía / Thyssen', 'Eje del arte en el Paseo del Prado', 'Art mile on Paseo del Prado'),
+  activity('park', 'Parque del Retiro', 'Retiro Park', 'Paseo, barcas y jardines', 'Walks, boats and gardens'),
+  activity('city', 'Centro de Madrid', 'Madrid city centre', 'Sol, Gran Vía y barrios con encanto', 'Sol, Gran Vía and charming neighbourhoods'),
+  activity('food', 'Tapas y mercados', 'Tapas and markets', 'San Miguel, Chamberí, Malasaña…', 'San Miguel, Chamberí, Malasaña…'),
+]
+
+const SINCELEJO_ACTIVITIES: HouseActivity[] = [
+  activity('city', 'Vida local', 'Local life', 'Paseo y ambiente de ciudad', 'City walks and local vibe'),
+  activity('food', 'Gastronomía', 'Food', 'Cocina local y mercados', 'Local cuisine and markets'),
+  activity('park', 'Espacios al aire libre', 'Outdoor spaces', 'Parques y zonas verdes cercanas', 'Nearby parks and green areas'),
+  activity('hiking', 'Excursiones', 'Day trips', 'Salidas cortas por el entorno', 'Short trips around the area'),
+]
 
 /** Contenido local — fotos en public/Fotos */
 export const SEED_HOUSES: House[] = [
@@ -42,6 +87,7 @@ export const SEED_HOUSES: House[] = [
     price_label_en: 'Ask for rates',
     garage: true,
     amenities: [
+      amenity('pet', 'Pet friendly', 'Pet friendly'),
       amenity('wifi', 'Wi‑Fi', 'Wi‑Fi'),
       amenity('kitchen', 'Cocina equipada', 'Equipped kitchen'),
       amenity('heating', 'Calefacción', 'Heating'),
@@ -49,6 +95,7 @@ export const SEED_HOUSES: House[] = [
       amenity('parking', 'Garaje / parking', 'Garage / parking'),
       amenity('fireplace', 'Chimenea', 'Fireplace'),
     ],
+    activities: ASTURIAS_ACTIVITIES,
     cover_image_url: '/Fotos/Astur/462143687.jpg',
     lat: 43.36,
     lng: -5.85,
@@ -88,6 +135,7 @@ export const SEED_HOUSES: House[] = [
     price_label_en: 'Ask for rates',
     garage: false,
     amenities: [
+      amenity('pet', 'Pet friendly', 'Pet friendly'),
       amenity('wifi', 'Wi‑Fi', 'Wi‑Fi'),
       amenity('kitchen', 'Cocina equipada', 'Equipped kitchen'),
       amenity('ac', 'Aire acondicionado', 'Air conditioning'),
@@ -95,6 +143,7 @@ export const SEED_HOUSES: House[] = [
       amenity('tv', 'TV', 'TV'),
       amenity('washer', 'Lavadora', 'Washing machine'),
     ],
+    activities: CANILLAS_ACTIVITIES,
     cover_image_url: '/Fotos/Canillas/Cibeles/457537558.jpg',
     lat: 36.87,
     lng: -3.99,
@@ -134,6 +183,7 @@ export const SEED_HOUSES: House[] = [
     price_label_en: 'Ask for rates',
     garage: true,
     amenities: [
+      amenity('pet', 'Pet friendly', 'Pet friendly'),
       amenity('wifi', 'Wi‑Fi', 'Wi‑Fi'),
       amenity('kitchen', 'Cocina equipada', 'Equipped kitchen'),
       amenity('ac', 'Aire acondicionado', 'Air conditioning'),
@@ -141,6 +191,7 @@ export const SEED_HOUSES: House[] = [
       amenity('parking', 'Garaje incluido', 'Garage included'),
       amenity('tv', 'TV', 'TV'),
     ],
+    activities: MADRID_ACTIVITIES,
     cover_image_url: '/Fotos/Mediterraneo/Madrid-1/430760121.jpg',
     lat: 40.43,
     lng: -3.67,
@@ -180,6 +231,7 @@ export const SEED_HOUSES: House[] = [
     price_label_en: 'Ask for rates',
     garage: false,
     amenities: [
+      amenity('pet', 'Pet friendly', 'Pet friendly'),
       amenity('wifi', 'Wi‑Fi', 'Wi‑Fi'),
       amenity('kitchen', 'Cocina equipada', 'Equipped kitchen'),
       amenity('heating', 'Calefacción', 'Heating'),
@@ -187,6 +239,7 @@ export const SEED_HOUSES: House[] = [
       amenity('tv', 'TV', 'TV'),
       amenity('washer', 'Lavadora', 'Washing machine'),
     ],
+    activities: MADRID_ACTIVITIES,
     cover_image_url: '/Fotos/Madrid-Norte/912264196.jpg',
     lat: 40.49,
     lng: -3.69,
@@ -226,6 +279,7 @@ export const SEED_HOUSES: House[] = [
     price_label_en: 'Ask for rates',
     garage: true,
     amenities: [
+      amenity('pet', 'Pet friendly', 'Pet friendly'),
       amenity('wifi', 'Wi‑Fi', 'Wi‑Fi'),
       amenity('kitchen', 'Cocina equipada', 'Equipped kitchen'),
       amenity('ac', 'Aire acondicionado', 'Air conditioning'),
@@ -233,6 +287,7 @@ export const SEED_HOUSES: House[] = [
       amenity('garden', 'Jardín', 'Garden'),
       amenity('parking', 'Garaje incluido', 'Garage included'),
     ],
+    activities: SINCELEJO_ACTIVITIES,
     cover_image_url: '/Fotos/Sincelejo/593765313.jpg',
     lat: 9.3,
     lng: -75.39,

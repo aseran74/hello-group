@@ -131,34 +131,36 @@ useSeoMeta({
             </ul>
           </div>
 
-          <div>
+          <div v-if="house.activities.length">
             <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
-              {{ t('homes.location') }}
+              {{ t('homes.nearbyServices') }}
             </h2>
-            <p class="mt-3 text-mute">{{ house.address }}</p>
-            <div class="mt-5 overflow-hidden rounded-[1.25rem] border border-line bg-line/40">
-              <iframe
-                v-if="house.lat != null && house.lng != null"
-                class="aspect-[16/10] w-full border-0 grayscale"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                :src="`https://maps.google.com/maps?q=${house.lat},${house.lng}&z=14&output=embed`"
-                :title="house.name"
-              />
-              <div v-else class="flex aspect-[16/10] items-center justify-center text-sm text-mute">
-                {{ house.location }}
-              </div>
-            </div>
-            <a
-              v-if="house.map_url"
-              :href="house.map_url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-secondary mt-4"
-            >
-              {{ t('homes.viewMap') }}
-            </a>
+            <p class="mt-2 text-sm text-mute">{{ t('homes.nearbyServicesSub') }}</p>
+            <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+              <li
+                v-for="item in house.activities"
+                :key="`${item.key}-${item.label}`"
+                class="flex items-start gap-3 rounded-2xl border border-line bg-paper-elevated px-4 py-4 text-ink"
+              >
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-mist">
+                  <ActivityIcon :name="item.key" />
+                </span>
+                <span>
+                  <span class="block font-semibold">{{ item.label }}</span>
+                  <span v-if="item.detail" class="mt-0.5 block text-sm text-mute">{{ item.detail }}</span>
+                </span>
+              </li>
+            </ul>
           </div>
+
+          <HouseMap
+            :name="house.name"
+            :address="house.address"
+            :location="house.location"
+            :lat="house.lat"
+            :lng="house.lng"
+            :map-url="house.map_url"
+          />
         </div>
 
         <aside class="space-y-5 lg:sticky lg:top-28 lg:self-start">

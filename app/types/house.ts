@@ -4,6 +4,14 @@ export interface HouseAmenity {
   label_en: string
 }
 
+export interface HouseActivity {
+  key: string
+  label_es: string
+  label_en: string
+  detail_es?: string
+  detail_en?: string
+}
+
 export interface HouseImage {
   id: string
   house_id: string
@@ -34,6 +42,7 @@ export interface House {
   price_label_en: string
   garage: boolean
   amenities: HouseAmenity[]
+  activities: HouseActivity[]
   cover_image_url: string | null
   lat: number | null
   lng: number | null
@@ -72,6 +81,7 @@ export type LocalizedHouse = {
   price_label: string
   garage: boolean
   amenities: { key: string; label: string }[]
+  activities: { key: string; label: string; detail?: string }[]
   cover_image_url: string | null
   lat: number | null
   lng: number | null

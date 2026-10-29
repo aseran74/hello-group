@@ -2,6 +2,8 @@
   "nav": {
     "homes": "Casas",
     "about": "Nosotros",
+    "features": "Características",
+    "blog": "Blog",
     "contact": "Contacto",
     "book": "Reserva",
     "menu": "Menú",
@@ -27,11 +29,15 @@
     "bathrooms": "{n} baños",
     "view": "Ver casa",
     "amenities": "Comodidades",
+    "nearbyServices": "Servicios cercanos",
+    "nearbyServicesSub": "Actividades y propuestas cerca del alojamiento.",
     "features": "Características",
     "description": "Descripción",
     "location": "Ubicación",
     "gallery": "Galería",
     "viewMap": "Ver mapa",
+    "mapPending": "El mapa de Google se activará cuando configures la API key.",
+    "mapUnavailable": "No se pudo cargar el mapa.",
     "ask": "Consultar disponibilidad",
     "bookSlot": "Reservas",
     "bookHint": "El motor de reservas (RoomRaccoon) se integrará aquí.",
@@ -49,6 +55,75 @@
     "title": "Nosotros",
     "lead": "Hello Group reúne casas rurales con encanto bajo una misma idea: hospitalidad cercana y estancias con carácter.",
     "body": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo. Cada casa está en una localización distinta, con el mismo estándar de cuidado y un mismo equipo detrás."
+  },
+  "featuresPage": {
+    "title": "Características",
+    "lead": "Lo que encontrarás en nuestras casas: comodidades pensadas para una estancia cómoda, flexible y con encanto.",
+    "items": [
+      {
+        "title": "Pet friendly",
+        "body": "Tus mascotas son bienvenidas. Avísanos al reservar para preparar todo con calma."
+      },
+      {
+        "title": "Wi‑Fi",
+        "body": "Conexión en todas las casas para teletrabajar o compartir el día a día."
+      },
+      {
+        "title": "Cocina equipada",
+        "body": "Todo lo esencial para cocinar como en casa durante la estancia."
+      },
+      {
+        "title": "Parking / garaje",
+        "body": "Espacio para aparcar con comodidad, según la casa."
+      },
+      {
+        "title": "Calefacción",
+        "body": "Ambiente cálido en cualquier época del año."
+      },
+      {
+        "title": "Jardín o terraza",
+        "body": "Espacios exteriores para desconectar al aire libre."
+      }
+    ]
+  },
+  "blog": {
+    "title": "Blog",
+    "lead": "Ideas, destinos y vida en nuestras casas rurales con encanto.",
+    "readMore": "Leer más",
+    "back": "Volver al blog",
+    "posts": [
+      {
+        "slug": "casas-rurales-con-encanto",
+        "title": "Casas rurales con encanto: nuestra forma de viajar",
+        "excerpt": "Por qué elegimos alojamientos con carácter y cómo Hello Group cuida cada detalle de la estancia.",
+        "date": "2026-03-12",
+        "body": [
+          "Viajar a una casa rural no es solo dormir fuera: es cambiar el ritmo, mirar el paisaje y sentirte como en casa lejos de casa.",
+          "En Hello Group reunimos alojamientos con personalidad —Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo— bajo el mismo criterio de hospitalidad cercana.",
+          "Si buscas una escapada con encanto, empieza por elegir la casa que mejor encaja con tu plan y cuéntanos qué necesitas."
+        ]
+      },
+      {
+        "slug": "viajar-con-mascota",
+        "title": "Viajar con mascota: qué tener en cuenta",
+        "excerpt": "Consejos prácticos para una escapada pet friendly sin estrés para ti ni para tu compañero de cuatro patas.",
+        "date": "2026-02-20",
+        "body": [
+          "Viajar con mascota funciona mejor con un poco de anticipación: avisa al reservar, lleva su cama o manta y respeta las normas de cada casa.",
+          "Nuestras estancias pet friendly están pensadas para que nadie se quede fuera del plan. Si tienes dudas sobre espacio exterior o normas, escríbenos antes de llegar."
+        ]
+      },
+      {
+        "slug": "fin-de-semana-en-asturias",
+        "title": "Un fin de semana en Asturias",
+        "excerpt": "Senderismo, costa y buena mesa alrededor de Hello Astur.",
+        "date": "2026-01-18",
+        "body": [
+          "Asturias invita a combinar montaña y mar en pocos kilómetros. Desde Hello Astur puedes plantear rutas, playas cercanas y una cocina local que merece parar el coche.",
+          "Guarda tiempo libre para no llenar el fin de semana de prisas: a menudo el mejor plan es simplemente quedarte en la casa."
+        ]
+      }
+    ]
   },
   "contact": {
     "title": "Contacto",
