@@ -12,19 +12,19 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Welcome to Hello Group",
-    "headline": "Charming rural homes",
+    "headline": "Urban hotels and charming rural homes",
     "sub": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "ctaHomes": "View homes",
     "ctaContact": "Get in touch",
     "scrollHint": "Scroll",
     "previewTitle": "Our homes",
-    "previewSub": "Charming rural homes, each with its own character.",
-    "aboutBandTitle": "Charming rural homes",
+    "previewSub": "Urban hotels and charming rural homes, each with its own character.",
+    "aboutBandTitle": "Urban hotels and charming rural homes",
     "aboutBandCta": "About Hello Group"
   },
   "homes": {
     "title": "Our homes",
-    "subtitle": "Charming rural homes: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
+    "subtitle": "Urban hotels and charming rural homes: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "capacity": "{n} guests",
     "bedrooms": "{n} beds",
     "bathrooms": "{n} baths",
@@ -54,7 +54,7 @@
   },
   "about": {
     "title": "About us",
-    "lead": "Hello Group brings together charming rural homes under one idea: warm hospitality and stays with character.",
+    "lead": "Hello Group brings together urban hotels and charming rural homes under one idea: warm hospitality and stays with character.",
     "body": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo. Each home sits in a different location, with the same standard of care and one team behind it all."
   },
   "featuresPage": {
@@ -89,17 +89,17 @@
   },
   "blog": {
     "title": "Blog",
-    "lead": "Ideas, destinations and life around our charming rural homes.",
+    "lead": "Ideas, destinations and life around our urban hotels and charming rural homes.",
     "readMore": "Read more",
     "back": "Back to blog",
     "posts": [
       {
         "slug": "casas-rurales-con-encanto",
-        "title": "Charming rural homes: how we like to travel",
+        "title": "Urban hotels and charming rural homes: how we like to travel",
         "excerpt": "Why we choose stays with character and how Hello Group looks after every detail.",
         "date": "2026-03-12",
         "body": [
-          "A rural stay is more than sleeping elsewhere: it is a change of pace, a look at the landscape and the feeling of home away from home.",
+          "An urban hotel or a rural stay is more than sleeping elsewhere: it is a change of pace and the feeling of home away from home.",
           "Hello Group brings together distinctive stays — Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo — under the same warm hospitality.",
           "If you want a getaway with character, start by choosing the home that fits your plan and tell us what you need."
         ]
@@ -142,7 +142,7 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "tagline": "Charming rural homes"
+    "tagline": "Urban hotels and charming rural homes"
   },
   "admin": {
     "login": "Admin access",

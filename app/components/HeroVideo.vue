@@ -2,165 +2,315 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const slides = [
-  '/Fotos/Ayuntamiento/Gemini_Generated_Image_pzlqf5pzlqf5pzlq.jfif',
-  '/Fotos/Ayuntamiento/Gemini_Generated_Image_y8z2w9y8z2w9y8z2.jfif',
-  '/Fotos/Ayuntamiento/ilovetattoos-architecture-3269011.jpg',
-] as const
+const VIDEO_SRC = '/Apple/gemini_generated_video_3ae6ed2e.mp4'
+const TOTAL_FRAMES = 10
+const FRAME_SEQUENCE = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
+  const n = String(i + 1).padStart(3, '0')
+  return `/Apple/frame_${n}.jpg`
+})
+
+/** Altura del runway de scroll en viewports tras el vídeo */
+const SCROLL_HEIGHT_VH = 180
 
 const sectionRef = ref<HTMLElement | null>(null)
-const active = ref(0)
+const canvasRef = ref<HTMLCanvasElement | null>(null)
+const videoRef = ref<HTMLVideoElement | null>(null)
+
+const images: (HTMLImageElement | undefined)[] = []
+let currentFrame = 0
+
+const isLoaded = ref(false)
+const videoEnded = ref(false)
+const videoPaused = ref(false)
+const progress = ref(0)
 const reduceMotion = ref(false)
-const animating = ref(false)
+const userPaused = ref(false)
 
-const COOLDOWN_MS = 900
-const lastIndex = slides.length - 1
+function drawFrame(index: number) {
+  const canvas = canvasRef.value
+  const img = images[index]
+  if (!canvas || !img?.complete || !img.naturalWidth) return
 
-let unlockTimer: ReturnType<typeof setTimeout> | null = null
-let touchStartY = 0
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
 
-function isHeroPinned() {
-  const el = sectionRef.value
-  if (!el) return false
-  const top = el.getBoundingClientRect().top
-  return top > -40 && top < 40 && window.scrollY < 40
-}
+  const parent = canvas.parentElement
+  const w = parent?.clientWidth || window.innerWidth
+  const h = parent?.clientHeight || window.innerHeight
+  const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
-function lockBriefly() {
-  animating.value = true
-  if (unlockTimer) clearTimeout(unlockTimer)
-  unlockTimer = setTimeout(() => {
-    animating.value = false
-  }, COOLDOWN_MS)
-}
+  canvas.width = Math.floor(w * dpr)
+  canvas.height = Math.floor(h * dpr)
+  canvas.style.width = `${w}px`
+  canvas.style.height = `${h}px`
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-function goTo(index: number) {
-  const next = Math.max(0, Math.min(lastIndex, index))
-  if (next === active.value) return false
-  active.value = next
-  lockBriefly()
-  return true
-}
+  const scaleBoost = w < 768 ? 1.08 : 1.02
+  const canvasAspect = w / h
+  const imgAspect = img.naturalWidth / img.naturalHeight
 
-function onWheel(e: WheelEvent) {
-  if (reduceMotion.value || !isHeroPinned()) return
-
-  if (animating.value) {
-    e.preventDefault()
-    return
+  let drawWidth: number
+  let drawHeight: number
+  if (imgAspect > canvasAspect) {
+    drawHeight = h * scaleBoost
+    drawWidth = drawHeight * imgAspect
+  } else {
+    drawWidth = w * scaleBoost
+    drawHeight = drawWidth / imgAspect
   }
 
-  if (e.deltaY > 10 && active.value < lastIndex) {
-    e.preventDefault()
-    goTo(active.value + 1)
-    return
-  }
+  const offsetX = (w - drawWidth) / 2
+  const offsetY = (h - drawHeight) / 2
 
-  if (e.deltaY < -10 && active.value > 0) {
-    e.preventDefault()
-    goTo(active.value - 1)
-  }
+  ctx.clearRect(0, 0, w, h)
+  ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
+  currentFrame = index
 }
 
-function onTouchStart(e: TouchEvent) {
-  touchStartY = e.touches[0]?.clientY ?? 0
+function finishVideo() {
+  videoEnded.value = true
 }
 
-function onTouchMove(e: TouchEvent) {
-  if (reduceMotion.value || !isHeroPinned() || animating.value) return
+function onVideoLoaded() {
+  videoRef.value?.play().catch(finishVideo)
+}
 
-  const y = e.touches[0]?.clientY ?? touchStartY
-  const delta = touchStartY - y
+function toggleVideoPlayback() {
+  const video = videoRef.value
+  if (!video || videoEnded.value) return
 
-  if (delta > 40 && active.value < lastIndex) {
-    e.preventDefault()
-    touchStartY = y
-    goTo(active.value + 1)
-  } else if (delta < -40 && active.value > 0) {
-    e.preventDefault()
-    touchStartY = y
-    goTo(active.value - 1)
+  if (video.paused) {
+    userPaused.value = false
+    video.play().catch(finishVideo)
+    videoPaused.value = false
+  } else {
+    userPaused.value = true
+    video.pause()
+    videoPaused.value = true
   }
 }
+
+const sectionHeight = computed(() => {
+  if (reduceMotion.value || !videoEnded.value) return '100svh'
+  return `${SCROLL_HEIGHT_VH}vh`
+})
+
+const textOpacity = computed(() => {
+  if (!videoEnded.value || reduceMotion.value) return 1
+  return Math.max(0, 1 - progress.value * 1.35)
+})
+
+const textY = computed(() => {
+  if (!videoEnded.value || reduceMotion.value) return 0
+  return progress.value * 48
+})
+
+const scrollHintVisible = computed(() => !videoEnded.value || progress.value < 0.9)
 
 onMounted(() => {
   reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  window.addEventListener('wheel', onWheel, { passive: false })
-  sectionRef.value?.addEventListener('touchstart', onTouchStart, { passive: true })
-  sectionRef.value?.addEventListener('touchmove', onTouchMove, { passive: false })
+
+  // Precarga frames mientras suena el vídeo (evita apagones)
+  let loaded = 0
+  FRAME_SEQUENCE.forEach((src, index) => {
+    const img = new Image()
+    img.src = src
+    img.decoding = 'async'
+    const done = () => {
+      images[index] = img
+      loaded += 1
+      if (loaded === TOTAL_FRAMES) {
+        isLoaded.value = true
+        drawFrame(0)
+      }
+    }
+    img.onload = done
+    img.onerror = done
+  })
+
+  if (!reduceMotion.value) {
+    videoRef.value?.play().catch(finishVideo)
+  }
+
+  const section = sectionRef.value
+  const video = videoRef.value
+  if (section && video && !reduceMotion.value) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return
+        if (!entry.isIntersecting) {
+          video.pause()
+          return
+        }
+        if (!userPaused.value && !videoEnded.value) {
+          video.play().catch(finishVideo)
+        }
+      },
+      { threshold: 0.35 },
+    )
+    observer.observe(section)
+    onUnmounted(() => observer.disconnect())
+  }
 })
 
-onUnmounted(() => {
-  window.removeEventListener('wheel', onWheel)
-  sectionRef.value?.removeEventListener('touchstart', onTouchStart)
-  sectionRef.value?.removeEventListener('touchmove', onTouchMove)
-  if (unlockTimer) clearTimeout(unlockTimer)
+watch([videoEnded, isLoaded], ([ended, loaded]) => {
+  if (ended && loaded) drawFrame(0)
 })
+
+watch(
+  [isLoaded, videoEnded, reduceMotion],
+  ([loaded, ended, reduced], _prev, onCleanup) => {
+    if (!import.meta.client || !loaded || !ended) return
+
+    if (reduced) {
+      drawFrame(0)
+      progress.value = 0
+      return
+    }
+
+    const onScroll = () => {
+      const section = sectionRef.value
+      if (!section) return
+
+      const rect = section.getBoundingClientRect()
+      const total = section.offsetHeight - window.innerHeight
+      const scrolled = Math.min(Math.max(-rect.top, 0), total)
+      const p = total > 0 ? scrolled / total : 0
+      progress.value = p
+
+      const frameIndex = Math.min(
+        TOTAL_FRAMES - 1,
+        Math.max(0, Math.round(p * (TOTAL_FRAMES - 1))),
+      )
+      if (frameIndex !== currentFrame) {
+        requestAnimationFrame(() => drawFrame(frameIndex))
+      }
+    }
+
+    const onResize = () => {
+      drawFrame(currentFrame)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+    onScroll()
+
+    onCleanup(() => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+    })
+  },
+)
 </script>
 
 <template>
   <section
     ref="sectionRef"
-    class="relative isolate min-h-[100svh] overflow-hidden bg-ink text-mist"
+    class="relative z-30"
+    :style="{ height: sectionHeight }"
+    :aria-label="t('home.welcome')"
   >
-    <div class="absolute inset-0" aria-hidden="true">
+    <div class="sticky top-0 h-[100svh] w-full overflow-hidden bg-ink text-mist">
       <img
-        v-for="(src, i) in slides"
-        :key="src"
-        :src="src"
+        v-if="!isLoaded && videoEnded"
+        :src="FRAME_SEQUENCE[0]"
         alt=""
-        class="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[900ms] will-change-[opacity,transform]"
-        :class="i === active ? 'opacity-100 scale-105' : 'opacity-0 scale-100'"
-        :style="{ transitionTimingFunction: 'cubic-bezier(0.77, 0, 0.175, 1)' }"
-        :fetchpriority="i === 0 ? 'high' : 'low'"
+        class="absolute inset-0 h-full w-full object-cover"
       >
-      <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-black/10" />
-    </div>
 
-    <div class="relative z-10 page-shell flex min-h-[100svh] flex-col justify-end px-5 pb-20 pt-28 md:px-8 md:pb-28">
-      <p class="eyebrow animate-fade-up text-white/70">Hello Group</p>
-      <h1
-        class="mt-4 max-w-[14ch] animate-fade-up font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white"
-        style="animation-delay: 80ms"
-      >
-        {{ t('home.welcome') }}
-      </h1>
-      <p
-        class="mt-5 max-w-md animate-fade-up text-base leading-relaxed text-white/80 md:text-lg"
-        style="animation-delay: 160ms"
-      >
-        {{ t('home.headline') }}
-      </p>
-      <div class="mt-9 flex flex-wrap gap-3 animate-fade-up" style="animation-delay: 240ms">
-        <NuxtLink :to="localePath('/casas')" class="btn-primary bg-white text-ink hover:bg-mist">
-          {{ t('home.ctaHomes') }}
-        </NuxtLink>
-        <NuxtLink :to="localePath('/contacto')" class="btn-ghost">
-          {{ t('home.ctaContact') }}
-        </NuxtLink>
-      </div>
+      <canvas
+        ref="canvasRef"
+        class="absolute inset-0 z-[1] block h-full w-full"
+        :style="{
+          opacity: videoEnded && isLoaded ? 1 : 0,
+          transition: 'opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+        }"
+      />
 
-      <div class="mt-10 flex items-center gap-4 animate-fade-up" style="animation-delay: 320ms">
-        <div class="flex gap-2" role="tablist" :aria-label="t('home.headline')">
-          <button
-            v-for="(_, i) in slides"
-            :key="i"
-            type="button"
-            class="h-1.5 w-8 rounded-full transition-[background-color,transform] duration-300"
-            :class="i === active ? 'bg-white scale-100' : 'bg-white/35 hover:bg-white/55'"
-            :style="{ transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' }"
-            :aria-label="`${i + 1} / ${slides.length}`"
-            :aria-selected="i === active"
-            @click="goTo(i)"
-          />
+      <video
+        v-if="!reduceMotion"
+        ref="videoRef"
+        class="absolute inset-0 z-[2] h-full w-full object-cover"
+        :style="{
+          opacity: videoEnded ? 0 : 1,
+          transition: 'opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          pointerEvents: videoEnded ? 'none' : 'auto',
+        }"
+        muted
+        playsinline
+        preload="auto"
+        :poster="FRAME_SEQUENCE[0]"
+        :src="VIDEO_SRC"
+        @loadeddata="onVideoLoaded"
+        @ended="finishVideo"
+        @error="finishVideo"
+      />
+
+      <img
+        v-if="reduceMotion"
+        :src="FRAME_SEQUENCE[0]"
+        alt=""
+        class="absolute inset-0 z-[2] h-full w-full object-cover"
+        @load="finishVideo"
+      >
+
+      <div class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/45 via-black/15 to-black/10" />
+
+      <div
+        class="absolute inset-0 z-20 flex items-end"
+        :style="{
+          opacity: textOpacity,
+          transform: `translateY(${textY}px)`,
+        }"
+      >
+        <div class="page-shell pointer-events-auto w-full px-5 pb-20 pt-28 md:px-8 md:pb-28">
+          <p class="eyebrow text-white/70">Hello Group</p>
+          <h1 class="mt-4 max-w-[14ch] font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white">
+            {{ t('home.welcome') }}
+          </h1>
+          <p class="mt-5 max-w-md text-base leading-relaxed text-white/80 md:text-lg">
+            {{ t('home.headline') }}
+          </p>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <NuxtLink :to="localePath('/casas')" class="btn-primary bg-white text-ink hover:bg-mist">
+              {{ t('home.ctaHomes') }}
+            </NuxtLink>
+            <NuxtLink :to="localePath('/contacto')" class="btn-ghost">
+              {{ t('home.ctaContact') }}
+            </NuxtLink>
+          </div>
+
+          <div class="mt-10 flex items-center gap-4">
+            <div
+              v-if="videoEnded && !reduceMotion"
+              class="h-0.5 w-28 overflow-hidden rounded-full bg-white/20"
+              aria-hidden="true"
+            >
+              <div
+                class="h-full origin-left rounded-full bg-white"
+                :style="{ transform: `scaleX(${Math.max(0.04, progress)})` }"
+              />
+            </div>
+            <p
+              v-if="scrollHintVisible"
+              class="text-xs font-medium uppercase tracking-wider text-white/55"
+            >
+              {{ t('home.scrollHint') }}
+            </p>
+          </div>
         </div>
-        <p
-          v-if="active < lastIndex"
-          class="text-xs font-medium uppercase tracking-wider text-white/55"
-        >
-          {{ t('home.scrollHint') }}
-        </p>
       </div>
+
+      <button
+        v-if="!reduceMotion && !videoEnded"
+        type="button"
+        class="absolute bottom-6 right-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white backdrop-blur-md transition-colors duration-200 hover:bg-white/25"
+        :aria-label="videoPaused ? 'Play' : 'Pause'"
+        @click="toggleVideoPlayback"
+      >
+        <span v-if="videoPaused" aria-hidden="true" class="ml-0.5 text-sm">▶</span>
+        <span v-else aria-hidden="true" class="text-sm">❚❚</span>
+      </button>
     </div>
   </section>
 </template>

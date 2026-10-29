@@ -12,19 +12,19 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Bienvenido a Hello Group",
-    "headline": "Casas rurales con encanto",
+    "headline": "Hoteles urbanos y casas rurales con encanto",
     "sub": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "ctaHomes": "Ver casas",
     "ctaContact": "Contactar",
     "scrollHint": "Desplázate",
     "previewTitle": "Nuestras casas",
-    "previewSub": "Casas rurales con encanto, cada una con su propio carácter.",
-    "aboutBandTitle": "Casas rurales con encanto",
+    "previewSub": "Hoteles urbanos y casas rurales con encanto, cada una con su propio carácter.",
+    "aboutBandTitle": "Hoteles urbanos y casas rurales con encanto",
     "aboutBandCta": "Conocer Hello Group"
   },
   "homes": {
     "title": "Nuestras casas",
-    "subtitle": "Casas rurales con encanto: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
+    "subtitle": "Hoteles urbanos y casas rurales con encanto: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "capacity": "{n} personas",
     "bedrooms": "{n} hab.",
     "bathrooms": "{n} baños",
@@ -54,7 +54,7 @@
   },
   "about": {
     "title": "Nosotros",
-    "lead": "Hello Group reúne casas rurales con encanto bajo una misma idea: hospitalidad cercana y estancias con carácter.",
+    "lead": "Hello Group reúne hoteles urbanos y casas rurales con encanto bajo una misma idea: hospitalidad cercana y estancias con carácter.",
     "body": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo. Cada casa está en una localización distinta, con el mismo estándar de cuidado y un mismo equipo detrás."
   },
   "featuresPage": {
@@ -89,17 +89,17 @@
   },
   "blog": {
     "title": "Blog",
-    "lead": "Ideas, destinos y vida en nuestras casas rurales con encanto.",
+    "lead": "Ideas, destinos y vida en nuestros hoteles urbanos y casas rurales con encanto.",
     "readMore": "Leer más",
     "back": "Volver al blog",
     "posts": [
       {
         "slug": "casas-rurales-con-encanto",
-        "title": "Casas rurales con encanto: nuestra forma de viajar",
+        "title": "Hoteles urbanos y casas rurales con encanto: nuestra forma de viajar",
         "excerpt": "Por qué elegimos alojamientos con carácter y cómo Hello Group cuida cada detalle de la estancia.",
         "date": "2026-03-12",
         "body": [
-          "Viajar a una casa rural no es solo dormir fuera: es cambiar el ritmo, mirar el paisaje y sentirte como en casa lejos de casa.",
+          "Viajar a un hotel urbano o a una casa rural no es solo dormir fuera: es cambiar el ritmo y sentirte como en casa lejos de casa.",
           "En Hello Group reunimos alojamientos con personalidad —Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo— bajo el mismo criterio de hospitalidad cercana.",
           "Si buscas una escapada con encanto, empieza por elegir la casa que mejor encaja con tu plan y cuéntanos qué necesitas."
         ]
@@ -142,7 +142,7 @@
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
-    "tagline": "Casas rurales con encanto"
+    "tagline": "Hoteles urbanos y casas rurales con encanto"
   },
   "admin": {
     "login": "Acceso admin",
