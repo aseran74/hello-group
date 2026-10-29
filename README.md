@@ -30,3 +30,15 @@ Sin Supabase real, la web usa datos seed (`app/data/seed-houses.ts`) y el formul
 - `npm run dev` — desarrollo
 - `npm run build` — build producción
 - `npm run preview` — preview del build
+
+## Vercel
+
+El preset Nitro es `vercel`. Variables de entorno en el proyecto Vercel:
+
+- `SUPABASE_URL`
+- `SUPABASE_KEY` (anon)
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `RESEND_API_KEY` (opcional)
+- `ADMIN_NOTIFY_EMAIL` (opcional)
+
+Sin Supabase real, la web usa seed local. Conecta el repo `aseran74/hello-group` en Vercel para deploys automáticos en cada push.
