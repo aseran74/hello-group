@@ -10,18 +10,18 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Bienvenido a Hello Group",
-    "headline": "Cinco casas. Cinco rincones de Asturias.",
-    "sub": "Escapadas rurales con el mismo cuidado, en localizaciones distintas.",
+    "headline": "Casas rurales con encanto",
+    "sub": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "ctaHomes": "Ver casas",
     "ctaContact": "Contactar",
     "previewTitle": "Nuestras casas",
-    "previewSub": "Cada casa tiene su propio carácter y paisaje.",
-    "aboutBandTitle": "Cinco casas, un mismo cuidado.",
+    "previewSub": "Casas rurales con encanto, cada una con su propio carácter.",
+    "aboutBandTitle": "Casas rurales con encanto",
     "aboutBandCta": "Conocer Hello Group"
   },
   "homes": {
     "title": "Nuestras casas",
-    "subtitle": "Cinco alojamientos rurales en localizaciones diferentes de Asturias.",
+    "subtitle": "Casas rurales con encanto: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "capacity": "{n} personas",
     "bedrooms": "{n} dormitorios",
     "view": "Ver casa",
@@ -34,8 +34,8 @@
   },
   "about": {
     "title": "Nosotros",
-    "lead": "Hello Group reúne cinco casas rurales bajo una misma idea: hospitalidad cercana y Asturias auténtica.",
-    "body": "Cada casa está en una localización distinta, pensada para quienes buscan silencio, paisaje y una base cómoda desde la que explorar. Gestionamos todo desde un mismo equipo, con el mismo estándar de cuidado."
+    "lead": "Hello Group reúne casas rurales con encanto bajo una misma idea: hospitalidad cercana y estancias con carácter.",
+    "body": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo. Cada casa está en una localización distinta, con el mismo estándar de cuidado y un mismo equipo detrás."
   },
   "contact": {
     "title": "Contacto",
@@ -53,7 +53,7 @@
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
-    "tagline": "Casas rurales en Asturias"
+    "tagline": "Casas rurales con encanto"
   },
   "admin": {
     "login": "Acceso admin",

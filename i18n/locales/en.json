@@ -10,18 +10,18 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Welcome to Hello Group",
-    "headline": "Five homes. Five corners of Asturias.",
-    "sub": "Rural escapes with the same care, in different locations.",
+    "headline": "Charming rural homes",
+    "sub": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "ctaHomes": "View homes",
     "ctaContact": "Get in touch",
     "previewTitle": "Our homes",
-    "previewSub": "Each house has its own character and landscape.",
-    "aboutBandTitle": "Five homes, one standard of care.",
+    "previewSub": "Charming rural homes, each with its own character.",
+    "aboutBandTitle": "Charming rural homes",
     "aboutBandCta": "About Hello Group"
   },
   "homes": {
     "title": "Our homes",
-    "subtitle": "Five rural stays in different locations across Asturias.",
+    "subtitle": "Charming rural homes: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "capacity": "{n} guests",
     "bedrooms": "{n} bedrooms",
     "view": "View home",
@@ -34,8 +34,8 @@
   },
   "about": {
     "title": "About us",
-    "lead": "Hello Group brings together five rural homes under one idea: warm hospitality and authentic Asturias.",
-    "body": "Each house sits in a different location, made for guests who want quiet, landscape and a comfortable base to explore from. One team looks after everything, with the same standard of care."
+    "lead": "Hello Group brings together charming rural homes under one idea: warm hospitality and stays with character.",
+    "body": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo. Each home sits in a different location, with the same standard of care and one team behind it all."
   },
   "contact": {
     "title": "Contact",
@@ -53,7 +53,7 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "tagline": "Rural homes in Asturias"
+    "tagline": "Charming rural homes"
   },
   "admin": {
     "login": "Admin access",

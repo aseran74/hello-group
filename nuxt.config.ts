@@ -29,7 +29,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', href: '/brand/logo.png' },
       ],
       meta: [
-        { name: 'description', content: 'Hello Group — casas rurales en Asturias' },
+        { name: 'description', content: 'Hello Group — casas rurales con encanto' },
         { name: 'theme-color', content: '#0c0c0c' },
       ],
     },

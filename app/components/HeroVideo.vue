@@ -34,7 +34,7 @@ function onVideoError() {
     </div>
 
     <div class="relative z-10 page-shell flex min-h-[100svh] flex-col justify-end px-5 pb-20 pt-28 md:px-8 md:pb-28">
-      <p class="eyebrow animate-fade-up text-white/70">Hello Group · Asturias</p>
+      <p class="eyebrow animate-fade-up text-white/70">Hello Group</p>
       <h1
         class="mt-4 max-w-[14ch] animate-fade-up font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white"
         style="animation-delay: 80ms"

@@ -1,6 +1,6 @@
 # Hello Group
 
-Web escaparate de casas rurales (Nuxt). Cinco casas, i18n ES/EN, formulario de consultas y panel admin en modo demo.
+Web escaparate de casas rurales con encanto (Nuxt). Cinco alojamientos, i18n ES/EN, formulario de consultas y panel admin en modo demo.
 
 ## Desarrollo
 

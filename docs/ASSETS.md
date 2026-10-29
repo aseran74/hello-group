@@ -11,13 +11,17 @@ Se usa en header (navbar píldora), footer y hero vía el componente `BrandLogo`
 2. Opcional: sustituye el póster `public/placeholders/hero-poster.svg` por un JPG/WebP y actualiza `heroPoster` en `app/components/HeroVideo.vue`.
 3. Si el vídeo falla al cargar, la web muestra automáticamente el póster.
 
-## Fotos de las 5 casas
+## Fotos de los 5 alojamientos
 
-1. Entra en `/admin` (usuario creado en Supabase Auth).
-2. Edita cada casa y usa **Subir imagen** (bucket `houses`).
-3. La primera imagen puede usarse como portada (`cover_image_url`).
+Fotos locales en `public/Fotos/`:
 
-Hasta entonces se usan los SVG de `public/placeholders/house-1.svg` … `house-5.svg`.
+- `Astur/`
+- `Canillas/` (Cibeles, Neptuno)
+- `Mediterraneo/` (Madrid-1, Madrid-2, Madrid-5)
+- `Madrid-Norte/`
+- `Sincelejo/`
+
+El seed (`app/data/seed-houses.ts`) apunta a estas carpetas para portada y galería.
 
 ## Widget RoomRaccoon
 
