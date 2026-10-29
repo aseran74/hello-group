@@ -20,10 +20,19 @@ export interface House {
   name_en: string
   location_es: string
   location_en: string
+  address_es: string
+  address_en: string
+  property_type_es: string
+  property_type_en: string
   description_es: string
   description_en: string
   capacity: number
   bedrooms: number
+  bathrooms: number
+  size_m2: number | null
+  price_label_es: string
+  price_label_en: string
+  garage: boolean
   amenities: HouseAmenity[]
   cover_image_url: string | null
   lat: number | null
@@ -53,13 +62,20 @@ export type LocalizedHouse = {
   slug: string
   name: string
   location: string
+  address: string
+  property_type: string
   description: string
   capacity: number
   bedrooms: number
+  bathrooms: number
+  size_m2: number | null
+  price_label: string
+  garage: boolean
   amenities: { key: string; label: string }[]
   cover_image_url: string | null
   lat: number | null
   lng: number | null
   sort_order: number
   images: { id: string; url: string; alt: string }[]
+  map_url: string | null
 }
