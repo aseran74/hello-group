@@ -11,6 +11,8 @@ const FRAME_SEQUENCE = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
 
 /** Altura del runway de scroll en viewports tras el vídeo */
 const SCROLL_HEIGHT_VH = 180
+/** En móvil el intro de vídeo se corta a 4s */
+const MOBILE_VIDEO_MAX_MS = 4000
 
 const sectionRef = ref<HTMLElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
@@ -18,6 +20,7 @@ const videoRef = ref<HTMLVideoElement | null>(null)
 
 const images: (HTMLImageElement | undefined)[] = []
 let currentFrame = 0
+let mobileCutoffTimer: ReturnType<typeof setTimeout> | null = null
 
 const isLoaded = ref(false)
 const videoEnded = ref(false)
@@ -25,6 +28,27 @@ const videoPaused = ref(false)
 const progress = ref(0)
 const reduceMotion = ref(false)
 const userPaused = ref(false)
+
+function isMobileViewport() {
+  return window.matchMedia('(max-width: 767px)').matches
+}
+
+function clearMobileCutoff() {
+  if (mobileCutoffTimer) {
+    clearTimeout(mobileCutoffTimer)
+    mobileCutoffTimer = null
+  }
+}
+
+function scheduleMobileCutoff() {
+  clearMobileCutoff()
+  if (!isMobileViewport() || videoEnded.value || reduceMotion.value) return
+  mobileCutoffTimer = setTimeout(() => {
+    const video = videoRef.value
+    if (video && !video.paused) video.pause()
+    finishVideo()
+  }, MOBILE_VIDEO_MAX_MS)
+}
 
 function drawFrame(index: number) {
   const canvas = canvasRef.value
@@ -68,11 +92,14 @@ function drawFrame(index: number) {
 }
 
 function finishVideo() {
+  clearMobileCutoff()
   videoEnded.value = true
 }
 
 function onVideoLoaded() {
-  videoRef.value?.play().catch(finishVideo)
+  const video = videoRef.value
+  if (!video) return
+  video.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
 }
 
 function toggleVideoPlayback() {
@@ -81,10 +108,11 @@ function toggleVideoPlayback() {
 
   if (video.paused) {
     userPaused.value = false
-    video.play().catch(finishVideo)
+    video.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
     videoPaused.value = false
   } else {
     userPaused.value = true
+    clearMobileCutoff()
     video.pause()
     videoPaused.value = true
   }
@@ -129,7 +157,7 @@ onMounted(() => {
   })
 
   if (!reduceMotion.value) {
-    videoRef.value?.play().catch(finishVideo)
+    videoRef.value?.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
   }
 
   const section = sectionRef.value
@@ -139,17 +167,21 @@ onMounted(() => {
       ([entry]) => {
         if (!entry) return
         if (!entry.isIntersecting) {
+          clearMobileCutoff()
           video.pause()
           return
         }
         if (!userPaused.value && !videoEnded.value) {
-          video.play().catch(finishVideo)
+          video.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
         }
       },
       { threshold: 0.35 },
     )
     observer.observe(section)
-    onUnmounted(() => observer.disconnect())
+    onUnmounted(() => {
+      observer.disconnect()
+      clearMobileCutoff()
+    })
   }
 })
 
