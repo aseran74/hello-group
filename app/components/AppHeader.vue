@@ -18,7 +18,6 @@ const houseLinks = computed(() =>
 )
 
 const secondaryLinks = computed(() => [
-  { to: localePath('/caracteristicas'), label: t('nav.features') },
   { to: localePath('/blog'), label: t('nav.blog') },
   { to: localePath('/contacto'), label: t('nav.contact') },
 ])
