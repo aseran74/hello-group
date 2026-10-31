@@ -12,19 +12,19 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Bienvenido a Hello Group",
-    "headline": "Hoteles urbanos y casas rurales con encanto",
+    "headline": "Hoteles urbanos en Madrid y casas rurales en Asturias",
     "sub": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "ctaHomes": "Ver casas",
     "ctaContact": "Contactar",
     "scrollHint": "Desplázate",
     "previewTitle": "Nuestras casas",
-    "previewSub": "Hoteles urbanos y casas rurales con encanto, cada una con su propio carácter.",
-    "aboutBandTitle": "Hoteles urbanos y casas rurales con encanto",
+    "previewSub": "Hoteles urbanos en Madrid y casas rurales en Asturias, cada una con su propio carácter.",
+    "aboutBandTitle": "Hoteles urbanos en Madrid y casas rurales en Asturias",
     "aboutBandCta": "Conocer Hello Group"
   },
   "homes": {
     "title": "Nuestras casas",
-    "subtitle": "Hoteles urbanos y casas rurales con encanto: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
+    "subtitle": "Hoteles urbanos en Madrid y casas rurales en Asturias: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "capacity": "{n} personas",
     "bedrooms": "{n} hab.",
     "bathrooms": "{n} baños",
@@ -54,7 +54,7 @@
   },
   "about": {
     "title": "Nosotros",
-    "lead": "Hello Group reúne hoteles urbanos y casas rurales con encanto bajo una misma idea: hospitalidad cercana y estancias con carácter.",
+    "lead": "Hello Group reúne hoteles urbanos en Madrid y casas rurales en Asturias bajo una misma idea: hospitalidad cercana y estancias con carácter.",
     "body": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo. Cada casa está en una localización distinta, con el mismo estándar de cuidado y un mismo equipo detrás."
   },
   "featuresPage": {
@@ -89,13 +89,13 @@
   },
   "blog": {
     "title": "Blog",
-    "lead": "Ideas, destinos y vida en nuestros hoteles urbanos y casas rurales con encanto.",
+    "lead": "Ideas, destinos y vida en nuestros hoteles urbanos en Madrid y casas rurales en Asturias.",
     "readMore": "Leer más",
     "back": "Volver al blog",
     "posts": [
       {
         "slug": "casas-rurales-con-encanto",
-        "title": "Hoteles urbanos y casas rurales con encanto: nuestra forma de viajar",
+        "title": "Hoteles urbanos en Madrid y casas rurales en Asturias: nuestra forma de viajar",
         "excerpt": "Por qué elegimos alojamientos con carácter y cómo Hello Group cuida cada detalle de la estancia.",
         "date": "2026-03-12",
         "body": [
@@ -142,7 +142,7 @@
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
-    "tagline": "Hoteles urbanos y casas rurales con encanto"
+    "tagline": "Hoteles urbanos en Madrid y casas rurales en Asturias"
   },
   "admin": {
     "login": "Acceso admin",

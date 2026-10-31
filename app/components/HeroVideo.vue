@@ -2,15 +2,15 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const VIDEO_SRC = '/Apple/Video-hero.mp4'
-const TOTAL_FRAMES = 10
+const VIDEO_SRC = '/Apple2/gemini_generated_video_f7d9d001.mp4'
+const TOTAL_FRAMES = 70
 const FRAME_SEQUENCE = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
-  const n = String(i + 1).padStart(3, '0')
-  return `/Apple/frame_${n}.jpg`
+  const n = String(i).padStart(3, '0')
+  return `/Apple2/gemini_generated_video_f7d9d001_${n}.jpg`
 })
 
 /** Altura del runway de scroll en viewports tras el vídeo */
-const SCROLL_HEIGHT_VH = 180
+const SCROLL_HEIGHT_VH = 400
 /** En móvil el intro de vídeo se corta a 4s */
 const MOBILE_VIDEO_MAX_MS = 4000
 
@@ -69,22 +69,26 @@ function drawFrame(index: number) {
   canvas.style.height = `${h}px`
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-  const scaleBoost = w < 768 ? 1.08 : 1.02
+  const isMobile = w < 768
   const canvasAspect = w / h
   const imgAspect = img.naturalWidth / img.naturalHeight
 
   let drawWidth: number
   let drawHeight: number
+  let offsetX: number
+  let offsetY: number
+
+  // Cover a todo el ancho (y alto) del viewport
   if (imgAspect > canvasAspect) {
-    drawHeight = h * scaleBoost
+    drawHeight = h
     drawWidth = drawHeight * imgAspect
   } else {
-    drawWidth = w * scaleBoost
+    drawWidth = w
     drawHeight = drawWidth / imgAspect
   }
-
-  const offsetX = (w - drawWidth) / 2
-  const offsetY = (h - drawHeight) / 2
+  offsetX = (w - drawWidth) / 2
+  // Móvil: encuadre bajo; escritorio: centrado
+  offsetY = isMobile ? h - drawHeight : (h - drawHeight) / 2
 
   ctx.clearRect(0, 0, w, h)
   ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
@@ -247,7 +251,7 @@ watch(
         v-if="!isLoaded && videoEnded"
         :src="FRAME_SEQUENCE[0]"
         alt=""
-        class="absolute inset-0 h-full w-full object-cover"
+        class="hero-media absolute inset-0 h-full w-full object-cover"
       >
 
       <canvas
@@ -262,7 +266,7 @@ watch(
       <video
         v-if="!reduceMotion"
         ref="videoRef"
-        class="absolute inset-0 z-[2] h-full w-full object-cover"
+        class="hero-media absolute inset-0 z-[2] h-full w-full object-cover"
         :style="{
           opacity: videoEnded ? 0 : 1,
           transition: 'opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
@@ -282,7 +286,7 @@ watch(
         v-if="reduceMotion"
         :src="FRAME_SEQUENCE[0]"
         alt=""
-        class="absolute inset-0 z-[2] h-full w-full object-cover"
+        class="hero-media absolute inset-0 z-[2] h-full w-full object-cover"
         @load="finishVideo"
       >
 
@@ -300,7 +304,7 @@ watch(
           <h1 class="mt-4 max-w-[14ch] font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white">
             {{ t('home.welcome') }}
           </h1>
-          <p class="mt-5 max-w-md text-base leading-relaxed text-white/80 md:text-lg">
+          <p class="mt-5 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
             {{ t('home.headline') }}
           </p>
           <div class="mt-9 flex flex-wrap gap-3">
@@ -346,3 +350,18 @@ watch(
     </div>
   </section>
 </template>
+
+<style scoped>
+.hero-media {
+  object-fit: cover;
+  object-position: center center;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 767px) {
+  .hero-media {
+    object-position: center bottom;
+  }
+}
+</style>

@@ -29,7 +29,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', href: '/brand/logo.png' },
       ],
       meta: [
-        { name: 'description', content: 'Hello Group — hoteles urbanos y casas rurales con encanto' },
+        { name: 'description', content: 'Hello Group — hoteles urbanos en Madrid y casas rurales en Asturias' },
         { name: 'theme-color', content: '#0c0c0c' },
       ],
     },
