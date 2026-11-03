@@ -18,7 +18,7 @@ if (!house.value) {
 
 const specs = computed(() => {
   const h = house.value!
-  const items = [
+  return [
     { label: t('homes.specType'), value: h.property_type },
     { label: t('homes.specSize'), value: h.size_m2 ? `${h.size_m2} m²` : '—' },
     { label: t('homes.specBedrooms'), value: t('homes.bedrooms', { n: h.bedrooms }) },
@@ -27,8 +27,41 @@ const specs = computed(() => {
     { label: t('homes.specGarage'), value: h.garage ? t('homes.garageYes') : t('homes.garageNo') },
     { label: t('homes.specPrice'), value: h.price_label },
   ]
-  return items
 })
+
+const mapLink = computed(() => {
+  const h = house.value
+  if (!h) return null
+  if (h.map_url) return h.map_url
+  if (h.lat != null && h.lng != null) {
+    return `https://www.google.com/maps/search/?api=1&query=${h.lat},${h.lng}`
+  }
+  return null
+})
+
+const shareCopied = ref(false)
+
+async function shareListing() {
+  const url = typeof window !== 'undefined' ? window.location.href : ''
+  const title = house.value?.name || 'Hello Group'
+  try {
+    if (navigator.share) {
+      await navigator.share({ title, url })
+      return
+    }
+  } catch {
+    /* fall through to clipboard */
+  }
+  try {
+    await navigator.clipboard.writeText(url)
+    shareCopied.value = true
+    setTimeout(() => {
+      shareCopied.value = false
+    }, 2000)
+  } catch {
+    /* ignore */
+  }
+}
 
 useSeoMeta({
   title: () => `${house.value?.name || ''} · Hello Group`,
@@ -38,36 +71,93 @@ useSeoMeta({
 
 <template>
   <div v-if="house">
-    <section class="page-shell px-5 pb-8 pt-28 md:px-8 md:pb-10 md:pt-32">
-      <p class="eyebrow">{{ house.location }}</p>
-      <h1 class="mt-2 font-display text-4xl font-bold tracking-tight text-ink md:text-6xl">
-        {{ house.name }}
-      </h1>
-      <p class="mt-3 max-w-3xl text-base text-mute md:text-lg">
-        {{ house.property_type }}
-        <span class="mx-2 text-line">·</span>
-        {{ house.address }}
-        <a
-          v-if="house.map_url"
-          :href="house.map_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="ml-2 font-semibold text-ink underline-offset-4 hover:underline"
+    <!-- Cabecera tipo Booking -->
+    <section class="mx-auto w-full max-w-[90rem] px-5 pb-5 pt-28 md:px-8 md:pb-6 md:pt-32">
+      <NuxtLink
+        :to="localePath('/casas')"
+        class="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-mute transition hover:text-ink"
+      >
+        <span aria-hidden="true">←</span>
+        {{ t('homes.back') }}
+      </NuxtLink>
+
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div class="min-w-0">
+          <h1 class="font-display text-3xl font-bold tracking-tight text-ink md:text-5xl">
+            {{ house.name }}
+          </h1>
+          <p class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-mute md:text-base">
+            <span class="inline-flex items-center gap-1.5">
+              <span aria-hidden="true">📍</span>
+              <span>{{ house.address }}</span>
+            </span>
+            <a
+              v-if="mapLink"
+              :href="mapLink"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-ink underline-offset-4 hover:underline"
+            >
+              {{ t('homes.viewMap') }}
+            </a>
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <NuxtLink
+            :to="localePath({ path: '/contacto', query: { casa: house.slug, reserva: '1' } })"
+            class="btn-primary"
+          >
+            {{ t('nav.book') }}
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería 75% + mapa 25% -->
+    <section class="mx-auto w-full max-w-[90rem] px-5 md:px-8">
+      <div class="grid gap-3 lg:grid-cols-[3fr_1fr] lg:gap-4 lg:items-stretch">
+        <HouseGallery
+          :name="house.name"
+          :cover="house.cover_image_url"
+          :images="house.images"
+        />
+        <HouseSideMap
+          class="lg:min-h-full"
+          :name="house.name"
+          :address="house.address"
+          :location="house.location"
+          :lat="house.lat"
+          :lng="house.lng"
+          :map-url="house.map_url"
+        />
+      </div>
+
+      <!-- Acciones: compartir / contacto / fechas / FAQ -->
+      <div class="mt-5 flex flex-wrap gap-2 md:mt-6 md:gap-3">
+        <button
+          type="button"
+          class="btn-secondary"
+          @click="shareListing"
         >
-          {{ t('homes.viewMap') }}
-        </a>
-      </p>
+          {{ shareCopied ? t('homes.shareDone') : t('homes.share') }}
+        </button>
+        <NuxtLink
+          :to="localePath({ path: '/contacto', query: { casa: house.slug } })"
+          class="btn-secondary"
+        >
+          {{ t('homes.contactCta') }}
+        </NuxtLink>
+        <NuxtLink
+          :to="localePath({ path: '/contacto', query: { casa: house.slug, reserva: '1' } })"
+          class="btn-primary"
+        >
+          {{ t('homes.seeDates') }}
+        </NuxtLink>
+      </div>
     </section>
 
-    <section class="page-shell px-5 md:px-8">
-      <HouseGallery
-        :name="house.name"
-        :cover="house.cover_image_url"
-        :images="house.images"
-      />
-    </section>
-
-    <!-- Características tipo HolyDeo -->
+    <!-- Chips -->
     <section class="page-shell px-5 pt-8 md:px-8">
       <div class="flex flex-wrap gap-2 md:gap-3">
         <div
@@ -153,14 +243,6 @@ useSeoMeta({
             </ul>
           </div>
 
-          <HouseMap
-            :name="house.name"
-            :address="house.address"
-            :location="house.location"
-            :lat="house.lat"
-            :lng="house.lng"
-            :map-url="house.map_url"
-          />
         </div>
 
         <aside class="space-y-5 lg:sticky lg:top-28 lg:self-start">
