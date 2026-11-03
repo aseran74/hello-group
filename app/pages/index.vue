@@ -5,8 +5,12 @@ const { fetchHouses } = useHouses()
 
 const { data: houses } = await useAsyncData('home-houses', () => fetchHouses())
 
-const topRow = computed(() => houses.value?.slice(0, 2) || [])
-const bottomRow = computed(() => houses.value?.slice(2) || [])
+const madridHomes = computed(() =>
+  (houses.value || []).filter((h) => h.slug !== 'astur'),
+)
+const asturiasHomes = computed(() =>
+  (houses.value || []).filter((h) => h.slug === 'astur'),
+)
 
 useSeoMeta({
   title: 'Hello Group',
@@ -29,26 +33,45 @@ useSeoMeta({
           </p>
         </header>
 
-        <div class="mt-8 space-y-3 md:mt-10 md:space-y-4">
-          <div class="grid gap-3 md:grid-cols-2 md:gap-4">
-            <HouseCard
-              v-for="(house, i) in topRow"
-              :key="house.id"
-              :house="house"
-              :index="i"
-            />
+        <div class="mt-10 space-y-12 md:mt-12 md:space-y-14">
+          <div>
+            <header class="mb-5 border-b border-line pb-3 md:mb-6">
+              <p class="eyebrow text-mute">Hello Group</p>
+              <h3 class="mt-1 font-display text-xl font-bold tracking-tight text-ink md:text-2xl">
+                {{ t('home.groupMadrid') }}
+              </h3>
+            </header>
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-2 md:gap-4">
+              <HouseCard
+                v-for="(house, i) in madridHomes"
+                :key="house.id"
+                :house="house"
+                :index="i"
+              />
+            </div>
           </div>
-          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
-            <HouseCard
-              v-for="(house, i) in bottomRow"
-              :key="house.id"
-              :house="house"
-              :index="i + 2"
-            />
+
+          <div>
+            <header class="mb-5 border-b border-line pb-3 md:mb-6">
+              <p class="eyebrow text-mute">Hello Group</p>
+              <h3 class="mt-1 font-display text-xl font-bold tracking-tight text-ink md:text-2xl">
+                {{ t('home.groupAsturias') }}
+              </h3>
+            </header>
+            <div class="grid gap-3 md:gap-4">
+              <HouseCard
+                v-for="(house, i) in asturiasHomes"
+                :key="house.id"
+                :house="house"
+                :index="i"
+                wide
+                carousel
+              />
+            </div>
           </div>
         </div>
 
-        <div class="mt-8 flex justify-center">
+        <div class="mt-10 flex justify-center">
           <NuxtLink :to="localePath('/casas')" class="btn-secondary">
             {{ t('home.ctaHomes') }}
           </NuxtLink>

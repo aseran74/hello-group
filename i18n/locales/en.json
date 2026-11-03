@@ -12,19 +12,21 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Welcome to Hello Group",
-    "headline": "Urban hotels in Madrid and rural homes in Asturias",
+    "headline": "Urban stays in Madrid and a rural home in Asturias",
     "sub": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "ctaHomes": "View homes",
     "ctaContact": "Get in touch",
     "scrollHint": "Scroll",
     "previewTitle": "Our homes",
-    "previewSub": "Urban hotels in Madrid and rural homes in Asturias, each with its own character.",
-    "aboutBandTitle": "Urban hotels in Madrid and rural homes in Asturias",
+    "previewSub": "Urban stays in Madrid and a rural home in Asturias, each with its own character.",
+    "groupMadrid": "Urban stays in Madrid",
+    "groupAsturias": "Rural home in Asturias",
+    "aboutBandTitle": "Urban stays in Madrid and a rural home in Asturias",
     "aboutBandCta": "About Hello Group"
   },
   "homes": {
     "title": "Our homes",
-    "subtitle": "Urban hotels in Madrid and rural homes in Asturias: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
+    "subtitle": "Urban stays in Madrid and a rural home in Asturias: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "capacity": "{n} guests",
     "bedrooms": "{n} beds",
     "bathrooms": "{n} baths",
@@ -54,7 +56,7 @@
   },
   "about": {
     "title": "About us",
-    "lead": "Hello Group brings together urban hotels in Madrid and rural homes in Asturias under one idea: warm hospitality and stays with character.",
+    "lead": "Hello Group brings together urban stays in Madrid and a rural home in Asturias under one idea: warm hospitality and stays with character.",
     "body": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo. Each home sits in a different location, with the same standard of care and one team behind it all."
   },
   "featuresPage": {
@@ -89,13 +91,13 @@
   },
   "blog": {
     "title": "Blog",
-    "lead": "Ideas, destinations and life around our urban hotels in Madrid and rural homes in Asturias.",
+    "lead": "Ideas, destinations and life around our urban stays in Madrid and a rural home in Asturias.",
     "readMore": "Read more",
     "back": "Back to blog",
     "posts": [
       {
         "slug": "casas-rurales-con-encanto",
-        "title": "Urban hotels in Madrid and rural homes in Asturias: how we like to travel",
+        "title": "Urban stays in Madrid and a rural home in Asturias: how we like to travel",
         "excerpt": "Why we choose stays with character and how Hello Group looks after every detail.",
         "date": "2026-03-12",
         "body": [
@@ -142,7 +144,7 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "tagline": "Urban hotels in Madrid and rural homes in Asturias"
+    "tagline": "Urban stays in Madrid and a rural home in Asturias"
   },
   "admin": {
     "login": "Admin access",
