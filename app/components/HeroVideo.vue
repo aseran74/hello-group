@@ -129,15 +129,21 @@ const sectionHeight = computed(() => {
 
 const textOpacity = computed(() => {
   if (!videoEnded.value || reduceMotion.value) return 1
-  return Math.max(0, 1 - progress.value * 1.35)
+  // Se mantiene visible a mitad del scroll y desaparece al final
+  const p = progress.value
+  if (p < 0.45) return 1
+  return Math.max(0, 1 - (p - 0.45) / 0.55)
 })
 
 const textY = computed(() => {
   if (!videoEnded.value || reduceMotion.value) return 0
-  return progress.value * 48
+  const p = Math.max(0, progress.value - 0.45)
+  return p * 72
 })
 
-const scrollHintVisible = computed(() => !videoEnded.value || progress.value < 0.9)
+const scrollHintVisible = computed(() => !videoEnded.value || progress.value < 0.85)
+
+const textInteractive = computed(() => textOpacity.value > 0.08)
 
 onMounted(() => {
   reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -293,18 +299,21 @@ watch(
       <div class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/45 via-black/15 to-black/10" />
 
       <div
-        class="absolute inset-0 z-20 flex items-end"
+        class="absolute inset-0 z-20 flex items-end transition-[opacity,transform] duration-150 ease-out"
+        :class="textInteractive ? 'pointer-events-auto' : 'pointer-events-none'"
         :style="{
           opacity: textOpacity,
           transform: `translateY(${textY}px)`,
         }"
       >
-        <div class="page-shell pointer-events-auto w-full px-5 pb-20 pt-28 md:px-8 md:pb-28">
+        <div class="page-shell w-full px-5 pb-20 pt-28 md:px-8 md:pb-28">
           <p class="eyebrow text-white/70">Hello Group</p>
           <h1 class="mt-4 max-w-[14ch] font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white">
             {{ t('home.welcome') }}
           </h1>
-          <p class="mt-5 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
+          <p
+            class="mt-5 inline-block max-w-2xl rounded-2xl bg-neutral-500/45 px-4 py-3 text-lg font-medium leading-snug text-white shadow-[0_8px_28px_rgba(0,0,0,0.22)] backdrop-blur-md md:px-5 md:py-3.5 md:text-xl lg:text-2xl"
+          >
             {{ t('home.headline') }}
           </p>
           <div class="mt-9 flex flex-wrap gap-3">
