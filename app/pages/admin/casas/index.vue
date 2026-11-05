@@ -1,48 +1,57 @@
 <script setup lang="ts">
+import type { House } from '~/types/house'
+
 definePageMeta({
   layout: 'admin',
+  middleware: ['admin-auth'],
 })
 
 const { t } = useI18n()
 const { fetchRawHouses } = useHouses()
+const { togglePublished, error } = useHouseAdmin()
 
-const { data: houses } = await useAsyncData('admin-houses', () => fetchRawHouses())
+const { data: houses, refresh, pending } = await useAsyncData('admin-houses', () => fetchRawHouses())
+
+onMounted(() => {
+  refresh()
+})
+
+async function onToggle(house: House) {
+  const updated = await togglePublished(house)
+  if (updated) await refresh()
+}
 </script>
 
 <template>
   <div>
     <div class="flex flex-wrap items-center justify-between gap-4">
-      <h1 class="font-display text-3xl font-semibold text-ink">{{ t('admin.houses') }}</h1>
+      <div>
+        <h1 class="font-display text-3xl font-semibold text-ink">{{ t('admin.houses') }}</h1>
+        <p class="mt-2 text-sm text-mute">
+          Edita datos, ubicación, descripciones y fotos de cada propiedad.
+        </p>
+      </div>
+      <NuxtLink
+        to="/admin/casas/nueva"
+        class="bg-ink px-4 py-2.5 text-sm font-medium text-white hover:bg-black"
+      >
+        {{ t('admin.newHouse') }}
+      </NuxtLink>
     </div>
-    <p class="mt-3 text-sm text-mute">
-      Lectura del seed local. La edición con Supabase se activará más adelante.
-    </p>
 
-    <div class="mt-8 overflow-x-auto border border-line bg-white">
-      <table class="w-full min-w-[40rem] text-left text-sm">
-        <thead class="border-b border-line bg-paper text-mute">
-          <tr>
-            <th class="px-4 py-3 font-medium">Nombre</th>
-            <th class="px-4 py-3 font-medium">Slug</th>
-            <th class="px-4 py-3 font-medium">Ubicación</th>
-            <th class="px-4 py-3 font-medium">{{ t('admin.published') }}</th>
-            <th class="px-4 py-3 font-medium" />
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="house in houses" :key="house.id" class="border-b border-line/70">
-            <td class="px-4 py-3 font-medium">{{ house.name_es }}</td>
-            <td class="px-4 py-3 text-mute">{{ house.slug }}</td>
-            <td class="px-4 py-3">{{ house.location_es }}</td>
-            <td class="px-4 py-3">{{ house.published ? 'Sí' : 'No' }}</td>
-            <td class="px-4 py-3 text-right">
-              <NuxtLink :to="`/admin/casas/${house.id}`" class="text-ink underline-offset-2 hover:underline">
-                Ver
-              </NuxtLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <p v-if="error" class="mt-4 text-sm text-red-700">{{ error }}</p>
+
+    <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <AdminHouseCard
+        v-for="house in houses"
+        :key="house.id"
+        :house="house"
+        @toggle-published="onToggle"
+      />
     </div>
+
+    <p v-if="!pending && !houses?.length" class="mt-8 text-sm text-mute">
+      No hay propiedades.
+    </p>
   </div>
 </template>

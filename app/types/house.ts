@@ -1,3 +1,5 @@
+import type { BathroomType, RoomType } from '~/data/feature-catalog'
+
 export interface HouseAmenity {
   key: string
   label_es: string
@@ -16,9 +18,37 @@ export interface HouseImage {
   id: string
   house_id: string
   url: string
+  storage_key?: string | null
   alt_es: string | null
   alt_en: string | null
   sort_order: number
+}
+
+export interface RoomImage {
+  id: string
+  room_id: string
+  url: string
+  storage_key?: string | null
+  alt_es: string | null
+  alt_en: string | null
+  sort_order: number
+}
+
+export interface Room {
+  id: string
+  house_id: string
+  name_es: string
+  name_en: string
+  room_type: RoomType
+  bathroom_type: BathroomType
+  description_es: string
+  description_en: string
+  capacity: number
+  sort_order: number
+  published: boolean
+  cover_image_url: string | null
+  cover_image_key?: string | null
+  room_images?: RoomImage[]
 }
 
 export interface House {
@@ -44,6 +74,7 @@ export interface House {
   amenities: HouseAmenity[]
   activities: HouseActivity[]
   cover_image_url: string | null
+  cover_image_key?: string | null
   lat: number | null
   lng: number | null
   sort_order: number
@@ -51,6 +82,7 @@ export interface House {
   created_at?: string
   updated_at?: string
   house_images?: HouseImage[]
+  rooms?: Room[]
 }
 
 export interface Inquiry {
@@ -64,6 +96,19 @@ export interface Inquiry {
   status: 'new' | 'read' | 'archived'
   created_at: string
   houses?: Pick<House, 'id' | 'slug' | 'name_es' | 'name_en'> | null
+}
+
+export type LocalizedRoom = {
+  id: string
+  name: string
+  room_type: RoomType
+  room_type_label: string
+  bathroom_type: BathroomType
+  bathroom_label: string
+  description: string
+  capacity: number
+  cover_image_url: string | null
+  images: { id: string; url: string; alt: string }[]
 }
 
 export type LocalizedHouse = {
@@ -88,4 +133,5 @@ export type LocalizedHouse = {
   sort_order: number
   images: { id: string; url: string; alt: string }[]
   map_url: string | null
+  rooms: LocalizedRoom[]
 }

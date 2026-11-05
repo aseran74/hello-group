@@ -3,6 +3,7 @@ import type { Inquiry } from '~/types/house'
 
 definePageMeta({
   layout: 'admin',
+  middleware: ['admin-auth'],
 })
 
 const { t } = useI18n()

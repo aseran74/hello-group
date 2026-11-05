@@ -116,24 +116,29 @@ useSeoMeta({
 
     <!-- Galería 75% + mapa 25% -->
     <section class="mx-auto w-full max-w-[90rem] px-5 md:px-8">
-      <div class="grid gap-3 lg:grid-cols-[3fr_1fr] lg:gap-4 lg:items-stretch">
+      <div class="grid gap-3 lg:grid-cols-[3fr_1fr] lg:gap-4 lg:items-start">
         <HouseGallery
           :name="house.name"
           :cover="house.cover_image_url"
           :images="house.images"
         />
-        <HouseSideMap
-          class="lg:min-h-full"
-          :name="house.name"
-          :address="house.address"
-          :location="house.location"
-          :lat="house.lat"
-          :lng="house.lng"
-          :map-url="house.map_url"
-        />
+        <div class="flex flex-col gap-3">
+          <HouseSideMap
+            :name="house.name"
+            :address="house.address"
+            :location="house.location"
+            :lat="house.lat"
+            :lng="house.lng"
+            :map-url="house.map_url"
+          />
+          <HouseDistances
+            :lat="house.lat"
+            :lng="house.lng"
+          />
+        </div>
       </div>
 
-      <!-- Acciones: compartir / contacto / fechas / FAQ -->
+      <!-- Acciones: compartir / contacto / fechas -->
       <div class="mt-5 flex flex-wrap gap-2 md:mt-6 md:gap-3">
         <button
           type="button"
@@ -203,6 +208,46 @@ useSeoMeta({
             </dl>
           </div>
 
+          <div v-if="house.rooms.length">
+            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
+              {{ t('homes.rooms') }}
+            </h2>
+            <p class="mt-2 text-sm text-mute">{{ t('homes.roomsSub') }}</p>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+              <article
+                v-for="room in house.rooms"
+                :key="room.id"
+                class="overflow-hidden rounded-2xl border border-line bg-paper-elevated"
+              >
+                <img
+                  v-if="room.cover_image_url || room.images[0]"
+                  :src="room.cover_image_url || room.images[0]?.url"
+                  :alt="room.name"
+                  class="aspect-[4/3] w-full object-cover"
+                >
+                <div class="p-4">
+                  <h3 class="font-display text-lg font-semibold text-ink">{{ room.name }}</h3>
+                  <p class="mt-1 text-sm text-mute">
+                    {{ room.room_type_label }} · {{ room.bathroom_label }}
+                    · {{ t('homes.capacity', { n: room.capacity }) }}
+                  </p>
+                  <p v-if="room.description" class="mt-2 text-sm leading-relaxed text-ink/80">
+                    {{ room.description }}
+                  </p>
+                  <div v-if="room.images.length > 1" class="mt-3 flex gap-2 overflow-x-auto">
+                    <img
+                      v-for="img in room.images.slice(0, 4)"
+                      :key="img.id"
+                      :src="img.url"
+                      :alt="img.alt"
+                      class="h-16 w-20 shrink-0 object-cover"
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
           <div v-if="house.amenities.length">
             <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
               {{ t('homes.amenities') }}
@@ -213,8 +258,8 @@ useSeoMeta({
                 :key="item.key"
                 class="flex items-center gap-3 rounded-2xl border border-line bg-paper-elevated px-4 py-3 text-ink"
               >
-                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-xs text-mist" aria-hidden="true">
-                  ✓
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-mist" aria-hidden="true">
+                  <FeatureIcon :name="item.key" />
                 </span>
                 {{ item.label }}
               </li>
@@ -233,7 +278,7 @@ useSeoMeta({
                 class="flex items-start gap-3 rounded-2xl border border-line bg-paper-elevated px-4 py-4 text-ink"
               >
                 <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-mist">
-                  <ActivityIcon :name="item.key" />
+                  <FeatureIcon :name="item.key" />
                 </span>
                 <span>
                   <span class="block font-semibold">{{ item.label }}</span>

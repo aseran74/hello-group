@@ -53,11 +53,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     resendApiKey: process.env.RESEND_API_KEY || '',
     adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || '',
-    supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+    insforgeApiKey: process.env.INSFORGE_API_KEY || '',
     public: {
       siteName: 'Hello Group',
-      supabaseUrl: process.env.SUPABASE_URL || '',
-      supabaseKey: process.env.SUPABASE_KEY || '',
+      insforgeUrl: process.env.NUXT_PUBLIC_INSFORGE_URL || '',
+      insforgeAnonKey: process.env.NUXT_PUBLIC_INSFORGE_ANON_KEY || '',
       googleMapsApiKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API_KEY || '',
     },
   },

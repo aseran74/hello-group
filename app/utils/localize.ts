@@ -1,4 +1,28 @@
-import type { House, HouseActivity, HouseAmenity, LocalizedHouse } from '~/types/house'
+import { bathroomTypeLabel, roomTypeLabel } from '~/data/feature-catalog'
+import type { House, HouseActivity, HouseAmenity, LocalizedHouse, LocalizedRoom, Room } from '~/types/house'
+
+export function localizeRoom(room: Room, locale: string): LocalizedRoom {
+  const isEn = locale.startsWith('en')
+  return {
+    id: room.id,
+    name: isEn ? room.name_en || room.name_es : room.name_es,
+    room_type: room.room_type,
+    room_type_label: roomTypeLabel(room.room_type, locale),
+    bathroom_type: room.bathroom_type,
+    bathroom_label: bathroomTypeLabel(room.bathroom_type, locale),
+    description: isEn ? room.description_en || room.description_es : room.description_es,
+    capacity: room.capacity,
+    cover_image_url: room.cover_image_url,
+    images: (room.room_images || [])
+      .slice()
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((img) => ({
+        id: img.id,
+        url: img.url,
+        alt: (isEn ? img.alt_en : img.alt_es) || room.name_es,
+      })),
+  }
+}
 
 export function localizeHouse(house: House, locale: string): LocalizedHouse {
   const isEn = locale.startsWith('en')
@@ -12,10 +36,18 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
     detail: isEn ? a.detail_en : a.detail_es,
   }))
 
+  const rooms = (house.rooms || [])
+    .filter((r) => r.published !== false)
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((r) => localizeRoom(r, locale))
+
   const map_url =
     house.lat != null && house.lng != null
       ? `https://www.google.com/maps/search/?api=1&query=${house.lat},${house.lng}`
       : null
+
+  const bedrooms = rooms.length > 0 ? rooms.length : house.bedrooms
 
   return {
     id: house.id,
@@ -26,7 +58,7 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
     property_type: isEn ? house.property_type_en : house.property_type_es,
     description: isEn ? house.description_en : house.description_es,
     capacity: house.capacity,
-    bedrooms: house.bedrooms,
+    bedrooms,
     bathrooms: house.bathrooms,
     size_m2: house.size_m2,
     price_label: isEn ? house.price_label_en : house.price_label_es,
@@ -46,5 +78,6 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
         url: img.url,
         alt: (isEn ? img.alt_en : img.alt_es) || house.name_es,
       })),
+    rooms,
   }
 }

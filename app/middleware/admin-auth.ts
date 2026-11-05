@@ -1,7 +1,14 @@
-/**
- * Auth is deferred until Supabase is configured.
- * For now the admin area is open (demo / content preview).
- */
-export default defineNuxtRouteMiddleware(() => {
-  // no-op
+export default defineNuxtRouteMiddleware(async (to) => {
+  if (to.path.includes('/admin/login')) return
+
+  if (!hasInsforgeConfig()) {
+    return navigateTo('/admin/login')
+  }
+
+  const { ensureSession, user } = useAdminAuth()
+  await ensureSession()
+
+  if (!user.value) {
+    return navigateTo('/admin/login')
+  }
 })

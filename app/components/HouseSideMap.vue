@@ -9,18 +9,13 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const config = useRuntimeConfig()
 
-const apiKey = computed(() => String(config.public.googleMapsApiKey || '').trim())
 const hasCoords = computed(() => props.lat != null && props.lng != null)
 
+/** Embed sin Maps Embed API (no requiere activar APIs de pago en Google Cloud). */
 const embedSrc = computed(() => {
   if (!hasCoords.value) return null
-  if (apiKey.value) {
-    const q = encodeURIComponent(`${props.lat},${props.lng}`)
-    return `https://www.google.com/maps/embed/v1/place?key=${apiKey.value}&q=${q}&zoom=14`
-  }
-  return `https://maps.google.com/maps?q=${props.lat},${props.lng}&z=14&output=embed`
+  return `https://maps.google.com/maps?q=${props.lat},${props.lng}&z=14&hl=es&output=embed`
 })
 
 const externalUrl = computed(
@@ -33,7 +28,7 @@ const externalUrl = computed(
 </script>
 
 <template>
-  <aside class="flex h-full min-h-[18rem] flex-col overflow-hidden rounded-xl border border-line bg-paper-elevated md:min-h-0">
+  <aside class="flex flex-col overflow-hidden rounded-xl border border-line bg-paper-elevated">
     <div class="border-b border-line px-4 py-3">
       <p class="text-xs font-semibold uppercase tracking-wider text-mute">
         {{ t('homes.location') }}
@@ -43,7 +38,7 @@ const externalUrl = computed(
       </p>
     </div>
 
-    <div class="relative min-h-[16rem] flex-1 bg-line/30 lg:min-h-[22rem]">
+    <div class="relative aspect-[4/3] min-h-[14rem] bg-line/30">
       <iframe
         v-if="embedSrc"
         class="absolute inset-0 h-full w-full border-0 grayscale-[0.15]"
