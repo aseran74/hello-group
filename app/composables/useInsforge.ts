@@ -12,11 +12,17 @@ export function hasInsforgeConfig() {
   return true
 }
 
-/** Cliente InsForge (anon). En browser se reutiliza una instancia. */
+function readAccessToken(): string | undefined {
+  const token = useCookie<string | null>('hg_access_token').value
+  return token || undefined
+}
+
+/** Cliente InsForge (anon + access token de cookie cuando existe). */
 export function useInsforge() {
   const config = useRuntimeConfig()
   const baseUrl = String(config.public.insforgeUrl || '')
   const anonKey = String(config.public.insforgeAnonKey || '')
+  const accessToken = readAccessToken()
 
   if (!baseUrl || !anonKey) {
     throw new Error('InsForge no está configurado (NUXT_PUBLIC_INSFORGE_URL / ANON_KEY)')
@@ -24,10 +30,21 @@ export function useInsforge() {
 
   if (import.meta.client) {
     if (!browserClient) {
-      browserClient = createClient({ baseUrl, anonKey })
+      browserClient = createClient({
+        baseUrl,
+        anonKey,
+        accessToken,
+      })
+    }
+    else if (accessToken) {
+      browserClient.setAccessToken(accessToken)
     }
     return browserClient
   }
 
-  return createClient({ baseUrl, anonKey })
+  return createClient({
+    baseUrl,
+    anonKey,
+    accessToken,
+  })
 }

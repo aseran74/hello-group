@@ -4,6 +4,10 @@ allowed_redirect_urls = [
   "http://localhost:3000/",
   "http://localhost:3000/admin",
   "http://localhost:3000/admin/login",
+  "https://hello-group-teal.vercel.app",
+  "https://hello-group-teal.vercel.app/",
+  "https://hello-group-teal.vercel.app/admin",
+  "https://hello-group-teal.vercel.app/admin/login",
 ]
 require_email_verification = false
 verify_email_method = "code"

@@ -5,44 +5,58 @@ type AdminUser = {
   profile?: { name?: string | null; avatar_url?: string | null }
 }
 
-const user = ref<AdminUser | null>(null)
-const accessToken = ref<string | null>(null)
-const ready = ref(false)
-let bootstrapped = false
+type SessionPayload = {
+  user: AdminUser | null
+  accessToken: string | null
+}
 
 export function useAdminAuth() {
+  const user = useState<AdminUser | null>('admin-auth-user', () => null)
+  const accessToken = useState<string | null>('admin-auth-token', () => null)
+  const ready = useState<boolean>('admin-auth-ready', () => false)
+  const bootstrapped = useState<boolean>('admin-auth-bootstrapped', () => false)
+
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  async function refresh() {
-    if (!hasInsforgeConfig()) {
-      user.value = null
-      accessToken.value = null
-      ready.value = true
-      return null
-    }
-    const client = useInsforge()
-    const { data, error: err } = await client.auth.getCurrentUser()
-    if (err || !data?.user) {
-      user.value = null
-      accessToken.value = null
-    }
-    else {
-      user.value = data.user as AdminUser
-      if (!accessToken.value) {
-        const refreshed = await client.auth.refreshSession()
-        if (refreshed.data && 'accessToken' in refreshed.data) {
-          accessToken.value = (refreshed.data as { accessToken?: string }).accessToken || null
-        }
+  function applySession(payload: SessionPayload) {
+    user.value = payload.user
+    accessToken.value = payload.accessToken
+    ready.value = true
+    if (import.meta.client && hasInsforgeConfig()) {
+      try {
+        const client = useInsforge()
+        client.setAccessToken(payload.accessToken)
+      }
+      catch {
+        // config missing
       }
     }
-    ready.value = true
+  }
+
+  async function fetchSession(): Promise<SessionPayload> {
+    const requestFetch = import.meta.server ? useRequestFetch() : $fetch
+    try {
+      return await requestFetch<SessionPayload>('/api/admin/auth/session')
+    }
+    catch {
+      return { user: null, accessToken: null }
+    }
+  }
+
+  async function refresh() {
+    if (!hasInsforgeConfig()) {
+      applySession({ user: null, accessToken: null })
+      return null
+    }
+    const session = await fetchSession()
+    applySession(session)
     return user.value
   }
 
   async function ensureSession() {
-    if (!bootstrapped) {
-      bootstrapped = true
+    if (!bootstrapped.value) {
+      bootstrapped.value = true
       await refresh()
     }
     else if (!ready.value) {
@@ -54,34 +68,33 @@ export function useAdminAuth() {
   async function ensureAccessToken() {
     await ensureSession()
     if (accessToken.value) return accessToken.value
-
     if (!user.value) return null
 
-    const client = useInsforge()
-    const refreshed = await client.auth.refreshSession()
-    const token = refreshed.data && 'accessToken' in refreshed.data
-      ? (refreshed.data as { accessToken?: string }).accessToken || null
-      : null
-    accessToken.value = token
-    return token
+    const session = await fetchSession()
+    applySession(session)
+    return accessToken.value
   }
 
   async function signIn(email: string, password: string) {
     loading.value = true
     error.value = null
     try {
-      const client = useInsforge()
-      const { data, error: err } = await client.auth.signInWithPassword({ email, password })
-      if (err) {
-        error.value = err.message || 'No se pudo iniciar sesión'
-        user.value = null
-        accessToken.value = null
-        return false
-      }
-      user.value = (data?.user as AdminUser | null) ?? null
-      accessToken.value = data?.accessToken ?? null
-      ready.value = true
+      const data = await $fetch<SessionPayload>('/api/admin/auth/login', {
+        method: 'POST',
+        body: { email, password },
+      })
+      applySession({
+        user: data.user,
+        accessToken: data.accessToken,
+      })
+      bootstrapped.value = true
       return !!user.value
+    }
+    catch (e: unknown) {
+      const err = e as { data?: { statusMessage?: string; message?: string }; message?: string }
+      error.value = err?.data?.statusMessage || err?.data?.message || err?.message || 'No se pudo iniciar sesión'
+      applySession({ user: null, accessToken: null })
+      return false
     }
     finally {
       loading.value = false
@@ -92,6 +105,10 @@ export function useAdminAuth() {
     loading.value = true
     error.value = null
     try {
+      if (!hasInsforgeConfig()) {
+        error.value = 'InsForge no está configurado'
+        return false
+      }
       const client = useInsforge()
       const { data, error: err } = await client.auth.signUp({
         email,
@@ -106,10 +123,13 @@ export function useAdminAuth() {
         error.value = 'Revisa tu email para verificar la cuenta antes de entrar.'
         return false
       }
-      user.value = (data?.user as AdminUser | null) ?? null
-      accessToken.value = data?.accessToken ?? null
-      ready.value = true
-      return !!user.value
+      // Tras registro exitoso, establece cookies vía login server-side
+      return await signIn(email, password)
+    }
+    catch (e: unknown) {
+      const err = e as { data?: { statusMessage?: string; message?: string }; message?: string }
+      error.value = err?.data?.statusMessage || err?.data?.message || err?.message || 'No se pudo crear la cuenta'
+      return false
     }
     finally {
       loading.value = false
@@ -117,12 +137,13 @@ export function useAdminAuth() {
   }
 
   async function signOut() {
-    if (hasInsforgeConfig()) {
-      const client = useInsforge()
-      await client.auth.signOut()
+    try {
+      await $fetch('/api/admin/auth/logout', { method: 'POST' })
     }
-    user.value = null
-    accessToken.value = null
+    catch {
+      // ignore
+    }
+    applySession({ user: null, accessToken: null })
     await navigateTo('/admin/login')
   }
 
