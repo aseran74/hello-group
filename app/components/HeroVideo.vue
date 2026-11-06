@@ -2,17 +2,18 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const VIDEO_SRC = '/Apple2/gemini_generated_video_f7d9d001.mp4'
-const TOTAL_FRAMES = 70
+const VIDEO_SRC = '/Apple3/gemini_generated_video_c4c919e5.mp4'
+const TOTAL_FRAMES = 50
 const FRAME_SEQUENCE = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
   const n = String(i).padStart(3, '0')
-  return `/Apple2/gemini_generated_video_f7d9d001_${n}.jpg`
+  return `/Apple3/gemini_generated_video_c4c919e5_${n}.jpg`
 })
 
 /** Altura del runway de scroll en viewports tras el vídeo */
-const SCROLL_HEIGHT_VH = 400
-/** En móvil el intro de vídeo se corta a 4s */
-const MOBILE_VIDEO_MAX_MS = 4000
+const SCROLL_HEIGHT_VH = 280
+/** Intro de vídeo: máximo 5s */
+const VIDEO_MAX_MS = 5_000
+const VIDEO_MAX_S = VIDEO_MAX_MS / 1000
 
 const sectionRef = ref<HTMLElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
@@ -20,7 +21,7 @@ const videoRef = ref<HTMLVideoElement | null>(null)
 
 const images: (HTMLImageElement | undefined)[] = []
 let currentFrame = 0
-let mobileCutoffTimer: ReturnType<typeof setTimeout> | null = null
+let videoCutoffTimer: ReturnType<typeof setTimeout> | null = null
 
 const isLoaded = ref(false)
 const videoEnded = ref(false)
@@ -29,25 +30,33 @@ const progress = ref(0)
 const reduceMotion = ref(false)
 const userPaused = ref(false)
 
-function isMobileViewport() {
-  return window.matchMedia('(max-width: 767px)').matches
-}
-
-function clearMobileCutoff() {
-  if (mobileCutoffTimer) {
-    clearTimeout(mobileCutoffTimer)
-    mobileCutoffTimer = null
+function clearVideoCutoff() {
+  if (videoCutoffTimer) {
+    clearTimeout(videoCutoffTimer)
+    videoCutoffTimer = null
   }
 }
 
-function scheduleMobileCutoff() {
-  clearMobileCutoff()
-  if (!isMobileViewport() || videoEnded.value || reduceMotion.value) return
-  mobileCutoffTimer = setTimeout(() => {
-    const video = videoRef.value
-    if (video && !video.paused) video.pause()
+function scheduleVideoCutoff() {
+  clearVideoCutoff()
+  if (videoEnded.value || reduceMotion.value) return
+  const video = videoRef.value
+  const elapsedMs = video ? Math.max(0, video.currentTime * 1000) : 0
+  const remaining = Math.max(0, VIDEO_MAX_MS - elapsedMs)
+  videoCutoffTimer = setTimeout(() => {
+    const v = videoRef.value
+    if (v && !v.paused) v.pause()
     finishVideo()
-  }, MOBILE_VIDEO_MAX_MS)
+  }, remaining)
+}
+
+function onVideoTimeUpdate() {
+  const video = videoRef.value
+  if (!video || videoEnded.value) return
+  if (video.currentTime >= VIDEO_MAX_S) {
+    video.pause()
+    finishVideo()
+  }
 }
 
 function drawFrame(index: number) {
@@ -69,26 +78,34 @@ function drawFrame(index: number) {
   canvas.style.height = `${h}px`
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-  const isMobile = w < 768
   const canvasAspect = w / h
   const imgAspect = img.naturalWidth / img.naturalHeight
+  // Móvil/tablet: cover a pantalla completa; escritorio: contain
+  const cover = w < 1024
 
   let drawWidth: number
   let drawHeight: number
-  let offsetX: number
-  let offsetY: number
 
-  // Cover a todo el ancho (y alto) del viewport
-  if (imgAspect > canvasAspect) {
-    drawHeight = h
-    drawWidth = drawHeight * imgAspect
-  } else {
+  if (cover) {
+    if (imgAspect > canvasAspect) {
+      drawHeight = h
+      drawWidth = drawHeight * imgAspect
+    } else {
+      drawWidth = w
+      drawHeight = drawWidth / imgAspect
+    }
+  }
+  else if (imgAspect > canvasAspect) {
     drawWidth = w
     drawHeight = drawWidth / imgAspect
   }
-  offsetX = (w - drawWidth) / 2
-  // Móvil: encuadre bajo; escritorio: centrado
-  offsetY = isMobile ? h - drawHeight : (h - drawHeight) / 2
+  else {
+    drawHeight = h
+    drawWidth = drawHeight * imgAspect
+  }
+
+  const offsetX = (w - drawWidth) / 2
+  const offsetY = (h - drawHeight) / 2
 
   ctx.clearRect(0, 0, w, h)
   ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
@@ -96,14 +113,14 @@ function drawFrame(index: number) {
 }
 
 function finishVideo() {
-  clearMobileCutoff()
+  clearVideoCutoff()
   videoEnded.value = true
 }
 
 function onVideoLoaded() {
   const video = videoRef.value
   if (!video) return
-  video.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
+  video.play().then(() => scheduleVideoCutoff()).catch(finishVideo)
 }
 
 function toggleVideoPlayback() {
@@ -112,11 +129,11 @@ function toggleVideoPlayback() {
 
   if (video.paused) {
     userPaused.value = false
-    video.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
+    video.play().then(() => scheduleVideoCutoff()).catch(finishVideo)
     videoPaused.value = false
   } else {
     userPaused.value = true
-    clearMobileCutoff()
+    clearVideoCutoff()
     video.pause()
     videoPaused.value = true
   }
@@ -167,7 +184,7 @@ onMounted(() => {
   })
 
   if (!reduceMotion.value) {
-    videoRef.value?.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
+    videoRef.value?.play().then(() => scheduleVideoCutoff()).catch(finishVideo)
   }
 
   const section = sectionRef.value
@@ -177,12 +194,12 @@ onMounted(() => {
       ([entry]) => {
         if (!entry) return
         if (!entry.isIntersecting) {
-          clearMobileCutoff()
+          clearVideoCutoff()
           video.pause()
           return
         }
         if (!userPaused.value && !videoEnded.value) {
-          video.play().then(() => scheduleMobileCutoff()).catch(finishVideo)
+          video.play().then(() => scheduleVideoCutoff()).catch(finishVideo)
         }
       },
       { threshold: 0.35 },
@@ -190,7 +207,7 @@ onMounted(() => {
     observer.observe(section)
     onUnmounted(() => {
       observer.disconnect()
-      clearMobileCutoff()
+      clearVideoCutoff()
     })
   }
 })
@@ -257,7 +274,7 @@ watch(
         v-if="!isLoaded && videoEnded"
         :src="FRAME_SEQUENCE[0]"
         alt=""
-        class="hero-media absolute inset-0 h-full w-full object-cover"
+        class="hero-media absolute inset-0 h-full w-full"
       >
 
       <canvas
@@ -272,7 +289,7 @@ watch(
       <video
         v-if="!reduceMotion"
         ref="videoRef"
-        class="hero-media absolute inset-0 z-[2] h-full w-full object-cover"
+        class="hero-media absolute inset-0 z-[2] h-full w-full"
         :style="{
           opacity: videoEnded ? 0 : 1,
           transition: 'opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
@@ -284,6 +301,7 @@ watch(
         :poster="FRAME_SEQUENCE[0]"
         :src="VIDEO_SRC"
         @loadeddata="onVideoLoaded"
+        @timeupdate="onVideoTimeUpdate"
         @ended="finishVideo"
         @error="finishVideo"
       />
@@ -292,7 +310,7 @@ watch(
         v-if="reduceMotion"
         :src="FRAME_SEQUENCE[0]"
         alt=""
-        class="hero-media absolute inset-0 z-[2] h-full w-full object-cover"
+        class="hero-media absolute inset-0 z-[2] h-full w-full"
         @load="finishVideo"
       >
 
@@ -368,9 +386,9 @@ watch(
   height: 100%;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 1024px) {
   .hero-media {
-    object-position: center bottom;
+    object-fit: contain;
   }
 }
 </style>

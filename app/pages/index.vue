@@ -14,14 +14,14 @@ const asturiasHomes = computed(() =>
   (houses.value || []).filter((h) => h.slug === 'astur'),
 )
 
-const previewFaqs = computed(() => (faqs.value || []).slice(0, 6))
+const homeFaqs = computed(() => faqs.value || [])
+const faqOpen = ref(false)
 const openFaqId = ref<string | null>(null)
 
-watchEffect(() => {
-  if (!openFaqId.value && previewFaqs.value.length) {
-    openFaqId.value = previewFaqs.value[0].id
-  }
-})
+function toggleFaqSection() {
+  faqOpen.value = !faqOpen.value
+  if (!faqOpen.value) openFaqId.value = null
+}
 
 function toggleFaq(id: string) {
   openFaqId.value = openFaqId.value === id ? null : id
@@ -94,31 +94,47 @@ useSeoMeta({
       </div>
     </section>
 
-    <section v-if="previewFaqs.length" id="faq" class="section-pad !py-16 md:!py-20">
-      <div class="page-shell max-w-3xl">
-        <header class="text-center md:text-left">
-          <p class="eyebrow">{{ t('nav.faq') }}</p>
-          <h2 class="mt-2 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
-            {{ t('home.faqTitle') }}
-          </h2>
-          <p class="mt-3 text-base leading-relaxed text-mute">
-            {{ t('home.faqSub') }}
-          </p>
-        </header>
+    <section v-if="homeFaqs.length" id="faq" class="border-y border-line bg-paper">
+      <div class="page-shell max-w-3xl px-5 py-1 md:px-8">
+        <button
+          type="button"
+          class="flex w-full items-start justify-between gap-4 py-4 text-left md:items-center md:py-3.5"
+          :aria-expanded="faqOpen"
+          @click="toggleFaqSection"
+        >
+          <span class="min-w-0 pr-2">
+            <span class="block font-display text-base font-semibold tracking-tight text-ink md:text-lg">
+              {{ t('home.faqTitle') }}
+            </span>
+            <span class="mt-1 block text-sm leading-snug text-mute">
+              {{ t('home.faqSub') }}
+            </span>
+          </span>
+          <span
+            class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-mute transition md:mt-0"
+            :class="faqOpen && 'rotate-45'"
+            aria-hidden="true"
+          >
+            +
+          </span>
+        </button>
 
-        <ul class="mt-10 divide-y divide-line border-y border-line">
-          <li v-for="item in previewFaqs" :key="item.id">
+        <ul
+          v-show="faqOpen"
+          class="mb-3 divide-y divide-line border-t border-line md:mb-2"
+        >
+          <li v-for="item in homeFaqs" :key="item.id" class="py-1">
             <button
               type="button"
-              class="flex w-full items-start justify-between gap-4 py-5 text-left"
+              class="flex w-full items-start justify-between gap-4 py-3.5 text-left md:items-center md:py-3"
               :aria-expanded="openFaqId === item.id"
               @click="toggleFaq(item.id)"
             >
-              <span class="font-display text-lg font-semibold tracking-tight text-ink md:text-xl">
+              <span class="min-w-0 font-display text-[0.9375rem] font-semibold leading-snug tracking-tight text-ink md:text-sm">
                 {{ item.title }}
               </span>
               <span
-                class="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center text-mute transition"
+                class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center text-mute transition md:mt-0"
                 :class="openFaqId === item.id && 'rotate-45'"
                 aria-hidden="true"
               >
@@ -127,18 +143,12 @@ useSeoMeta({
             </button>
             <div
               v-show="openFaqId === item.id"
-              class="pb-6 pr-10 text-base leading-relaxed text-mute whitespace-pre-line"
+              class="pb-4 pr-2 text-sm leading-relaxed text-mute whitespace-pre-line md:pr-8"
             >
               {{ item.message }}
             </div>
           </li>
         </ul>
-
-        <div class="mt-8 flex justify-center md:justify-start">
-          <NuxtLink :to="localePath('/faq')" class="btn-secondary">
-            {{ t('home.faqAll') }}
-          </NuxtLink>
-        </div>
       </div>
     </section>
 

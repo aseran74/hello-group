@@ -6,12 +6,6 @@ const { data: faqs } = await useAsyncData('public-faqs', () => fetchFaqs({ publi
 
 const openId = ref<string | null>(null)
 
-watchEffect(() => {
-  if (!openId.value && faqs.value?.length) {
-    openId.value = faqs.value[0].id
-  }
-})
-
 function toggle(id: string) {
   openId.value = openId.value === id ? null : id
 }
@@ -27,31 +21,31 @@ useSeoMeta({
     <div class="page-shell max-w-3xl">
       <header>
         <p class="eyebrow">Hello Group</p>
-        <h1 class="mt-3 font-display text-4xl font-bold tracking-tight text-ink md:text-6xl">
+        <h1 class="mt-3 font-display text-4xl font-bold tracking-tight text-ink md:text-5xl">
           {{ t('faq.title') }}
         </h1>
-        <p class="mt-5 text-lg leading-relaxed text-mute">
+        <p class="mt-4 text-base leading-relaxed text-mute">
           {{ t('faq.subtitle') }}
         </p>
       </header>
 
-      <div v-if="!faqs?.length" class="mt-12 text-mute">
+      <div v-if="!faqs?.length" class="mt-10 text-mute">
         {{ t('faq.empty') }}
       </div>
 
-      <ul v-else class="mt-12 divide-y divide-line border-y border-line">
-        <li v-for="item in faqs" :key="item.id">
+      <ul v-else class="mt-8 divide-y divide-line border-y border-line">
+        <li v-for="item in faqs" :key="item.id" class="py-1">
           <button
             type="button"
-            class="flex w-full items-start justify-between gap-4 py-5 text-left transition hover:text-black"
+            class="flex w-full items-start justify-between gap-4 py-3.5 text-left transition hover:text-black md:items-center md:py-3.5"
             :aria-expanded="openId === item.id"
             @click="toggle(item.id)"
           >
-            <span class="font-display text-lg font-semibold tracking-tight text-ink md:text-xl">
+            <span class="min-w-0 font-display text-[0.9375rem] font-semibold leading-snug tracking-tight text-ink md:text-base">
               {{ item.title }}
             </span>
             <span
-              class="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center text-mute transition"
+              class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-mute transition md:mt-0 md:h-6 md:w-6 md:border-0"
               :class="openId === item.id && 'rotate-45'"
               aria-hidden="true"
             >
@@ -60,7 +54,7 @@ useSeoMeta({
           </button>
           <div
             v-show="openId === item.id"
-            class="pb-6 pr-10 text-base leading-relaxed text-mute whitespace-pre-line"
+            class="pb-4 pr-2 text-sm leading-relaxed text-mute whitespace-pre-line md:pr-8"
           >
             {{ item.message }}
           </div>
