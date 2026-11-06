@@ -59,7 +59,7 @@ async function onToggle(house: House) {
       </NuxtLink>
     </div>
 
-    <div class="mt-6 grid gap-3 sm:grid-cols-4">
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
       <div class="border border-line bg-white px-4 py-3">
         <p class="text-xs uppercase tracking-wider text-mute">Propiedades</p>
         <p class="mt-1 font-display text-3xl font-semibold">{{ houses?.length || 0 }}</p>
@@ -75,6 +75,10 @@ async function onToggle(house: House) {
       <NuxtLink to="/admin/consultas" class="border border-line bg-white px-4 py-3 transition hover:border-ink">
         <p class="text-xs uppercase tracking-wider text-mute">{{ t('admin.inquiries') }}</p>
         <p class="mt-1 font-display text-3xl font-semibold">{{ unread }}</p>
+      </NuxtLink>
+      <NuxtLink to="/admin/faq" class="border border-line bg-white px-4 py-3 transition hover:border-ink">
+        <p class="text-xs uppercase tracking-wider text-mute">{{ t('admin.faq') }}</p>
+        <p class="mt-1 text-sm text-mute">Respuestas rápidas</p>
       </NuxtLink>
     </div>
 

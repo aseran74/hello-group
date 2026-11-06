@@ -71,7 +71,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
     <div class="grid gap-2 md:grid-cols-[1.55fr_0.85fr] md:gap-2 lg:gap-2.5">
       <button
         type="button"
-        class="group relative overflow-hidden rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:row-span-2 md:min-h-[24rem] lg:min-h-[28rem]"
+        class="group relative overflow-hidden rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:row-span-2 md:min-h-[24rem] lg:min-h-[28rem]"
         @click="openAt(0)"
       >
         <img
@@ -84,7 +84,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
       <div class="grid grid-rows-2 gap-2">
         <button
           type="button"
-          class="group relative min-h-[7rem] overflow-hidden rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:min-h-0"
+          class="group relative min-h-[7rem] overflow-hidden rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:min-h-0"
           @click="openAt(1)"
         >
           <img
@@ -96,7 +96,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         </button>
         <button
           type="button"
-          class="group relative min-h-[7rem] overflow-hidden rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:min-h-0"
+          class="group relative min-h-[7rem] overflow-hidden rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:min-h-0"
           @click="openAt(2)"
         >
           <img
@@ -114,7 +114,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         v-for="(img, i) in thumbs"
         :key="`${img.id}-thumb-${i}`"
         type="button"
-        class="group relative aspect-[4/3] overflow-hidden rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        class="group relative aspect-[4/3] overflow-hidden rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         @click="i === thumbs.length - 1 && extraCount > 0 ? openMore() : openAt(i + 3)"
       >
         <img
@@ -158,7 +158,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         <img
           :src="all[lightboxIndex].url"
           :alt="all[lightboxIndex].alt"
-          class="max-h-[85vh] max-w-full rounded-xl object-contain"
+          class="max-h-[85vh] max-w-full rounded-2xl object-contain"
         >
         <button
           type="button"

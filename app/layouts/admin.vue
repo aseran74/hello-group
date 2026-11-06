@@ -4,7 +4,7 @@ const route = useRoute()
 const { user, signOut } = useAdminAuth()
 const isLogin = computed(() => route.path.includes('/admin/login'))
 
-function navClass(kind: 'dashboard' | 'casas' | 'consultas') {
+function navClass(kind: 'dashboard' | 'casas' | 'consultas' | 'faq') {
   const path = route.path
   const active =
     kind === 'dashboard'
@@ -25,6 +25,7 @@ function navClass(kind: 'dashboard' | 'casas' | 'consultas') {
           <nav v-if="!isLogin && user" class="hidden gap-5 text-sm sm:flex">
             <NuxtLink to="/admin" :class="navClass('dashboard')">{{ t('admin.dashboard') }}</NuxtLink>
             <NuxtLink to="/admin/casas" :class="navClass('casas')">{{ t('admin.houses') }}</NuxtLink>
+            <NuxtLink to="/admin/faq" :class="navClass('faq')">{{ t('admin.faq') }}</NuxtLink>
             <NuxtLink to="/admin/consultas" :class="navClass('consultas')">{{ t('admin.inquiries') }}</NuxtLink>
           </nav>
         </div>

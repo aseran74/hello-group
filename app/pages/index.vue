@@ -2,8 +2,10 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { fetchHouses } = useHouses()
+const { fetchFaqs } = useFaqs()
 
 const { data: houses } = await useAsyncData('home-houses', () => fetchHouses())
+const { data: faqs } = await useAsyncData('home-faqs', () => fetchFaqs({ publishedOnly: true }))
 
 const madridHomes = computed(() =>
   (houses.value || []).filter((h) => h.slug !== 'astur'),
@@ -11,6 +13,19 @@ const madridHomes = computed(() =>
 const asturiasHomes = computed(() =>
   (houses.value || []).filter((h) => h.slug === 'astur'),
 )
+
+const previewFaqs = computed(() => (faqs.value || []).slice(0, 6))
+const openFaqId = ref<string | null>(null)
+
+watchEffect(() => {
+  if (!openFaqId.value && previewFaqs.value.length) {
+    openFaqId.value = previewFaqs.value[0].id
+  }
+})
+
+function toggleFaq(id: string) {
+  openFaqId.value = openFaqId.value === id ? null : id
+}
 
 useSeoMeta({
   title: 'Hello Group',
@@ -74,6 +89,54 @@ useSeoMeta({
         <div class="mt-10 flex justify-center">
           <NuxtLink :to="localePath('/casas')" class="btn-secondary">
             {{ t('home.ctaHomes') }}
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <section v-if="previewFaqs.length" id="faq" class="section-pad !py-16 md:!py-20">
+      <div class="page-shell max-w-3xl">
+        <header class="text-center md:text-left">
+          <p class="eyebrow">{{ t('nav.faq') }}</p>
+          <h2 class="mt-2 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
+            {{ t('home.faqTitle') }}
+          </h2>
+          <p class="mt-3 text-base leading-relaxed text-mute">
+            {{ t('home.faqSub') }}
+          </p>
+        </header>
+
+        <ul class="mt-10 divide-y divide-line border-y border-line">
+          <li v-for="item in previewFaqs" :key="item.id">
+            <button
+              type="button"
+              class="flex w-full items-start justify-between gap-4 py-5 text-left"
+              :aria-expanded="openFaqId === item.id"
+              @click="toggleFaq(item.id)"
+            >
+              <span class="font-display text-lg font-semibold tracking-tight text-ink md:text-xl">
+                {{ item.title }}
+              </span>
+              <span
+                class="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center text-mute transition"
+                :class="openFaqId === item.id && 'rotate-45'"
+                aria-hidden="true"
+              >
+                +
+              </span>
+            </button>
+            <div
+              v-show="openFaqId === item.id"
+              class="pb-6 pr-10 text-base leading-relaxed text-mute whitespace-pre-line"
+            >
+              {{ item.message }}
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-8 flex justify-center md:justify-start">
+          <NuxtLink :to="localePath('/faq')" class="btn-secondary">
+            {{ t('home.faqAll') }}
           </NuxtLink>
         </div>
       </div>

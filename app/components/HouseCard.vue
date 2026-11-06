@@ -102,11 +102,11 @@ onUnmounted(() => {
 <template>
   <NuxtLink
     :to="localePath(`/casas/${house.slug}`)"
-    class="group relative isolate block overflow-hidden bg-ink outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
+    class="group relative isolate block overflow-hidden rounded-2xl bg-ink outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
   >
     <div
       ref="rootRef"
-      class="relative overflow-hidden"
+      class="relative overflow-hidden rounded-2xl"
       :class="wide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[4/3]'"
     >
       <template v-if="useCarousel">

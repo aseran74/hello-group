@@ -3,11 +3,17 @@
     "homes": "Casas",
     "about": "Nosotros",
     "features": "Características",
+    "faq": "FAQ",
     "blog": "Blog",
     "contact": "Contacto",
     "book": "Reserva",
     "menu": "Menú",
     "houses": "Casas"
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "subtitle": "Respuestas rápidas sobre check-in, acceso, Wi‑Fi y más detalles de la estancia.",
+    "empty": "Todavía no hay preguntas publicadas."
   },
   "home": {
     "brand": "Hello Group",
@@ -22,7 +28,10 @@
     "groupMadrid": "Alojamientos urbanos en Madrid",
     "groupAsturias": "Casa rural en Asturias",
     "aboutBandTitle": "Alojamientos urbanos en Madrid y Casa rural en Asturias",
-    "aboutBandCta": "Conocer Hello Group"
+    "aboutBandCta": "Conocer Hello Group",
+    "faqTitle": "Preguntas frecuentes",
+    "faqSub": "Check-in, acceso, Wi‑Fi y lo esencial de la estancia.",
+    "faqAll": "Ver todas las FAQ"
   },
   "homes": {
     "title": "Nuestras casas",
@@ -166,6 +175,13 @@
     "signOut": "Salir",
     "dashboard": "Dashboard",
     "houses": "Propiedades",
+    "faq": "FAQ",
+    "faqSub": "Respuestas rápidas editables (ES/EN) con atajos para copiar al chat.",
+    "newFaq": "Nueva FAQ",
+    "shortcuts": "Atajos",
+    "shortcutsHint": "/wifi, internet, …",
+    "copyMessage": "Copiar mensaje",
+    "copied": "Copiado",
     "inquiries": "Consultas",
     "unread": "Sin leer",
     "markRead": "Marcar leída",

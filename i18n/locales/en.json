@@ -3,11 +3,17 @@
     "homes": "Homes",
     "about": "About",
     "features": "Features",
+    "faq": "FAQ",
     "blog": "Blog",
     "contact": "Contact",
     "book": "Book",
     "menu": "Menu",
     "houses": "Homes"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "subtitle": "Quick answers about check-in, access, Wi‑Fi and other stay details.",
+    "empty": "No published questions yet."
   },
   "home": {
     "brand": "Hello Group",
@@ -22,7 +28,10 @@
     "groupMadrid": "Urban stays in Madrid",
     "groupAsturias": "Rural home in Asturias",
     "aboutBandTitle": "Urban stays in Madrid and a rural home in Asturias",
-    "aboutBandCta": "About Hello Group"
+    "aboutBandCta": "About Hello Group",
+    "faqTitle": "Frequently asked questions",
+    "faqSub": "Check-in, access, Wi‑Fi and the essentials of your stay.",
+    "faqAll": "See all FAQs"
   },
   "homes": {
     "title": "Our homes",
@@ -166,6 +175,13 @@
     "signOut": "Sign out",
     "dashboard": "Dashboard",
     "houses": "Properties",
+    "faq": "FAQ",
+    "faqSub": "Editable quick replies (ES/EN) with shortcuts you can copy into chat.",
+    "newFaq": "New FAQ",
+    "shortcuts": "Shortcuts",
+    "shortcutsHint": "/wifi, internet, …",
+    "copyMessage": "Copy message",
+    "copied": "Copied",
     "inquiries": "Enquiries",
     "unread": "Unread",
     "markRead": "Mark as read",
