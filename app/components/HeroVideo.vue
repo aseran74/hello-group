@@ -80,28 +80,17 @@ function drawFrame(index: number) {
 
   const canvasAspect = w / h
   const imgAspect = img.naturalWidth / img.naturalHeight
-  // Móvil/tablet: cover a pantalla completa; escritorio: contain
-  const cover = w < 1024
 
   let drawWidth: number
   let drawHeight: number
 
-  if (cover) {
-    if (imgAspect > canvasAspect) {
-      drawHeight = h
-      drawWidth = drawHeight * imgAspect
-    } else {
-      drawWidth = w
-      drawHeight = drawWidth / imgAspect
-    }
-  }
-  else if (imgAspect > canvasAspect) {
-    drawWidth = w
-    drawHeight = drawWidth / imgAspect
-  }
-  else {
+  // Cover a pantalla completa en todos los anchos (sin letterbox)
+  if (imgAspect > canvasAspect) {
     drawHeight = h
     drawWidth = drawHeight * imgAspect
+  } else {
+    drawWidth = w
+    drawHeight = drawWidth / imgAspect
   }
 
   const offsetX = (w - drawWidth) / 2
@@ -384,11 +373,5 @@ watch(
   object-position: center center;
   width: 100%;
   height: 100%;
-}
-
-@media (min-width: 1024px) {
-  .hero-media {
-    object-fit: contain;
-  }
 }
 </style>
