@@ -1,4 +1,12 @@
 <script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    /** Contenedor ondulado / con márgenes (estilo landing) */
+    framed?: boolean
+  }>(),
+  { framed: false },
+)
+
 const { t } = useI18n()
 const localePath = useLocalePath()
 
@@ -129,8 +137,10 @@ function toggleVideoPlayback() {
 }
 
 const sectionHeight = computed(() => {
-  if (reduceMotion.value || !videoEnded.value) return '100svh'
-  return `${SCROLL_HEIGHT_VH}vh`
+  if (reduceMotion.value || !videoEnded.value) {
+    return props.framed ? undefined : '100svh'
+  }
+  return props.framed ? `${Math.round(SCROLL_HEIGHT_VH * 0.85)}vh` : `${SCROLL_HEIGHT_VH}vh`
 })
 
 const textOpacity = computed(() => {
@@ -255,10 +265,35 @@ watch(
   <section
     ref="sectionRef"
     class="relative z-30"
-    :style="{ height: sectionHeight }"
+    :class="[
+      framed && 'px-4 pt-20 md:px-6 md:pt-24',
+      framed && !videoEnded && 'min-h-[min(78svh,44rem)] md:min-h-[min(82svh,48rem)]',
+    ]"
+    :style="sectionHeight ? { height: sectionHeight } : undefined"
     :aria-label="t('home.welcome')"
   >
-    <div class="sticky top-0 h-[100svh] w-full overflow-hidden bg-ink text-mist">
+    <div
+      class="sticky w-full overflow-hidden bg-ink text-mist"
+      :class="
+        framed
+          ? 'hero-framed top-3 h-[min(78svh,44rem)] md:top-4 md:h-[min(82svh,48rem)]'
+          : 'top-0 h-[100svh]'
+      "
+    >
+      <div
+        v-if="framed"
+        class="absolute right-4 top-4 z-30 max-w-[11rem] overflow-hidden rounded-[1.35rem] border border-white/25 bg-black/35 shadow-[0_16px_40px_rgba(0,0,0,0.28)] backdrop-blur-md md:right-6 md:top-6 md:max-w-[13rem]"
+      >
+        <img
+          src="/landing/madrid-retiro.jpg"
+          alt=""
+          class="aspect-[4/3] w-full object-cover"
+          loading="lazy"
+        >
+        <p class="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/90">
+          {{ t('home.heroChip') }}
+        </p>
+      </div>
       <img
         v-if="!isLoaded && videoEnded"
         :src="FRAME_SEQUENCE[0]"
@@ -373,5 +408,15 @@ watch(
   object-position: center center;
   width: 100%;
   height: 100%;
+}
+
+.hero-framed {
+  border-radius: 2rem 2rem 42% 42% / 2rem 2rem 10% 10%;
+}
+
+@media (min-width: 768px) {
+  .hero-framed {
+    border-radius: 2.75rem 2.75rem 46% 46% / 2.75rem 2.75rem 12% 12%;
+  }
 }
 </style>

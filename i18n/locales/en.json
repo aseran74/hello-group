@@ -18,24 +18,45 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Welcome to Hello Group",
-    "headline": "Urban stays in Madrid and a rural home in Asturias",
+    "headline": "Urban stays in Madrid and a hotel in Asturias",
     "sub": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "ctaHomes": "View homes",
     "ctaContact": "Get in touch",
     "scrollHint": "Scroll",
     "previewTitle": "Our homes",
-    "previewSub": "Urban stays in Madrid and a rural home in Asturias, each with its own character.",
+    "previewSub": "Urban stays in Madrid and a hotel in Asturias, each with its own character.",
     "groupMadrid": "Urban stays in Madrid",
-    "groupAsturias": "Rural home in Asturias",
-    "aboutBandTitle": "Urban stays in Madrid and a rural home in Asturias",
+    "groupAsturias": "Hotel in Asturias",
+    "aboutBandTitle": "Urban stays in Madrid and a hotel in Asturias",
     "aboutBandCta": "About Hello Group",
     "faqTitle": "Frequently asked questions",
     "faqSub": "Check-in, access, Wi‑Fi and the essentials of your stay.",
-    "faqAll": "See all FAQs"
+    "faqAll": "See all FAQs",
+    "heroChip": "Madrid · Asturias",
+    "missionTitle": "Stays with character in the city and up north",
+    "missionBody": "Hello Group brings together urban stays in Madrid and a hotel in Asturias under one idea: close hospitality, spaces with personality, and a frictionless arrival.",
+    "pillarUrban": "Urban Madrid",
+    "pillarUrbanBody": "Well-placed apartments for city living.",
+    "pillarRural": "Hotel in Asturias",
+    "pillarRuralBody": "A hotel with its own pace away from the noise.",
+    "pillarCare": "Real care",
+    "pillarCareBody": "Self check-in, detail and a close reply.",
+    "pillarStay": "Flexible stays",
+    "pillarStayBody": "Made for getaways, work or family.",
+    "momentsEyebrow": "Moments",
+    "momentsTitle": "The setting around your stay",
+    "momentsSub": "Streets, landmarks and Madrid rhythms near our homes.",
+    "momentCity": "Gran Vía",
+    "momentLandmark": "Puerta de Alcalá",
+    "momentPark": "El Retiro",
+    "momentNight": "Metrópolis",
+    "curvedAlt1": "Metrópolis building at dusk",
+    "curvedAlt2": "Puerta de Alcalá",
+    "curvedAlt3": "Monument in El Retiro"
   },
   "homes": {
     "title": "Our homes",
-    "subtitle": "Urban stays in Madrid and a rural home in Asturias: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
+    "subtitle": "Urban stays in Madrid and a hotel in Asturias: Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo.",
     "capacity": "{n} guests",
     "bedrooms": "{n} beds",
     "bathrooms": "{n} baths",
@@ -77,7 +98,7 @@
   },
   "about": {
     "title": "About us",
-    "lead": "Hello Group brings together urban stays in Madrid and a rural home in Asturias under one idea: warm hospitality and stays with character.",
+    "lead": "Hello Group brings together urban stays in Madrid and a hotel in Asturias under one idea: warm hospitality and stays with character.",
     "body": "Astur, Canillas, Mediterraneo, Madrid Norte and Sincelejo. Each home sits in a different location, with the same standard of care and one team behind it all."
   },
   "featuresPage": {
@@ -112,13 +133,13 @@
   },
   "blog": {
     "title": "Blog",
-    "lead": "Ideas, destinations and life around our urban stays in Madrid and a rural home in Asturias.",
+    "lead": "Ideas, destinations and life around our urban stays in Madrid and a hotel in Asturias.",
     "readMore": "Read more",
     "back": "Back to blog",
     "posts": [
       {
         "slug": "casas-rurales-con-encanto",
-        "title": "Urban stays in Madrid and a rural home in Asturias: how we like to travel",
+        "title": "Urban stays in Madrid and a hotel in Asturias: how we like to travel",
         "excerpt": "Why we choose stays with character and how Hello Group looks after every detail.",
         "date": "2026-03-12",
         "body": [
@@ -165,7 +186,7 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "tagline": "Urban stays in Madrid and a rural home in Asturias"
+    "tagline": "Urban stays in Madrid and a hotel in Asturias"
   },
   "admin": {
     "login": "Admin access",

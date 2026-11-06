@@ -18,24 +18,45 @@
   "home": {
     "brand": "Hello Group",
     "welcome": "Bienvenido a Hello Group",
-    "headline": "Alojamientos urbanos en Madrid y Casa rural en Asturias",
+    "headline": "Alojamientos urbanos en Madrid y Hotel en Asturias",
     "sub": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "ctaHomes": "Ver casas",
     "ctaContact": "Contactar",
     "scrollHint": "Desplázate",
     "previewTitle": "Nuestras casas",
-    "previewSub": "Alojamientos urbanos en Madrid y Casa rural en Asturias, cada una con su propio carácter.",
+    "previewSub": "Alojamientos urbanos en Madrid y Hotel en Asturias, cada una con su propio carácter.",
     "groupMadrid": "Alojamientos urbanos en Madrid",
-    "groupAsturias": "Casa rural en Asturias",
-    "aboutBandTitle": "Alojamientos urbanos en Madrid y Casa rural en Asturias",
+    "groupAsturias": "Hotel en Asturias",
+    "aboutBandTitle": "Alojamientos urbanos en Madrid y Hotel en Asturias",
     "aboutBandCta": "Conocer Hello Group",
     "faqTitle": "Preguntas frecuentes",
     "faqSub": "Check-in, acceso, Wi‑Fi y lo esencial de la estancia.",
-    "faqAll": "Ver todas las FAQ"
+    "faqAll": "Ver todas las FAQ",
+    "heroChip": "Madrid · Asturias",
+    "missionTitle": "Estancias con carácter en la ciudad y en el norte",
+    "missionBody": "Hello Group reúne alojamientos urbanos en Madrid y un hotel en Asturias bajo la misma idea: hospitalidad cercana, espacios con personalidad y una llegada sin fricción.",
+    "pillarUrban": "Madrid urbano",
+    "pillarUrbanBody": "Apartamentos bien ubicados para vivir la ciudad.",
+    "pillarRural": "Hotel en Asturias",
+    "pillarRuralBody": "Un hotel con ritmo propio lejos del ruido.",
+    "pillarCare": "Cuidado real",
+    "pillarCareBody": "Check-in autónomo, detalle y respuesta cercana.",
+    "pillarStay": "Estancia flexible",
+    "pillarStayBody": "Pensado para escapadas, trabajo o familia.",
+    "momentsEyebrow": "Momentos",
+    "momentsTitle": "El entorno de tus estancias",
+    "momentsSub": "Calles, monumentos y ritmos de Madrid alrededor de nuestras casas.",
+    "momentCity": "Gran Vía",
+    "momentLandmark": "Puerta de Alcalá",
+    "momentPark": "El Retiro",
+    "momentNight": "Metrópolis",
+    "curvedAlt1": "Edificio Metrópolis al anochecer",
+    "curvedAlt2": "Puerta de Alcalá",
+    "curvedAlt3": "Monumento en el Retiro"
   },
   "homes": {
     "title": "Nuestras casas",
-    "subtitle": "Alojamientos urbanos en Madrid y Casa rural en Asturias: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
+    "subtitle": "Alojamientos urbanos en Madrid y Hotel en Asturias: Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo.",
     "capacity": "{n} personas",
     "bedrooms": "{n} hab.",
     "bathrooms": "{n} baños",
@@ -77,7 +98,7 @@
   },
   "about": {
     "title": "Nosotros",
-    "lead": "Hello Group reúne alojamientos urbanos en Madrid y Casa rural en Asturias bajo una misma idea: hospitalidad cercana y estancias con carácter.",
+    "lead": "Hello Group reúne alojamientos urbanos en Madrid y Hotel en Asturias bajo una misma idea: hospitalidad cercana y estancias con carácter.",
     "body": "Astur, Canillas, Mediterráneo, Madrid Norte y Sincelejo. Cada casa está en una localización distinta, con el mismo estándar de cuidado y un mismo equipo detrás."
   },
   "featuresPage": {
@@ -112,13 +133,13 @@
   },
   "blog": {
     "title": "Blog",
-    "lead": "Ideas, destinos y vida en nuestros alojamientos urbanos en Madrid y Casa rural en Asturias.",
+    "lead": "Ideas, destinos y vida en nuestros alojamientos urbanos en Madrid y Hotel en Asturias.",
     "readMore": "Leer más",
     "back": "Volver al blog",
     "posts": [
       {
         "slug": "casas-rurales-con-encanto",
-        "title": "Alojamientos urbanos en Madrid y Casa rural en Asturias: nuestra forma de viajar",
+        "title": "Alojamientos urbanos en Madrid y Hotel en Asturias: nuestra forma de viajar",
         "excerpt": "Por qué elegimos alojamientos con carácter y cómo Hello Group cuida cada detalle de la estancia.",
         "date": "2026-03-12",
         "body": [
@@ -165,7 +186,7 @@
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
-    "tagline": "Alojamientos urbanos en Madrid y Casa rural en Asturias"
+    "tagline": "Alojamientos urbanos en Madrid y Hotel en Asturias"
   },
   "admin": {
     "login": "Acceso admin",
