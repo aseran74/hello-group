@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { bookingUrlForHouse } from '~/data/booking-urls'
+
 const route = useRoute()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const { fetchHouseBySlug } = useHouses()
 
@@ -15,6 +17,8 @@ const { data: house } = await useAsyncData(
 if (!house.value) {
   throw createError({ statusCode: 404, statusMessage: 'House not found' })
 }
+
+const bookingUrl = computed(() => bookingUrlForHouse(slug.value, locale.value))
 
 const specs = computed(() => {
   const h = house.value!
@@ -306,14 +310,24 @@ useSeoMeta({
             >
               {{ t('homes.ask') }}
             </NuxtLink>
+            <a
+              v-if="bookingUrl"
+              :href="bookingUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary mt-3 w-full text-center"
+            >
+              {{ t('nav.book') }}
+            </a>
             <NuxtLink
+              v-else
               :to="localePath({ path: '/contacto', query: { casa: house.slug, reserva: '1' } })"
               class="btn-secondary mt-3 w-full"
             >
               {{ t('nav.book') }}
             </NuxtLink>
           </div>
-          <RoomRaccoonSlot />
+          <RoomRaccoonSlot :booking-url="bookingUrl" :house-name="house.name" />
         </aside>
       </div>
     </section>

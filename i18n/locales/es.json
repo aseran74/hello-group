@@ -86,6 +86,7 @@
     "ask": "Consultar disponibilidad",
     "bookSlot": "Reservas",
     "bookHint": "El motor de reservas (RoomRaccoon) se integrará aquí.",
+    "bookReady": "Reserva {name} directamente en el calendario.",
     "specType": "Tipo",
     "specSize": "Superficie",
     "specBedrooms": "Habitaciones",

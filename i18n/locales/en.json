@@ -86,6 +86,7 @@
     "ask": "Ask about dates",
     "bookSlot": "Bookings",
     "bookHint": "The RoomRaccoon booking widget will be embedded here.",
+    "bookReady": "Book {name} directly on the calendar.",
     "specType": "Type",
     "specSize": "Size",
     "specBedrooms": "Bedrooms",
