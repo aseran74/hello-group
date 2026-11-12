@@ -7,6 +7,7 @@ import {
 } from '~/utils/features'
 
 const PHOTO_BUCKET = 'house-photos'
+const HOUSE_SELECT = '*, house_images(*), rooms(*, room_images(*)), apartments(*, apartment_images(*))'
 
 export type HouseForm = {
   slug: string
@@ -130,18 +131,24 @@ function formPayload(form: HouseForm) {
   }
 }
 
+function errMessage(err: unknown, fallback: string) {
+  if (!err || typeof err !== 'object') return fallback
+  const e = err as { data?: { statusMessage?: string; message?: string }; message?: string; statusMessage?: string }
+  return e.data?.statusMessage || e.data?.message || e.statusMessage || e.message || fallback
+}
+
 export function useHouseAdmin() {
   const saving = ref(false)
   const uploading = ref(false)
   const message = ref<string | null>(null)
   const error = ref<string | null>(null)
+  const { adminInsert, adminUpdate, adminDelete } = useAdminMutate()
 
   async function saveHouse(id: string | null, form: HouseForm) {
     saving.value = true
     message.value = null
     error.value = null
     try {
-      const client = useInsforge()
       const payload = formPayload(form)
       if (!payload.slug || !payload.name_es) {
         error.value = 'Slug y nombre (ES) son obligatorios'
@@ -149,31 +156,28 @@ export function useHouseAdmin() {
       }
 
       if (id) {
-        const { data, error: err } = await client.database
-          .from('houses')
-          .update(payload)
-          .eq('id', id)
-          .select('*, house_images(*), rooms(*, room_images(*))')
-          .single()
-        if (err) {
-          error.value = err.message || 'Error al guardar'
+        const rows = await adminUpdate<House>('houses', payload, { column: 'id', value: id }, HOUSE_SELECT)
+        const data = rows[0]
+        if (!data) {
+          error.value = 'Error al guardar'
           return null
         }
         message.value = 'Guardado'
         return data
       }
 
-      const { data, error: err } = await client.database
-        .from('houses')
-        .insert([payload])
-        .select('*, house_images(*), rooms(*, room_images(*))')
-        .single()
-      if (err) {
-        error.value = err.message || 'Error al crear'
+      const rows = await adminInsert<House>('houses', [payload], HOUSE_SELECT)
+      const data = rows[0]
+      if (!data) {
+        error.value = 'Error al crear'
         return null
       }
       message.value = 'Creada'
       return data
+    }
+    catch (e) {
+      error.value = errMessage(e, 'Error inesperado al guardar')
+      return null
     }
     finally {
       saving.value = false
@@ -185,30 +189,31 @@ export function useHouseAdmin() {
     error.value = null
     try {
       const { uploadAdminPhoto } = useAdminUpload()
-      const client = useInsforge()
       const uploaded = await uploadAdminPhoto(file, `houses/${houseId}`)
 
       if (form.cover_image_key) {
-        await client.storage.from(PHOTO_BUCKET).remove(form.cover_image_key).catch(() => null)
+        try {
+          const client = useInsforge()
+          await client.storage.from(PHOTO_BUCKET).remove(form.cover_image_key).catch(() => null)
+        }
+        catch {
+          // ignore
+        }
       }
 
       form.cover_image_url = uploaded.url
       form.cover_image_key = uploaded.key
 
-      const { error: dbErr } = await client.database
-        .from('houses')
-        .update({ cover_image_url: uploaded.url, cover_image_key: uploaded.key })
-        .eq('id', houseId)
+      await adminUpdate('houses', {
+        cover_image_url: uploaded.url,
+        cover_image_key: uploaded.key,
+      }, { column: 'id', value: houseId })
 
-      if (dbErr) {
-        error.value = dbErr.message || 'Portada subida pero no se guardó en la ficha'
-        return false
-      }
       message.value = 'Portada actualizada'
       return true
     }
     catch (e) {
-      error.value = e instanceof Error ? e.message : 'Error al subir portada'
+      error.value = errMessage(e, 'Error al subir portada')
       return false
     }
     finally {
@@ -221,7 +226,6 @@ export function useHouseAdmin() {
     error.value = null
     try {
       const { uploadAdminPhoto } = useAdminUpload()
-      const client = useInsforge()
       const list = Array.from(files)
       const inserted: HouseImage[] = []
 
@@ -229,30 +233,26 @@ export function useHouseAdmin() {
         const file = list[i]
         try {
           const uploaded = await uploadAdminPhoto(file, `houses/${houseId}`)
-          const { data: row, error: dbErr } = await client.database
-            .from('house_images')
-            .insert([{
-              house_id: houseId,
-              url: uploaded.url,
-              storage_key: uploaded.key,
-              sort_order: currentCount + i + 1,
-            }])
-            .select('*')
-            .single()
-
-          if (dbErr || !row) {
-            error.value = dbErr?.message || 'Imagen subida pero no registrada'
-            continue
-          }
-          inserted.push(row as HouseImage)
+          const rows = await adminInsert<HouseImage>('house_images', [{
+            house_id: houseId,
+            url: uploaded.url,
+            storage_key: uploaded.key,
+            sort_order: currentCount + i + 1,
+          }])
+          if (rows[0]) inserted.push(rows[0])
+          else error.value = 'Imagen subida pero no registrada'
         }
         catch (e) {
-          error.value = e instanceof Error ? e.message : `Error al subir ${file.name}`
+          error.value = errMessage(e, `Error al subir ${file.name}`)
         }
       }
 
       if (inserted.length) message.value = `${inserted.length} foto(s) añadidas`
       return inserted
+    }
+    catch (e) {
+      error.value = errMessage(e, 'Error al subir fotos')
+      return []
     }
     finally {
       uploading.value = false
@@ -261,49 +261,60 @@ export function useHouseAdmin() {
 
   async function deleteGalleryImage(image: HouseImage & { storage_key?: string | null }) {
     error.value = null
-    const client = useInsforge()
-    if (image.storage_key) {
-      await client.storage.from(PHOTO_BUCKET).remove(image.storage_key).catch(() => null)
+    try {
+      if (image.storage_key) {
+        try {
+          const client = useInsforge()
+          await client.storage.from(PHOTO_BUCKET).remove(image.storage_key).catch(() => null)
+        }
+        catch {
+          // ignore
+        }
+      }
+      await adminDelete('house_images', { column: 'id', value: image.id })
+      message.value = 'Foto eliminada'
+      return true
     }
-    const { error: err } = await client.database
-      .from('house_images')
-      .delete()
-      .eq('id', image.id)
-    if (err) {
-      error.value = err.message || 'No se pudo eliminar'
+    catch (e) {
+      error.value = errMessage(e, 'No se pudo eliminar')
       return false
     }
-    message.value = 'Foto eliminada'
-    return true
   }
 
   async function deleteHouse(id: string) {
     error.value = null
-    const client = useInsforge()
-    const { error: err } = await client.database.from('houses').delete().eq('id', id)
-    if (err) {
-      error.value = err.message || 'No se pudo eliminar la casa'
+    try {
+      await adminDelete('houses', { column: 'id', value: id })
+      return true
+    }
+    catch (e) {
+      error.value = errMessage(e, 'No se pudo eliminar la casa')
       return false
     }
-    return true
   }
 
   async function togglePublished(house: House) {
     error.value = null
-    const client = useInsforge()
-    const next = !house.published
-    const { data, error: err } = await client.database
-      .from('houses')
-      .update({ published: next })
-      .eq('id', house.id)
-      .select('*, house_images(*)')
-      .single()
-    if (err) {
-      error.value = err.message || 'No se pudo cambiar el estado'
+    try {
+      const next = !house.published
+      const rows = await adminUpdate<House>(
+        'houses',
+        { published: next },
+        { column: 'id', value: house.id },
+        '*, house_images(*)',
+      )
+      const data = rows[0]
+      if (!data) {
+        error.value = 'No se pudo cambiar el estado'
+        return null
+      }
+      message.value = next ? 'Publicada' : 'Ocultada'
+      return data
+    }
+    catch (e) {
+      error.value = errMessage(e, 'No se pudo cambiar el estado')
       return null
     }
-    message.value = next ? 'Publicada' : 'Ocultada'
-    return data as House
   }
 
   return {

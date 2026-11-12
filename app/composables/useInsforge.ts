@@ -39,6 +39,14 @@ export function useInsforge() {
     else if (accessToken) {
       browserClient.setAccessToken(accessToken)
     }
+    // Prefer in-memory admin token if cookie is missing/stale.
+    try {
+      const stateToken = useState<string | null>('admin-auth-token').value
+      if (stateToken) browserClient.setAccessToken(stateToken)
+    }
+    catch {
+      // outside Nuxt context
+    }
     return browserClient
   }
 

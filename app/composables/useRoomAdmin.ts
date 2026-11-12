@@ -70,8 +70,8 @@ function formPayload(form: RoomForm, houseId: string) {
 
 function errMessage(err: unknown, fallback: string) {
   if (!err || typeof err !== 'object') return fallback
-  const e = err as { message?: string; error?: string; nextActions?: string }
-  return [e.message || e.error || fallback, e.nextActions].filter(Boolean).join(' — ')
+  const e = err as { data?: { statusMessage?: string; message?: string }; message?: string; statusMessage?: string }
+  return e.data?.statusMessage || e.data?.message || e.statusMessage || e.message || fallback
 }
 
 export function useRoomAdmin() {
@@ -79,55 +79,37 @@ export function useRoomAdmin() {
   const uploading = ref(false)
   const message = ref<string | null>(null)
   const error = ref<string | null>(null)
+  const { adminInsert, adminUpdate, adminDelete } = useAdminMutate()
 
   async function saveRoom(houseId: string, roomId: string | null, form: RoomForm) {
     saving.value = true
     message.value = null
     error.value = null
     try {
-      const { ensureSession, user } = useAdminAuth()
-      await ensureSession()
-      if (!user.value) {
-        error.value = 'Sesión caducada. Vuelve a iniciar sesión en /admin/login'
-        return null
-      }
-
-      const client = useInsforge()
       const payload = formPayload(form, houseId)
 
       if (roomId) {
-        const { data, error: err } = await client.database
-          .from('rooms')
-          .update(payload)
-          .eq('id', roomId)
-          .select('*')
-          .single()
-        if (err) {
-          error.value = errMessage(err, 'Error al guardar habitación')
+        const rows = await adminUpdate<Room>('rooms', payload, { column: 'id', value: roomId })
+        const data = rows[0]
+        if (!data) {
+          error.value = 'Error al guardar habitación'
           return null
         }
         message.value = 'Habitación guardada'
-        return { ...(data as Room), room_images: (data as Room).room_images || [] }
+        return { ...data, room_images: data.room_images || [] }
       }
 
-      const { data, error: err } = await client.database
-        .from('rooms')
-        .insert([payload])
-        .select('*')
-        .single()
-      if (err) {
-        error.value = errMessage(err, 'Error al crear habitación')
-        return null
-      }
+      const rows = await adminInsert<Room>('rooms', [payload])
+      const data = rows[0]
       if (!data) {
         error.value = 'La habitación no se creó (sin respuesta del servidor)'
         return null
       }
       message.value = 'Habitación creada'
-      return { ...(data as Room), room_images: [] }
+      return { ...data, room_images: [] }
     }
     catch (e) {
-      error.value = e instanceof Error ? e.message : 'Error inesperado al guardar'
+      error.value = errMessage(e, 'Error inesperado al guardar')
       return null
     }
     finally {
@@ -140,26 +122,27 @@ export function useRoomAdmin() {
     error.value = null
     try {
       const { uploadAdminPhoto } = useAdminUpload()
-      const client = useInsforge()
       const uploaded = await uploadAdminPhoto(file, `houses/${houseId}/rooms/${roomId}`)
       if (form.cover_image_key) {
-        await client.storage.from(PHOTO_BUCKET).remove(form.cover_image_key).catch(() => null)
+        try {
+          const client = useInsforge()
+          await client.storage.from(PHOTO_BUCKET).remove(form.cover_image_key).catch(() => null)
+        }
+        catch {
+          // ignore storage cleanup
+        }
       }
       form.cover_image_url = uploaded.url
       form.cover_image_key = uploaded.key
-      const { error: dbErr } = await client.database
-        .from('rooms')
-        .update({ cover_image_url: uploaded.url, cover_image_key: uploaded.key })
-        .eq('id', roomId)
-      if (dbErr) {
-        error.value = errMessage(dbErr, 'Portada subida pero no guardada')
-        return false
-      }
+      await adminUpdate('rooms', {
+        cover_image_url: uploaded.url,
+        cover_image_key: uploaded.key,
+      }, { column: 'id', value: roomId })
       message.value = 'Portada actualizada'
       return true
     }
     catch (e) {
-      error.value = e instanceof Error ? e.message : 'Error al subir portada'
+      error.value = errMessage(e, 'Error al subir portada')
       return false
     }
     finally {
@@ -172,7 +155,6 @@ export function useRoomAdmin() {
     error.value = null
     try {
       const { uploadAdminPhoto } = useAdminUpload()
-      const client = useInsforge()
       const list = Array.from(files)
       const inserted: RoomImage[] = []
 
@@ -180,29 +162,26 @@ export function useRoomAdmin() {
         const file = list[i]
         try {
           const uploaded = await uploadAdminPhoto(file, `houses/${houseId}/rooms/${roomId}`)
-          const { data: row, error: dbErr } = await client.database
-            .from('room_images')
-            .insert([{
-              room_id: roomId,
-              url: uploaded.url,
-              storage_key: uploaded.key,
-              sort_order: currentCount + i + 1,
-            }])
-            .select('*')
-            .single()
-          if (dbErr || !row) {
-            error.value = errMessage(dbErr, 'Imagen subida pero no registrada')
-            continue
-          }
-          inserted.push(row as RoomImage)
+          const rows = await adminInsert<RoomImage>('room_images', [{
+            room_id: roomId,
+            url: uploaded.url,
+            storage_key: uploaded.key,
+            sort_order: currentCount + i + 1,
+          }])
+          if (rows[0]) inserted.push(rows[0])
+          else error.value = 'Imagen subida pero no registrada'
         }
         catch (e) {
-          error.value = e instanceof Error ? e.message : `Error al subir ${file.name}`
+          error.value = errMessage(e, `Error al subir ${file.name}`)
         }
       }
 
       if (inserted.length) message.value = `${inserted.length} foto(s) añadidas`
       return inserted
+    }
+    catch (e) {
+      error.value = errMessage(e, 'Error al subir fotos')
+      return []
     }
     finally {
       uploading.value = false
@@ -211,28 +190,36 @@ export function useRoomAdmin() {
 
   async function deleteRoomImage(image: RoomImage) {
     error.value = null
-    const client = useInsforge()
-    if (image.storage_key) {
-      await client.storage.from(PHOTO_BUCKET).remove(image.storage_key).catch(() => null)
+    try {
+      if (image.storage_key) {
+        try {
+          const client = useInsforge()
+          await client.storage.from(PHOTO_BUCKET).remove(image.storage_key).catch(() => null)
+        }
+        catch {
+          // ignore
+        }
+      }
+      await adminDelete('room_images', { column: 'id', value: image.id })
+      message.value = 'Foto eliminada'
+      return true
     }
-    const { error: err } = await client.database.from('room_images').delete().eq('id', image.id)
-    if (err) {
-      error.value = err.message || 'No se pudo eliminar'
+    catch (e) {
+      error.value = errMessage(e, 'No se pudo eliminar')
       return false
     }
-    message.value = 'Foto eliminada'
-    return true
   }
 
   async function deleteRoom(roomId: string) {
     error.value = null
-    const client = useInsforge()
-    const { error: err } = await client.database.from('rooms').delete().eq('id', roomId)
-    if (err) {
-      error.value = err.message || 'No se pudo eliminar la habitación'
+    try {
+      await adminDelete('rooms', { column: 'id', value: roomId })
+      return true
+    }
+    catch (e) {
+      error.value = errMessage(e, 'No se pudo eliminar la habitación')
       return false
     }
-    return true
   }
 
   return {

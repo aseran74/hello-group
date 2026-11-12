@@ -26,12 +26,24 @@ export function useAdminAuth() {
     if (import.meta.client && hasInsforgeConfig()) {
       try {
         const client = useInsforge()
-        client.setAccessToken(payload.accessToken)
+        // Only set when we have a token — never wipe a valid client JWT with null.
+        if (payload.accessToken) client.setAccessToken(payload.accessToken)
       }
       catch {
         // config missing
       }
     }
+  }
+
+  /** Cliente InsForge con JWT de admin; falla si no hay sesión válida. */
+  async function requireAdminClient() {
+    const token = await ensureAccessToken()
+    if (!user.value || !token) {
+      throw new Error('Sesión caducada. Vuelve a iniciar sesión en /admin/login')
+    }
+    const client = useInsforge()
+    client.setAccessToken(token)
+    return client
   }
 
   async function fetchSession(): Promise<SessionPayload> {
@@ -143,6 +155,14 @@ export function useAdminAuth() {
     catch {
       // ignore
     }
+    if (import.meta.client && hasInsforgeConfig()) {
+      try {
+        useInsforge().setAccessToken(null)
+      }
+      catch {
+        // ignore
+      }
+    }
     applySession({ user: null, accessToken: null })
     await navigateTo('/admin/login')
   }
@@ -156,6 +176,7 @@ export function useAdminAuth() {
     refresh,
     ensureSession,
     ensureAccessToken,
+    requireAdminClient,
     signIn,
     signUp,
     signOut,
