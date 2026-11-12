@@ -1,7 +1,9 @@
 import { SEED_HOUSES } from '~/data/seed-houses'
-import type { House, HouseImage, Room, RoomImage } from '~/types/house'
+import type { Apartment, ApartmentImage, House, HouseImage, Room, RoomImage } from '~/types/house'
 import { normalizeActivities, normalizeAmenities } from '~/utils/features'
 import { localizeHouse } from '~/utils/localize'
+
+const ROOM_TYPE_KEYS = ['single', 'double', 'twin', 'triple'] as const
 
 function normalizeRoom(row: Record<string, unknown>): Room {
   const images = Array.isArray(row.room_images)
@@ -16,7 +18,7 @@ function normalizeRoom(row: Record<string, unknown>): Room {
     house_id: String(row.house_id),
     name_es: String(row.name_es ?? ''),
     name_en: String(row.name_en ?? ''),
-    room_type: (['single', 'double', 'triple'].includes(roomType) ? roomType : 'double') as Room['room_type'],
+    room_type: (ROOM_TYPE_KEYS.includes(roomType as typeof ROOM_TYPE_KEYS[number]) ? roomType : 'double') as Room['room_type'],
     bathroom_type: (['private', 'shared'].includes(bathroomType) ? bathroomType : 'private') as Room['bathroom_type'],
     description_es: String(row.description_es ?? ''),
     description_en: String(row.description_en ?? ''),
@@ -29,12 +31,38 @@ function normalizeRoom(row: Record<string, unknown>): Room {
   }
 }
 
+function normalizeApartment(row: Record<string, unknown>): Apartment {
+  const images = Array.isArray(row.apartment_images)
+    ? (row.apartment_images as ApartmentImage[]).slice().sort((a, b) => a.sort_order - b.sort_order)
+    : []
+
+  return {
+    id: String(row.id),
+    house_id: String(row.house_id),
+    name_es: String(row.name_es ?? ''),
+    name_en: String(row.name_en ?? ''),
+    description_es: String(row.description_es ?? ''),
+    description_en: String(row.description_en ?? ''),
+    capacity: Number(row.capacity ?? 2),
+    bedrooms: Number(row.bedrooms ?? 1),
+    bathrooms: Number(row.bathrooms ?? 1),
+    sort_order: Number(row.sort_order ?? 0),
+    published: row.published !== false,
+    cover_image_url: row.cover_image_url ? String(row.cover_image_url) : null,
+    cover_image_key: row.cover_image_key ? String(row.cover_image_key) : null,
+    apartment_images: images,
+  }
+}
+
 function normalizeHouse(row: Record<string, unknown>): House {
   const images = Array.isArray(row.house_images)
     ? (row.house_images as HouseImage[]).slice().sort((a, b) => a.sort_order - b.sort_order)
     : []
   const rooms = Array.isArray(row.rooms)
     ? (row.rooms as Record<string, unknown>[]).map(normalizeRoom).sort((a, b) => a.sort_order - b.sort_order)
+    : []
+  const apartments = Array.isArray(row.apartments)
+    ? (row.apartments as Record<string, unknown>[]).map(normalizeApartment).sort((a, b) => a.sort_order - b.sort_order)
     : []
 
   return {
@@ -69,6 +97,7 @@ function normalizeHouse(row: Record<string, unknown>): House {
     updated_at: row.updated_at ? String(row.updated_at) : undefined,
     house_images: images,
     rooms,
+    apartments,
   }
 }
 
@@ -82,7 +111,7 @@ export function useHouses() {
       const client = useInsforge()
       let query = client.database
         .from('houses')
-        .select('*, house_images(*), rooms(*, room_images(*))')
+        .select('*, house_images(*), rooms(*, room_images(*)), apartments(*, apartment_images(*))')
 
       if (opts.id) query = query.eq('id', opts.id)
       if (opts.slug) query = query.eq('slug', opts.slug)

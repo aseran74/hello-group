@@ -36,12 +36,13 @@ export const ACTIVITY_CATALOG: FeatureItem[] = [
   { key: 'food', label_es: 'Gastronomía', label_en: 'Food', detail_es: 'Cocina local', detail_en: 'Local cuisine' },
 ]
 
-export type RoomType = 'single' | 'double' | 'triple'
+export type RoomType = 'single' | 'double' | 'twin' | 'triple'
 export type BathroomType = 'private' | 'shared'
 
 export const ROOM_TYPES: { key: RoomType; label_es: string; label_en: string; capacity: number }[] = [
   { key: 'single', label_es: 'Sencilla', label_en: 'Single', capacity: 1 },
   { key: 'double', label_es: 'Doble', label_en: 'Double', capacity: 2 },
+  { key: 'twin', label_es: 'Twin (2 camas)', label_en: 'Twin (2 beds)', capacity: 2 },
   { key: 'triple', label_es: 'Triple', label_en: 'Triple', capacity: 3 },
 ]
 

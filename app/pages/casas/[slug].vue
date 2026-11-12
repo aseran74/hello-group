@@ -252,6 +252,47 @@ useSeoMeta({
             </div>
           </div>
 
+          <div v-if="house.apartments.length">
+            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
+              {{ t('homes.apartments') }}
+            </h2>
+            <p class="mt-2 text-sm text-mute">{{ t('homes.apartmentsSub') }}</p>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+              <article
+                v-for="apt in house.apartments"
+                :key="apt.id"
+                class="overflow-hidden rounded-2xl border border-line bg-paper-elevated"
+              >
+                <img
+                  v-if="apt.cover_image_url || apt.images[0]"
+                  :src="apt.cover_image_url || apt.images[0]?.url"
+                  :alt="apt.name"
+                  class="aspect-[4/3] w-full object-cover"
+                >
+                <div class="p-4">
+                  <h3 class="font-display text-lg font-semibold text-ink">{{ apt.name }}</h3>
+                  <p class="mt-1 text-sm text-mute">
+                    {{ t('homes.capacity', { n: apt.capacity }) }}
+                    · {{ t('homes.bedrooms', { n: apt.bedrooms }) }}
+                    · {{ t('homes.bathrooms', { n: apt.bathrooms }) }}
+                  </p>
+                  <p v-if="apt.description" class="mt-2 text-sm leading-relaxed text-ink/80">
+                    {{ apt.description }}
+                  </p>
+                  <div v-if="apt.images.length > 1" class="mt-3 flex gap-2 overflow-x-auto">
+                    <img
+                      v-for="img in apt.images.slice(0, 4)"
+                      :key="img.id"
+                      :src="img.url"
+                      :alt="img.alt"
+                      class="h-16 w-20 shrink-0 object-cover"
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
           <div v-if="house.amenities.length">
             <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
               {{ t('homes.amenities') }}

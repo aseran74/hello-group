@@ -51,6 +51,33 @@ export interface Room {
   room_images?: RoomImage[]
 }
 
+export interface ApartmentImage {
+  id: string
+  apartment_id: string
+  url: string
+  storage_key?: string | null
+  alt_es: string | null
+  alt_en: string | null
+  sort_order: number
+}
+
+export interface Apartment {
+  id: string
+  house_id: string
+  name_es: string
+  name_en: string
+  description_es: string
+  description_en: string
+  capacity: number
+  bedrooms: number
+  bathrooms: number
+  sort_order: number
+  published: boolean
+  cover_image_url: string | null
+  cover_image_key?: string | null
+  apartment_images?: ApartmentImage[]
+}
+
 export interface House {
   id: string
   slug: string
@@ -83,6 +110,7 @@ export interface House {
   updated_at?: string
   house_images?: HouseImage[]
   rooms?: Room[]
+  apartments?: Apartment[]
 }
 
 export interface Inquiry {
@@ -111,6 +139,17 @@ export type LocalizedRoom = {
   images: { id: string; url: string; alt: string }[]
 }
 
+export type LocalizedApartment = {
+  id: string
+  name: string
+  description: string
+  capacity: number
+  bedrooms: number
+  bathrooms: number
+  cover_image_url: string | null
+  images: { id: string; url: string; alt: string }[]
+}
+
 export type LocalizedHouse = {
   id: string
   slug: string
@@ -134,4 +173,5 @@ export type LocalizedHouse = {
   images: { id: string; url: string; alt: string }[]
   map_url: string | null
   rooms: LocalizedRoom[]
+  apartments: LocalizedApartment[]
 }

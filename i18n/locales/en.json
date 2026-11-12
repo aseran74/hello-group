@@ -64,6 +64,8 @@
     "amenities": "Amenities",
     "rooms": "Rooms",
     "roomsSub": "Type, bathroom and photos for each room.",
+    "apartments": "Apartments",
+    "apartmentsSub": "Capacity, bedrooms, bathrooms and photos for each unit.",
     "nearbyServices": "Nearby services",
     "nearbyServicesSub": "Activities and ideas close to the stay.",
     "features": "Features",

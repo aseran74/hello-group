@@ -1,5 +1,14 @@
 import { bathroomTypeLabel, roomTypeLabel } from '~/data/feature-catalog'
-import type { House, HouseActivity, HouseAmenity, LocalizedHouse, LocalizedRoom, Room } from '~/types/house'
+import type {
+  Apartment,
+  House,
+  HouseActivity,
+  HouseAmenity,
+  LocalizedApartment,
+  LocalizedHouse,
+  LocalizedRoom,
+  Room,
+} from '~/types/house'
 
 export function localizeRoom(room: Room, locale: string): LocalizedRoom {
   const isEn = locale.startsWith('en')
@@ -24,6 +33,27 @@ export function localizeRoom(room: Room, locale: string): LocalizedRoom {
   }
 }
 
+export function localizeApartment(apartment: Apartment, locale: string): LocalizedApartment {
+  const isEn = locale.startsWith('en')
+  return {
+    id: apartment.id,
+    name: isEn ? apartment.name_en || apartment.name_es : apartment.name_es,
+    description: isEn ? apartment.description_en || apartment.description_es : apartment.description_es,
+    capacity: apartment.capacity,
+    bedrooms: apartment.bedrooms,
+    bathrooms: apartment.bathrooms,
+    cover_image_url: apartment.cover_image_url,
+    images: (apartment.apartment_images || [])
+      .slice()
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((img) => ({
+        id: img.id,
+        url: img.url,
+        alt: (isEn ? img.alt_en : img.alt_es) || apartment.name_es,
+      })),
+  }
+}
+
 export function localizeHouse(house: House, locale: string): LocalizedHouse {
   const isEn = locale.startsWith('en')
   const amenities = (house.amenities || []).map((a: HouseAmenity) => ({
@@ -41,6 +71,12 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
     .slice()
     .sort((a, b) => a.sort_order - b.sort_order)
     .map((r) => localizeRoom(r, locale))
+
+  const apartments = (house.apartments || [])
+    .filter((a) => a.published !== false)
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((a) => localizeApartment(a, locale))
 
   const map_url =
     house.lat != null && house.lng != null
@@ -79,5 +115,6 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
         alt: (isEn ? img.alt_en : img.alt_es) || house.name_es,
       })),
     rooms,
+    apartments,
   }
 }

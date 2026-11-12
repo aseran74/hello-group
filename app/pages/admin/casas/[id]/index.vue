@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ACTIVITY_CATALOG, AMENITY_CATALOG, bathroomTypeLabel, roomTypeLabel } from '~/data/feature-catalog'
-import type { HouseImage, Room } from '~/types/house'
+import type { Apartment, HouseImage, Room } from '~/types/house'
 
 definePageMeta({
   layout: 'admin',
@@ -37,12 +37,14 @@ if (!house.value) {
 const form = reactive(houseToForm(house.value))
 const images = ref<HouseImage[]>([...(house.value.house_images || [])])
 const rooms = ref<Room[]>([...(house.value.rooms || [])].sort((a, b) => a.sort_order - b.sort_order))
+const apartments = ref<Apartment[]>([...(house.value.apartments || [])].sort((a, b) => a.sort_order - b.sort_order))
 
 watch(house, (h) => {
   if (!h) return
   Object.assign(form, houseToForm(h))
   images.value = [...(h.house_images || [])]
   rooms.value = [...(h.rooms || [])].sort((a, b) => a.sort_order - b.sort_order)
+  apartments.value = [...(h.apartments || [])].sort((a, b) => a.sort_order - b.sort_order)
 })
 
 async function onSave() {
@@ -91,7 +93,9 @@ const labelClass = 'block text-sm text-mute'
     <div class="mt-4 flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 class="font-display text-3xl font-semibold text-ink">{{ form.name_es || 'Casa' }}</h1>
-        <p class="mt-1 text-sm text-mute">{{ form.slug }} · {{ rooms.length }} habitaciones</p>
+        <p class="mt-1 text-sm text-mute">
+          {{ form.slug }} · {{ rooms.length }} habitaciones · {{ apartments.length }} apartamentos
+        </p>
       </div>
       <div class="flex flex-wrap gap-2">
         <button
@@ -239,7 +243,7 @@ const labelClass = 'block text-sm text-mute'
         <div>
           <h2 class="font-display text-lg font-semibold">Habitaciones</h2>
           <p class="mt-1 text-sm text-mute">
-            Cada habitación: tipo (sencilla / doble / triple), baño y fotos propias.
+            Cada habitación: tipo (sencilla / doble / twin / triple), baño y fotos propias.
           </p>
         </div>
         <NuxtLink
@@ -277,6 +281,51 @@ const labelClass = 'block text-sm text-mute'
       </div>
       <p v-else class="mt-4 text-sm text-mute">
         Aún no hay habitaciones. En Madrid Norte puedes crear 14 (o las que necesites).
+      </p>
+    </section>
+
+    <section class="mt-8 border border-line bg-white p-5">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display text-lg font-semibold">Apartamentos</h2>
+          <p class="mt-1 text-sm text-mute">
+            Unidades completas: capacidad, dormitorios, baños y fotos propias.
+          </p>
+        </div>
+        <NuxtLink
+          :to="`/admin/casas/${id}/apartamentos/nueva`"
+          class="bg-ink px-4 py-2 text-sm font-medium text-white"
+        >
+          Añadir apartamento
+        </NuxtLink>
+      </div>
+
+      <div v-if="apartments.length" class="mt-5 grid gap-3 sm:grid-cols-2">
+        <NuxtLink
+          v-for="apt in apartments"
+          :key="apt.id"
+          :to="`/admin/casas/${id}/apartamentos/${apt.id}`"
+          class="flex gap-3 border border-line p-3 transition hover:border-ink"
+        >
+          <img
+            :src="apt.cover_image_url || apt.apartment_images?.[0]?.url || '/placeholders/house-1.svg'"
+            :alt="apt.name_es"
+            class="size-20 shrink-0 object-cover"
+          >
+          <div class="min-w-0">
+            <p class="font-medium text-ink">{{ apt.name_es || `Apartamento ${apt.sort_order}` }}</p>
+            <p class="mt-1 text-sm text-mute">
+              {{ apt.capacity }} pers. · {{ apt.bedrooms }} dorm. · {{ apt.bathrooms }} baños
+            </p>
+            <p class="mt-1 text-xs text-mute">
+              {{ apt.apartment_images?.length || 0 }} fotos
+              · {{ apt.published ? 'Publicado' : 'Borrador' }}
+            </p>
+          </div>
+        </NuxtLink>
+      </div>
+      <p v-else class="mt-4 text-sm text-mute">
+        Aún no hay apartamentos en esta propiedad.
       </p>
     </section>
 
