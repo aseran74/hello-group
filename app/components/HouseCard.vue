@@ -158,20 +158,20 @@ onUnmounted(() => {
         />
       </div>
 
-      <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-2 p-3 sm:gap-3 sm:p-4 md:p-6">
-        <div class="min-w-0 flex-1 pr-1 sm:pr-2">
-          <h3 class="font-display text-base font-bold leading-tight tracking-tight text-white sm:text-xl md:text-[1.75rem]">
+      <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-1.5 p-2 sm:gap-3 sm:p-4 md:p-6">
+        <div class="min-w-0 flex-1 pr-0.5 sm:pr-2">
+          <h3 class="font-display text-[0.7rem] font-bold leading-tight tracking-tight text-white sm:text-xl md:text-[1.75rem]">
             {{ house.name }}
           </h3>
-          <p class="mt-1 text-[11px] leading-snug text-white/70 sm:mt-1.5 sm:text-sm md:text-base">
+          <p class="mt-0.5 text-[9px] leading-snug text-white/70 sm:mt-1.5 sm:text-sm md:text-base">
             <span>{{ house.location }}</span>
-            <span class="mx-1 text-white/35 sm:mx-1.5" aria-hidden="true">·</span>
+            <span class="mx-0.5 text-white/35 sm:mx-1.5" aria-hidden="true">·</span>
             <span>{{ t('homes.capacity', { n: house.capacity }) }}</span>
           </p>
         </div>
 
         <span
-          class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-sm text-white backdrop-blur-md transition duration-300 group-hover:border-accent group-hover:bg-accent sm:h-9 sm:w-9"
+          class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-[10px] text-white backdrop-blur-md transition duration-300 group-hover:border-accent group-hover:bg-accent sm:h-9 sm:w-9 sm:text-sm"
           :aria-label="t('homes.view')"
         >
           <span aria-hidden="true">→</span>

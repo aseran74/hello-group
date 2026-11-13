@@ -10,15 +10,15 @@ const props = withDefaults(
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const VIDEO_SRC = '/Apple3/gemini_generated_video_c4c919e5.mp4'
-const TOTAL_FRAMES = 50
+const VIDEO_SRC = '/efecto-apple/hero.mp4'
+const TOTAL_FRAMES = 10
 const FRAME_SEQUENCE = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
-  const n = String(i).padStart(3, '0')
-  return `/Apple3/gemini_generated_video_c4c919e5_${n}.jpg`
+  const n = String(i + 1).padStart(3, '0')
+  return `/efecto-apple/frame_${n}.jpg`
 })
 
 /** Altura del runway de scroll en viewports tras el vídeo */
-const SCROLL_HEIGHT_VH = 280
+const SCROLL_HEIGHT_VH = 220
 /** Intro de vídeo: máximo 5s */
 const VIDEO_MAX_MS = 5_000
 const VIDEO_MAX_S = VIDEO_MAX_MS / 1000
