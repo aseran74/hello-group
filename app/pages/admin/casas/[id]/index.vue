@@ -189,6 +189,10 @@ const labelClass = 'block text-sm text-mute'
             <label :class="labelClass">Precio EN</label>
             <input v-model="form.price_label_en" :class="fieldClass">
           </div>
+          <div class="sm:col-span-2">
+            <label :class="labelClass">URL reserva RoomRaccoon</label>
+            <input v-model="form.booking_url" type="url" :class="fieldClass" placeholder="https://booking.roomraccoon.es/...">
+          </div>
         </div>
         <p class="text-xs text-mute">
           El nº de habitaciones se calcula desde las fichas de habitación ({{ rooms.length }}).

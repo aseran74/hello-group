@@ -46,6 +46,7 @@ export interface Room {
   capacity: number
   sort_order: number
   published: boolean
+  booking_url: string | null
   cover_image_url: string | null
   cover_image_key?: string | null
   room_images?: RoomImage[]
@@ -73,6 +74,7 @@ export interface Apartment {
   bathrooms: number
   sort_order: number
   published: boolean
+  booking_url: string | null
   cover_image_url: string | null
   cover_image_key?: string | null
   apartment_images?: ApartmentImage[]
@@ -102,6 +104,7 @@ export interface House {
   activities: HouseActivity[]
   cover_image_url: string | null
   cover_image_key?: string | null
+  booking_url: string | null
   lat: number | null
   lng: number | null
   sort_order: number
@@ -135,6 +138,7 @@ export type LocalizedRoom = {
   bathroom_label: string
   description: string
   capacity: number
+  booking_url: string | null
   cover_image_url: string | null
   images: { id: string; url: string; alt: string }[]
 }
@@ -146,6 +150,7 @@ export type LocalizedApartment = {
   capacity: number
   bedrooms: number
   bathrooms: number
+  booking_url: string | null
   cover_image_url: string | null
   images: { id: string; url: string; alt: string }[]
 }
@@ -167,6 +172,7 @@ export type LocalizedHouse = {
   amenities: { key: string; label: string }[]
   activities: { key: string; label: string; detail?: string }[]
   cover_image_url: string | null
+  booking_url: string | null
   lat: number | null
   lng: number | null
   sort_order: number

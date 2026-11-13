@@ -172,6 +172,10 @@ async function onDelete() {
           <label :class="labelClass">Descripción EN</label>
           <textarea v-model="form.description_en" rows="3" :class="fieldClass" />
         </div>
+        <div>
+          <label :class="labelClass">URL reserva RoomRaccoon</label>
+          <input v-model="form.booking_url" type="url" :class="fieldClass" placeholder="https://booking.roomraccoon.es/...">
+        </div>
       </section>
 
     </form>

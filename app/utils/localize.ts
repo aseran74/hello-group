@@ -1,3 +1,4 @@
+import { withBookingLocale } from '~/data/booking-urls'
 import { bathroomTypeLabel, roomTypeLabel } from '~/data/feature-catalog'
 import type {
   Apartment,
@@ -21,6 +22,7 @@ export function localizeRoom(room: Room, locale: string): LocalizedRoom {
     bathroom_label: bathroomTypeLabel(room.bathroom_type, locale),
     description: isEn ? room.description_en || room.description_es : room.description_es,
     capacity: room.capacity,
+    booking_url: withBookingLocale(room.booking_url, locale),
     cover_image_url: room.cover_image_url,
     images: (room.room_images || [])
       .slice()
@@ -42,6 +44,7 @@ export function localizeApartment(apartment: Apartment, locale: string): Localiz
     capacity: apartment.capacity,
     bedrooms: apartment.bedrooms,
     bathrooms: apartment.bathrooms,
+    booking_url: withBookingLocale(apartment.booking_url, locale),
     cover_image_url: apartment.cover_image_url,
     images: (apartment.apartment_images || [])
       .slice()
@@ -102,6 +105,7 @@ export function localizeHouse(house: House, locale: string): LocalizedHouse {
     amenities,
     activities,
     cover_image_url: house.cover_image_url,
+    booking_url: withBookingLocale(house.booking_url, locale),
     lat: house.lat,
     lng: house.lng,
     sort_order: house.sort_order,

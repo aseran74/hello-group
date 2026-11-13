@@ -3,7 +3,7 @@ import type { Apartment, ApartmentImage, House, HouseImage, Room, RoomImage } fr
 import { normalizeActivities, normalizeAmenities } from '~/utils/features'
 import { localizeHouse } from '~/utils/localize'
 
-const ROOM_TYPE_KEYS = ['single', 'double', 'twin', 'triple'] as const
+const ROOM_TYPE_KEYS = ['single', 'double', 'twin', 'triple', 'quadruple'] as const
 
 function normalizeRoom(row: Record<string, unknown>): Room {
   const images = Array.isArray(row.room_images)
@@ -25,6 +25,7 @@ function normalizeRoom(row: Record<string, unknown>): Room {
     capacity: Number(row.capacity ?? 2),
     sort_order: Number(row.sort_order ?? 0),
     published: row.published !== false,
+    booking_url: row.booking_url ? String(row.booking_url) : null,
     cover_image_url: row.cover_image_url ? String(row.cover_image_url) : null,
     cover_image_key: row.cover_image_key ? String(row.cover_image_key) : null,
     room_images: images,
@@ -48,6 +49,7 @@ function normalizeApartment(row: Record<string, unknown>): Apartment {
     bathrooms: Number(row.bathrooms ?? 1),
     sort_order: Number(row.sort_order ?? 0),
     published: row.published !== false,
+    booking_url: row.booking_url ? String(row.booking_url) : null,
     cover_image_url: row.cover_image_url ? String(row.cover_image_url) : null,
     cover_image_key: row.cover_image_key ? String(row.cover_image_key) : null,
     apartment_images: images,
@@ -89,6 +91,7 @@ function normalizeHouse(row: Record<string, unknown>): House {
     activities: normalizeActivities(row.activities),
     cover_image_url: row.cover_image_url ? String(row.cover_image_url) : null,
     cover_image_key: row.cover_image_key ? String(row.cover_image_key) : null,
+    booking_url: row.booking_url ? String(row.booking_url) : null,
     lat: row.lat == null ? null : Number(row.lat),
     lng: row.lng == null ? null : Number(row.lng),
     sort_order: Number(row.sort_order ?? 0),

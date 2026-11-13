@@ -34,6 +34,7 @@ export type HouseForm = {
   lng: number | null
   sort_order: number
   published: boolean
+  booking_url: string
   cover_image_url: string | null
   cover_image_key: string | null
 }
@@ -64,6 +65,7 @@ export function houseToForm(house: House & { cover_image_key?: string | null }):
     lng: house.lng,
     sort_order: house.sort_order,
     published: house.published,
+    booking_url: house.booking_url || '',
     cover_image_url: house.cover_image_url,
     cover_image_key: house.cover_image_key ?? null,
   }
@@ -95,6 +97,7 @@ export function emptyHouseForm(): HouseForm {
     lng: null,
     sort_order: 10,
     published: true,
+    booking_url: '',
     cover_image_url: null,
     cover_image_key: null,
   }
@@ -126,6 +129,7 @@ function formPayload(form: HouseForm) {
     lng: form.lng == null || Number.isNaN(Number(form.lng)) ? null : Number(form.lng),
     sort_order: Number(form.sort_order) || 0,
     published: Boolean(form.published),
+    booking_url: form.booking_url.trim() || null,
     cover_image_url: form.cover_image_url,
     cover_image_key: form.cover_image_key,
   }

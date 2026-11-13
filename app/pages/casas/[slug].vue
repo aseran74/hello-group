@@ -18,7 +18,9 @@ if (!house.value) {
   throw createError({ statusCode: 404, statusMessage: 'House not found' })
 }
 
-const bookingUrl = computed(() => bookingUrlForHouse(slug.value, locale.value))
+const bookingUrl = computed(() =>
+  bookingUrlForHouse(slug.value, locale.value, house.value?.booking_url),
+)
 
 const specs = computed(() => {
   const h = house.value!
@@ -157,12 +159,30 @@ useSeoMeta({
         >
           {{ t('homes.contactCta') }}
         </NuxtLink>
+        <a
+          v-if="bookingUrl"
+          :href="bookingUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary"
+        >
+          {{ t('nav.book') }}
+        </a>
         <NuxtLink
+          v-else
           :to="localePath({ path: '/contacto', query: { casa: house.slug, reserva: '1' } })"
           class="btn-primary"
         >
           {{ t('homes.seeDates') }}
         </NuxtLink>
+      </div>
+
+      <div v-if="bookingUrl" class="mt-8 md:mt-10">
+        <RoomRaccoonSlot
+          variant="panel"
+          :booking-url="bookingUrl"
+          :house-name="house.name"
+        />
       </div>
     </section>
 
@@ -190,66 +210,6 @@ useSeoMeta({
             <p class="mt-4 max-w-2xl text-lg leading-relaxed text-mute">
               {{ house.description }}
             </p>
-          </div>
-
-          <div>
-            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
-              {{ t('homes.features') }}
-            </h2>
-            <dl class="mt-5 divide-y divide-line border-y border-line">
-              <div
-                v-for="spec in specs"
-                :key="`row-${spec.label}`"
-                class="grid grid-cols-[1fr_auto] gap-4 py-3.5 text-sm md:text-base"
-              >
-                <dt class="text-mute">{{ spec.label }}</dt>
-                <dd class="font-semibold text-ink">{{ spec.value }}</dd>
-              </div>
-              <div class="grid grid-cols-[1fr_auto] gap-4 py-3.5 text-sm md:text-base">
-                <dt class="text-mute">{{ t('homes.location') }}</dt>
-                <dd class="max-w-[18rem] text-right font-semibold text-ink">{{ house.address }}</dd>
-              </div>
-            </dl>
-          </div>
-
-          <div v-if="house.rooms.length">
-            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
-              {{ t('homes.rooms') }}
-            </h2>
-            <p class="mt-2 text-sm text-mute">{{ t('homes.roomsSub') }}</p>
-            <div class="mt-5 grid gap-4 sm:grid-cols-2">
-              <article
-                v-for="room in house.rooms"
-                :key="room.id"
-                class="overflow-hidden rounded-2xl border border-line bg-paper-elevated"
-              >
-                <img
-                  v-if="room.cover_image_url || room.images[0]"
-                  :src="room.cover_image_url || room.images[0]?.url"
-                  :alt="room.name"
-                  class="aspect-[4/3] w-full object-cover"
-                >
-                <div class="p-4">
-                  <h3 class="font-display text-lg font-semibold text-ink">{{ room.name }}</h3>
-                  <p class="mt-1 text-sm text-mute">
-                    {{ room.room_type_label }} · {{ room.bathroom_label }}
-                    · {{ t('homes.capacity', { n: room.capacity }) }}
-                  </p>
-                  <p v-if="room.description" class="mt-2 text-sm leading-relaxed text-ink/80">
-                    {{ room.description }}
-                  </p>
-                  <div v-if="room.images.length > 1" class="mt-3 flex gap-2 overflow-x-auto">
-                    <img
-                      v-for="img in room.images.slice(0, 4)"
-                      :key="img.id"
-                      :src="img.url"
-                      :alt="img.alt"
-                      class="h-16 w-20 shrink-0 object-cover"
-                    >
-                  </div>
-                </div>
-              </article>
-            </div>
           </div>
 
           <div v-if="house.apartments.length">
@@ -288,9 +248,87 @@ useSeoMeta({
                       class="h-16 w-20 shrink-0 object-cover"
                     >
                   </div>
+                  <a
+                    v-if="apt.booking_url"
+                    :href="apt.booking_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-secondary mt-4 inline-flex w-full justify-center text-center"
+                  >
+                    {{ t('nav.book') }}
+                  </a>
                 </div>
               </article>
             </div>
+          </div>
+
+          <div v-if="house.rooms.length">
+            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
+              {{ t('homes.rooms') }}
+            </h2>
+            <p class="mt-2 text-sm text-mute">{{ t('homes.roomsSub') }}</p>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+              <article
+                v-for="room in house.rooms"
+                :key="room.id"
+                class="overflow-hidden rounded-2xl border border-line bg-paper-elevated"
+              >
+                <img
+                  v-if="room.cover_image_url || room.images[0]"
+                  :src="room.cover_image_url || room.images[0]?.url"
+                  :alt="room.name"
+                  class="aspect-[4/3] w-full object-cover"
+                >
+                <div class="p-4">
+                  <h3 class="font-display text-lg font-semibold text-ink">{{ room.name }}</h3>
+                  <p class="mt-1 text-sm text-mute">
+                    {{ room.room_type_label }} · {{ room.bathroom_label }}
+                    · {{ t('homes.capacity', { n: room.capacity }) }}
+                  </p>
+                  <p v-if="room.description" class="mt-2 text-sm leading-relaxed text-ink/80">
+                    {{ room.description }}
+                  </p>
+                  <div v-if="room.images.length > 1" class="mt-3 flex gap-2 overflow-x-auto">
+                    <img
+                      v-for="img in room.images.slice(0, 4)"
+                      :key="img.id"
+                      :src="img.url"
+                      :alt="img.alt"
+                      class="h-16 w-20 shrink-0 object-cover"
+                    >
+                  </div>
+                  <a
+                    v-if="room.booking_url"
+                    :href="room.booking_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-secondary mt-4 inline-flex w-full justify-center text-center"
+                  >
+                    {{ t('nav.book') }}
+                  </a>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="font-display text-2xl font-bold tracking-tight text-ink">
+              {{ t('homes.features') }}
+            </h2>
+            <dl class="mt-5 divide-y divide-line border-y border-line">
+              <div
+                v-for="spec in specs"
+                :key="`row-${spec.label}`"
+                class="grid grid-cols-[1fr_auto] gap-4 py-3.5 text-sm md:text-base"
+              >
+                <dt class="text-mute">{{ spec.label }}</dt>
+                <dd class="font-semibold text-ink">{{ spec.value }}</dd>
+              </div>
+              <div class="grid grid-cols-[1fr_auto] gap-4 py-3.5 text-sm md:text-base">
+                <dt class="text-mute">{{ t('homes.location') }}</dt>
+                <dd class="max-w-[18rem] text-right font-semibold text-ink">{{ house.address }}</dd>
+              </div>
+            </dl>
           </div>
 
           <div v-if="house.amenities.length">
@@ -368,7 +406,11 @@ useSeoMeta({
               {{ t('nav.book') }}
             </NuxtLink>
           </div>
-          <RoomRaccoonSlot :booking-url="bookingUrl" :house-name="house.name" />
+          <RoomRaccoonSlot
+            variant="sidebar"
+            :booking-url="bookingUrl"
+            :house-name="house.name"
+          />
         </aside>
       </div>
     </section>

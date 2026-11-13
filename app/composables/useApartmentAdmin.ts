@@ -12,6 +12,7 @@ export type ApartmentForm = {
   bathrooms: number
   sort_order: number
   published: boolean
+  booking_url: string
   cover_image_url: string | null
   cover_image_key: string | null
 }
@@ -27,6 +28,7 @@ export function emptyApartmentForm(sortOrder = 1): ApartmentForm {
     bathrooms: 1,
     sort_order: sortOrder,
     published: true,
+    booking_url: '',
     cover_image_url: null,
     cover_image_key: null,
   }
@@ -43,6 +45,7 @@ export function apartmentToForm(apartment: Apartment): ApartmentForm {
     bathrooms: apartment.bathrooms,
     sort_order: apartment.sort_order,
     published: apartment.published,
+    booking_url: apartment.booking_url || '',
     cover_image_url: apartment.cover_image_url,
     cover_image_key: apartment.cover_image_key ?? null,
   }
@@ -60,6 +63,7 @@ function formPayload(form: ApartmentForm, houseId: string) {
     bathrooms: Number(form.bathrooms) || 1,
     sort_order: Number(form.sort_order) || 0,
     published: Boolean(form.published),
+    booking_url: form.booking_url.trim() || null,
   }
   if (form.cover_image_url) payload.cover_image_url = form.cover_image_url
   if (form.cover_image_key) payload.cover_image_key = form.cover_image_key

@@ -81,6 +81,10 @@ async function onCreate() {
         <label :class="labelClass">Descripción EN</label>
         <textarea v-model="form.description_en" rows="3" :class="fieldClass" />
       </div>
+      <div>
+        <label :class="labelClass">URL reserva RoomRaccoon</label>
+        <input v-model="form.booking_url" type="url" :class="fieldClass" placeholder="https://booking.roomraccoon.es/...">
+      </div>
       <div class="flex items-center gap-2">
         <input id="pub" v-model="form.published" type="checkbox" class="size-4">
         <label for="pub" class="text-sm">{{ t('admin.published') }}</label>
