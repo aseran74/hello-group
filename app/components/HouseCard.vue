@@ -107,7 +107,7 @@ onUnmounted(() => {
     <div
       ref="rootRef"
       class="relative overflow-hidden rounded-[1.75rem] md:rounded-[2rem]"
-      :class="wide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[4/3]'"
+      :class="wide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[5/4] md:aspect-[4/3]'"
     >
       <template v-if="useCarousel">
         <img
@@ -158,12 +158,12 @@ onUnmounted(() => {
         />
       </div>
 
-      <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-3 p-4 md:p-5">
-        <div class="min-w-0">
-          <h3 class="truncate font-display text-xl font-bold tracking-tight text-white md:text-2xl">
+      <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-3 p-4 md:p-6">
+        <div class="min-w-0 flex-1 pr-2">
+          <h3 class="font-display text-2xl font-bold leading-tight tracking-tight text-white md:text-[1.75rem]">
             {{ house.name }}
           </h3>
-          <p class="mt-1 truncate text-xs text-white/70 md:text-sm">
+          <p class="mt-1.5 text-sm leading-snug text-white/70 md:text-base">
             <span>{{ house.location }}</span>
             <span class="mx-1.5 text-white/35" aria-hidden="true">·</span>
             <span>{{ t('homes.capacity', { n: house.capacity }) }}</span>

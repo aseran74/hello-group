@@ -353,7 +353,7 @@ watch(
           <h1 class="mt-4 max-w-[18ch] font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white">
             <span class="block">{{ t('home.welcome') }}</span>
             <span class="mt-1 block font-poppins text-[clamp(2.2rem,5.5vw,4.5rem)] font-black uppercase leading-none tracking-tight text-white">
-              {{ t('home.welcomeBrand') }}
+              Hello <span class="italic">Group</span>
             </span>
           </h1>
           <p
