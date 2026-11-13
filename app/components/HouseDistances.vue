@@ -11,31 +11,28 @@ const distances = computed(() => getDistances(props.lat, props.lng))
 </script>
 
 <template>
-  <section v-if="distances.length" class="overflow-hidden rounded-xl border border-line bg-paper-elevated">
-    <div class="border-b border-line px-4 py-3">
-      <h2 class="font-display text-base font-bold tracking-tight text-ink md:text-lg">
+  <section v-if="distances.length" class="overflow-hidden rounded-md border border-line bg-paper-elevated">
+    <div class="border-b border-line px-2.5 py-1.5">
+      <h2 class="font-display text-xs font-bold tracking-tight text-ink">
         {{ t('homes.distances') }}
       </h2>
-      <p class="mt-1 text-xs text-mute md:text-sm">
-        {{ t('homes.distancesSub') }}
-      </p>
     </div>
 
     <ul class="divide-y divide-line">
       <li
         v-for="item in distances"
         :key="item.id"
-        class="flex items-center justify-between gap-3 px-4 py-3"
+        class="flex items-center justify-between gap-1.5 px-2.5 py-1"
       >
-        <div class="min-w-0">
-          <p class="text-sm font-medium text-ink">{{ item.label }}</p>
-          <p class="mt-0.5 text-sm text-mute">{{ item.distanceLabel }}</p>
-        </div>
+        <p class="min-w-0 truncate text-[11px] leading-tight text-ink">
+          <span class="font-medium">{{ item.label }}</span>
+          <span class="text-mute"> · {{ item.distanceLabel }}</span>
+        </p>
         <a
           :href="item.mapsUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="shrink-0 text-sm font-semibold text-ink underline-offset-4 hover:underline"
+          class="shrink-0 text-[10px] font-semibold text-mute underline-offset-2 hover:text-ink hover:underline"
         >
           {{ t('homes.route') }}
         </a>

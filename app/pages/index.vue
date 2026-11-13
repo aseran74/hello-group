@@ -52,7 +52,7 @@ useSeoMeta({
               {{ t('home.groupApartmentsSub') }}
             </p>
           </header>
-          <div class="grid grid-cols-3 gap-2 sm:gap-3 md:gap-6">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
             <HouseCard
               v-for="(house, i) in apartmentHomes"
               :key="`apt-${house.id}`"
@@ -71,7 +71,7 @@ useSeoMeta({
               {{ t('home.groupRoomsSub') }}
             </p>
           </header>
-          <div class="grid grid-cols-3 gap-2 sm:gap-3 md:gap-6">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
             <HouseCard
               v-for="(house, i) in roomHomes"
               :key="`room-${house.id}`"

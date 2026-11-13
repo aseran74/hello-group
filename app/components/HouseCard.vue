@@ -107,7 +107,7 @@ onUnmounted(() => {
     <div
       ref="rootRef"
       class="relative overflow-hidden rounded-[1.75rem] md:rounded-[2rem]"
-      :class="wide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[3/4] sm:aspect-[4/3]'"
+      :class="wide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[4/3]'"
     >
       <template v-if="useCarousel">
         <img
@@ -132,7 +132,7 @@ onUnmounted(() => {
         loading="lazy"
       >
 
-      <div class="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div class="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/85 via-black/30 to-transparent md:from-black/90 md:via-black/35" />
 
       <span
         v-if="orderLabel"
@@ -158,20 +158,20 @@ onUnmounted(() => {
         />
       </div>
 
-      <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-1.5 p-2 sm:gap-3 sm:p-4 md:p-6">
-        <div class="min-w-0 flex-1 pr-0.5 sm:pr-2">
-          <h3 class="font-display text-[0.7rem] font-bold leading-tight tracking-tight text-white sm:text-xl md:text-[1.75rem]">
+      <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-3 p-4 md:p-7">
+        <div class="min-w-0 flex-1 pr-2">
+          <h3 class="font-display text-2xl font-bold leading-tight tracking-tight text-white drop-shadow-sm md:text-3xl md:leading-[1.15]">
             {{ house.name }}
           </h3>
-          <p class="mt-0.5 text-[9px] leading-snug text-white/70 sm:mt-1.5 sm:text-sm md:text-base">
+          <p class="mt-1.5 text-sm leading-snug text-white/75 md:mt-2 md:text-lg">
             <span>{{ house.location }}</span>
-            <span class="mx-0.5 text-white/35 sm:mx-1.5" aria-hidden="true">·</span>
+            <span class="mx-1.5 text-white/35" aria-hidden="true">·</span>
             <span>{{ t('homes.capacity', { n: house.capacity }) }}</span>
           </p>
         </div>
 
         <span
-          class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-[10px] text-white backdrop-blur-md transition duration-300 group-hover:border-accent group-hover:bg-accent sm:h-9 sm:w-9 sm:text-sm"
+          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-sm text-white backdrop-blur-md transition duration-300 group-hover:border-accent group-hover:bg-accent md:h-11 md:w-11 md:text-base"
           :aria-label="t('homes.view')"
         >
           <span aria-hidden="true">→</span>
