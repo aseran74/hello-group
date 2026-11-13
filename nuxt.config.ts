@@ -24,13 +24,13 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Syne:wght@500;600;700;800&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Poppins:wght@900&family=Sora:wght@500;600;700;800&display=swap',
         },
         { rel: 'icon', type: 'image/png', href: '/brand/logo.png' },
       ],
       meta: [
         { name: 'description', content: 'Hello Group — alojamientos urbanos en Madrid y Hotel en Asturias' },
-        { name: 'theme-color', content: '#0c0c0c' },
+        { name: 'theme-color', content: '#FF6B35' },
       ],
     },
   },

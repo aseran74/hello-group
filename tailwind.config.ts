@@ -12,40 +12,53 @@ export default {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#0c0c0c',
-          soft: '#1a1a1a',
+          DEFAULT: '#1a1a1a',
+          soft: '#2a2a2a',
         },
         paper: {
-          DEFAULT: '#f0f1ef',
-          elevated: '#fafaf8',
+          DEFAULT: '#f7f4ef',
+          elevated: '#ffffff',
         },
-        mute: '#5e635f',
-        line: '#d4d6d2',
-        silver: '#b8bcb8',
-        mist: '#f5f6f4',
+        mute: '#6b6b6b',
+        line: '#e8e2d9',
+        silver: '#c4beb6',
+        mist: '#fffaf5',
+        accent: {
+          DEFAULT: '#ff6b35',
+          soft: '#ff8a5c',
+          deep: '#e85a28',
+        },
         // Compat aliases used across existing templates
         moss: {
-          DEFAULT: '#0c0c0c',
-          deep: '#0a0a0a',
+          DEFAULT: '#1a1a1a',
+          deep: '#0f0f0f',
           soft: '#3a3a3a',
         },
-        lichen: '#e8e8e6',
-        fog: '#c4c4c0',
+        lichen: '#efeae3',
+        fog: '#c4beb6',
         slate: {
-          ink: '#0c0c0c',
-          muted: '#5e635f',
+          ink: '#1a1a1a',
+          muted: '#6b6b6b',
         },
-        sand: '#f0f1ef',
+        sand: '#f7f4ef',
       },
       fontFamily: {
-        display: ['Syne', 'system-ui', 'sans-serif'],
-        sans: ['Figtree', 'system-ui', 'sans-serif'],
+        display: ['Sora', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        poppins: ['Poppins', 'system-ui', 'sans-serif'],
       },
       maxWidth: {
         content: '76rem',
       },
       letterSpacing: {
         brand: '0.18em',
+      },
+      boxShadow: {
+        soft: '0 18px 50px rgba(26, 26, 26, 0.08)',
+        card: '0 12px 40px rgba(26, 26, 26, 0.06)',
+      },
+      borderRadius: {
+        ahead: '1.75rem',
       },
       animation: {
         'fade-up': 'fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both',

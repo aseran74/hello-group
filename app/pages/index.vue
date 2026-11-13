@@ -7,11 +7,11 @@ const { fetchFaqs } = useFaqs()
 const { data: houses } = await useAsyncData('home-houses', () => fetchHouses())
 const { data: faqs } = await useAsyncData('home-faqs', () => fetchFaqs({ publishedOnly: true }))
 
-const madridHomes = computed(() =>
-  (houses.value || []).filter((h) => h.slug !== 'astur'),
+const apartmentHomes = computed(() =>
+  (houses.value || []).filter((h) => (h.apartments?.length || 0) > 0),
 )
-const asturiasHomes = computed(() =>
-  (houses.value || []).filter((h) => h.slug === 'astur'),
+const roomHomes = computed(() =>
+  (houses.value || []).filter((h) => (h.rooms?.length || 0) > 0),
 )
 
 const homeFaqs = computed(() => faqs.value || [])
@@ -37,47 +37,52 @@ useSeoMeta({
   <div class="bg-paper">
     <HeroVideo />
 
-    <section id="casas" class="section-pad !py-12 md:!py-16">
+    <section id="casas" class="section-pad !py-14 md:!py-20">
       <div class="page-shell">
-        <header class="mx-auto max-w-xl text-center">
+        <header class="mx-auto flex max-w-3xl flex-col items-center text-center">
           <p class="eyebrow">Hello Group</p>
-          <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
+          <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-ink md:text-5xl">
             {{ t('home.previewTitle') }}
           </h2>
-          <p class="mt-3 text-base leading-relaxed text-mute">
+          <p class="mt-3 max-w-xl text-base leading-relaxed text-mute">
             {{ t('home.previewSub') }}
           </p>
         </header>
 
-        <div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4 md:mt-10 md:gap-4">
-          <HouseCard
-            v-for="(house, i) in madridHomes.slice(0, 4)"
-            :key="house.id"
-            :house="house"
-            :index="i"
-          />
-        </div>
-
-        <div v-if="asturiasHomes.length" class="mt-8 md:mt-10">
-          <header class="mb-4 md:mb-5">
-            <h3 class="font-display text-xl font-bold tracking-tight text-ink md:text-2xl">
-              {{ t('home.groupAsturias') }}
+        <div v-if="apartmentHomes.length" class="mt-10 md:mt-12">
+          <header class="mb-5">
+            <h3 class="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+              {{ t('home.groupApartments') }}
             </h3>
           </header>
-          <div class="grid gap-4">
+          <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-5">
             <HouseCard
-              v-for="(house, i) in asturiasHomes"
-              :key="house.id"
+              v-for="(house, i) in apartmentHomes"
+              :key="`apt-${house.id}`"
               :house="house"
               :index="i"
-              wide
-              carousel
             />
           </div>
         </div>
 
-        <div class="mt-8 flex justify-center md:mt-10">
-          <NuxtLink :to="localePath('/casas')" class="btn-secondary">
+        <div v-if="roomHomes.length" class="mt-10 md:mt-12">
+          <header class="mb-5">
+            <h3 class="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+              {{ t('home.groupRooms') }}
+            </h3>
+          </header>
+          <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-5">
+            <HouseCard
+              v-for="(house, i) in roomHomes"
+              :key="`room-${house.id}`"
+              :house="house"
+              :index="i"
+            />
+          </div>
+        </div>
+
+        <div class="mt-10 flex justify-center">
+          <NuxtLink :to="localePath('/casas')" class="btn-primary">
             {{ t('home.ctaHomes') }}
           </NuxtLink>
         </div>
@@ -88,31 +93,32 @@ useSeoMeta({
 
     <HomeMoments />
 
-    <section class="relative overflow-hidden bg-ink text-mist">
-      <WaveDivider flip fill="var(--color-ink)" class="absolute inset-x-0 top-0 z-[1]" />
-      <div class="page-shell relative z-[2] grid gap-8 px-5 py-16 md:grid-cols-[1.2fr_0.8fr] md:items-center md:gap-12 md:px-8 md:py-24">
-        <div>
-          <p class="eyebrow text-white/45">{{ t('nav.about') }}</p>
-          <h2 class="mt-3 font-display text-3xl font-bold tracking-tight md:text-5xl md:leading-[1.08]">
-            {{ t('home.aboutBandTitle') }}
-          </h2>
-          <p class="mt-4 max-w-xl text-sm leading-relaxed text-white/65 md:text-base">
-            {{ t('about.lead') }}
-          </p>
-        </div>
-        <div class="flex flex-col gap-3 sm:flex-row md:flex-col md:items-stretch lg:flex-row">
-          <NuxtLink
-            :to="localePath('/nosotros')"
-            class="btn-ghost border-white/25 text-center"
-          >
-            {{ t('home.aboutBandCta') }}
-          </NuxtLink>
-          <NuxtLink
-            :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-            class="btn-primary bg-white text-center text-ink hover:bg-mist"
-          >
-            {{ t('nav.book') }}
-          </NuxtLink>
+    <section class="px-4 pb-8 md:px-8 md:pb-12">
+      <div class="page-shell overflow-hidden rounded-[2rem] bg-ink text-mist shadow-soft md:rounded-[2.5rem]">
+        <div class="grid gap-8 px-6 py-14 md:grid-cols-[1.2fr_0.8fr] md:items-center md:gap-12 md:px-10 md:py-20">
+          <div>
+            <p class="eyebrow text-accent-soft">{{ t('nav.about') }}</p>
+            <h2 class="mt-3 font-display text-3xl font-bold tracking-tight md:text-5xl md:leading-[1.08]">
+              {{ t('home.aboutBandTitle') }}
+            </h2>
+            <p class="mt-4 max-w-xl text-sm leading-relaxed text-white/65 md:text-base">
+              {{ t('about.lead') }}
+            </p>
+          </div>
+          <div class="flex flex-col gap-3 sm:flex-row md:justify-end">
+            <NuxtLink
+              :to="localePath('/nosotros')"
+              class="btn-ghost border-white/25 text-center"
+            >
+              {{ t('home.aboutBandCta') }}
+            </NuxtLink>
+            <NuxtLink
+              :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
+              class="btn-primary text-center"
+            >
+              {{ t('nav.book') }}
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </section>
@@ -121,12 +127,12 @@ useSeoMeta({
       <div class="page-shell max-w-3xl px-5 py-1 md:px-8">
         <button
           type="button"
-          class="flex w-full items-start justify-between gap-4 py-4 text-left md:items-center md:py-3.5"
+          class="flex w-full items-start justify-between gap-4 py-5 text-left md:items-center"
           :aria-expanded="faqOpen"
           @click="toggleFaqSection"
         >
           <span class="min-w-0 pr-2">
-            <span class="block font-display text-base font-semibold tracking-tight text-ink md:text-lg">
+            <span class="block font-display text-lg font-bold tracking-tight text-ink md:text-xl">
               {{ t('home.faqTitle') }}
             </span>
             <span class="mt-1 block text-sm leading-snug text-mute">
@@ -134,8 +140,8 @@ useSeoMeta({
             </span>
           </span>
           <span
-            class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-mute transition md:mt-0"
-            :class="faqOpen && 'rotate-45'"
+            class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-white text-mute shadow-card transition md:mt-0"
+            :class="faqOpen && 'rotate-45 bg-accent text-white border-accent'"
             aria-hidden="true"
           >
             +
@@ -144,20 +150,20 @@ useSeoMeta({
 
         <ul
           v-show="faqOpen"
-          class="mb-3 divide-y divide-line border-t border-line md:mb-2"
+          class="mb-4 divide-y divide-line overflow-hidden rounded-[1.5rem] border border-line bg-white shadow-card md:mb-6"
         >
-          <li v-for="item in homeFaqs" :key="item.id" class="py-1">
+          <li v-for="item in homeFaqs" :key="item.id" class="px-4">
             <button
               type="button"
-              class="flex w-full items-start justify-between gap-4 py-3.5 text-left md:items-center md:py-3"
+              class="flex w-full items-start justify-between gap-4 py-4 text-left md:items-center"
               :aria-expanded="openFaqId === item.id"
               @click="toggleFaq(item.id)"
             >
-              <span class="min-w-0 font-display text-[0.9375rem] font-semibold leading-snug tracking-tight text-ink md:text-sm">
+              <span class="min-w-0 font-display text-[0.95rem] font-semibold leading-snug tracking-tight text-ink md:text-sm">
                 {{ item.title }}
               </span>
               <span
-                class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center text-mute transition md:mt-0"
+                class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center text-accent transition md:mt-0"
                 :class="openFaqId === item.id && 'rotate-45'"
                 aria-hidden="true"
               >

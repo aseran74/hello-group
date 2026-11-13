@@ -81,7 +81,7 @@ onUnmounted(() => {
         </NuxtLink>
         <NuxtLink
           :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-          class="rounded-full bg-white/90 px-4 py-1.5 text-[13px] font-semibold text-black transition hover:bg-white"
+          class="rounded-full bg-accent px-4 py-1.5 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(255,107,53,0.35)] transition hover:bg-accent-deep"
         >
           {{ t('nav.book') }}
         </NuxtLink>
@@ -90,7 +90,7 @@ onUnmounted(() => {
       <div class="ml-auto flex items-center gap-1 lg:ml-0">
         <NuxtLink
           :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-          class="rounded-full bg-white/90 px-3 py-1.5 text-sm font-semibold text-black transition hover:bg-white lg:hidden"
+          class="rounded-full bg-accent px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-accent-deep lg:hidden"
         >
           {{ t('nav.book') }}
         </NuxtLink>
@@ -161,7 +161,7 @@ onUnmounted(() => {
           </NuxtLink>
           <NuxtLink
             :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-            class="rounded-full bg-white px-3 py-2.5 text-center text-sm font-semibold text-black"
+            class="rounded-full bg-accent px-3 py-2.5 text-center text-sm font-semibold text-white"
             @click="open = false"
           >
             {{ t('nav.book') }}

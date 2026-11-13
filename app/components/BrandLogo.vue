@@ -24,7 +24,7 @@ const sizeClass = computed(() => {
 
 <template>
   <img
-    src="/brand/logo.png"
+    src="/brand/logo-hello-group.png"
     alt="Hello Group"
     class="block object-contain"
     :class="[

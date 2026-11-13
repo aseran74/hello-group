@@ -18,7 +18,8 @@ withDefaults(
       :src="src"
       :alt="alt"
       class="h-full w-full object-cover transition duration-700 ease-expo group-hover:scale-[1.04]"
-      loading="lazy"
+      loading="eager"
+      decoding="async"
       draggable="false"
     >
     <slot />

@@ -270,7 +270,7 @@ watch(
       framed && !videoEnded && 'min-h-[min(78svh,44rem)] md:min-h-[min(82svh,48rem)]',
     ]"
     :style="sectionHeight ? { height: sectionHeight } : undefined"
-    :aria-label="t('home.welcome')"
+    :aria-label="`${t('home.welcome')} ${t('home.welcomeBrand')}`"
   >
     <div
       class="sticky w-full overflow-hidden bg-ink text-mist"
@@ -285,7 +285,7 @@ watch(
         class="absolute right-4 top-4 z-30 max-w-[11rem] overflow-hidden rounded-[1.35rem] border border-white/25 bg-black/35 shadow-[0_16px_40px_rgba(0,0,0,0.28)] backdrop-blur-md md:right-6 md:top-6 md:max-w-[13rem]"
       >
         <img
-          src="/landing/madrid-retiro.jpg"
+          src="/landing/bernabeu-noche.jpg"
           alt=""
           class="aspect-[4/3] w-full object-cover"
           loading="lazy"
@@ -350,8 +350,11 @@ watch(
       >
         <div class="page-shell w-full px-5 pb-20 pt-28 md:px-8 md:pb-28">
           <p class="eyebrow text-white/70">Hello Group</p>
-          <h1 class="mt-4 max-w-[14ch] font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white">
-            {{ t('home.welcome') }}
+          <h1 class="mt-4 max-w-[18ch] font-display text-[clamp(2.4rem,6vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-white">
+            <span class="block">{{ t('home.welcome') }}</span>
+            <span class="mt-1 block font-poppins text-[clamp(2.2rem,5.5vw,4.5rem)] font-black uppercase leading-none tracking-tight text-white">
+              {{ t('home.welcomeBrand') }}
+            </span>
           </h1>
           <p
             class="mt-5 inline-block max-w-2xl rounded-2xl bg-neutral-500/45 px-4 py-3 text-lg font-medium leading-snug text-white shadow-[0_8px_28px_rgba(0,0,0,0.22)] backdrop-blur-md md:px-5 md:py-3.5 md:text-xl lg:text-2xl"

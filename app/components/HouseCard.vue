@@ -171,7 +171,7 @@ onUnmounted(() => {
         </div>
 
         <span
-          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-sm text-white backdrop-blur-md transition duration-300 group-hover:bg-white group-hover:text-ink"
+          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-sm text-white backdrop-blur-md transition duration-300 group-hover:border-accent group-hover:bg-accent"
           :aria-label="t('homes.view')"
         >
           <span aria-hidden="true">→</span>
