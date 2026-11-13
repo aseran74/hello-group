@@ -50,10 +50,13 @@ useSeoMeta({
         </header>
 
         <div v-if="apartmentHomes.length" class="mt-10 md:mt-12">
-          <header class="mb-5">
+          <header class="mb-5 max-w-2xl">
             <h3 class="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
               {{ t('home.groupApartments') }}
             </h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute md:text-base">
+              {{ t('home.groupApartmentsSub') }}
+            </p>
           </header>
           <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-5">
             <HouseCard
@@ -66,10 +69,13 @@ useSeoMeta({
         </div>
 
         <div v-if="roomHomes.length" class="mt-10 md:mt-12">
-          <header class="mb-5">
+          <header class="mb-5 max-w-2xl">
             <h3 class="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
               {{ t('home.groupRooms') }}
             </h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute md:text-base">
+              {{ t('home.groupRoomsSub') }}
+            </p>
           </header>
           <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-5">
             <HouseCard
