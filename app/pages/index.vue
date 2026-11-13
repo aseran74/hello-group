@@ -40,16 +40,10 @@ useSeoMeta({
     <section id="casas" class="section-pad !py-14 md:!py-20">
       <div class="page-shell">
         <header class="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <p class="eyebrow">Hello Group</p>
-          <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-ink md:text-5xl">
-            {{ t('home.previewTitle') }}
-          </h2>
-          <p class="mt-3 max-w-xl text-base leading-relaxed text-mute">
-            {{ t('home.previewSub') }}
-          </p>
+          <p class="eyebrow text-accent">Hello Group</p>
         </header>
 
-        <div v-if="apartmentHomes.length" class="mt-10 md:mt-12">
+        <div v-if="apartmentHomes.length" class="mt-8 md:mt-10">
           <header class="mx-auto mb-6 max-w-2xl text-center md:mb-8">
             <h3 class="font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
               {{ t('home.groupApartments') }}
