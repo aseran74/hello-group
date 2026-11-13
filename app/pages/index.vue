@@ -50,15 +50,15 @@ useSeoMeta({
         </header>
 
         <div v-if="apartmentHomes.length" class="mt-10 md:mt-12">
-          <header class="mb-5 max-w-2xl">
-            <h3 class="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+          <header class="mx-auto mb-6 max-w-2xl text-center md:mb-8">
+            <h3 class="font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
               {{ t('home.groupApartments') }}
             </h3>
-            <p class="mt-2 text-sm leading-relaxed text-mute md:text-base">
+            <p class="mt-3 text-base leading-relaxed text-mute md:text-lg">
               {{ t('home.groupApartmentsSub') }}
             </p>
           </header>
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3">
+          <div class="grid grid-cols-2 gap-3 md:gap-6 xl:grid-cols-3">
             <HouseCard
               v-for="(house, i) in apartmentHomes"
               :key="`apt-${house.id}`"
@@ -68,16 +68,16 @@ useSeoMeta({
           </div>
         </div>
 
-        <div v-if="roomHomes.length" class="mt-10 md:mt-12">
-          <header class="mb-5 max-w-2xl">
-            <h3 class="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+        <div v-if="roomHomes.length" class="mt-12 md:mt-16">
+          <header class="mx-auto mb-6 max-w-2xl text-center md:mb-8">
+            <h3 class="font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
               {{ t('home.groupRooms') }}
             </h3>
-            <p class="mt-2 text-sm leading-relaxed text-mute md:text-base">
+            <p class="mt-3 text-base leading-relaxed text-mute md:text-lg">
               {{ t('home.groupRoomsSub') }}
             </p>
           </header>
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3">
+          <div class="grid grid-cols-2 gap-3 md:gap-6 xl:grid-cols-3">
             <HouseCard
               v-for="(house, i) in roomHomes"
               :key="`room-${house.id}`"
