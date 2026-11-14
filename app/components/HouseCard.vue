@@ -102,7 +102,8 @@ onUnmounted(() => {
 <template>
   <NuxtLink
     :to="localePath(`/casas/${house.slug}`)"
-    class="group relative isolate block overflow-hidden rounded-[1.75rem] bg-ink outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 md:rounded-[2rem]"
+    class="group relative isolate block cursor-pointer overflow-hidden rounded-[1.75rem] bg-ink outline-none transition duration-200 ease-out focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 md:rounded-[2rem]"
+    :aria-label="`${house.name} · ${house.location}`"
   >
     <div
       ref="rootRef"
@@ -114,7 +115,7 @@ onUnmounted(() => {
           v-for="(src, i) in slides"
           :key="`${house.id}-${src}`"
           :src="src"
-          alt=""
+          :alt="house.name"
           class="absolute inset-0 h-full w-full object-cover"
           :class="i === active ? 'z-[1] opacity-100' : 'z-0 opacity-0'"
           :style="{
@@ -127,8 +128,8 @@ onUnmounted(() => {
       <img
         v-else
         :src="slides[0]"
-        alt=""
-        class="h-full w-full object-cover transition duration-700 ease-expo group-hover:scale-[1.04]"
+        :alt="house.name"
+        class="h-full w-full object-cover transition duration-300 ease-out motion-safe:group-hover:scale-[1.03]"
         loading="lazy"
       >
 
@@ -171,10 +172,10 @@ onUnmounted(() => {
         </div>
 
         <span
-          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-sm text-white backdrop-blur-md transition duration-300 group-hover:border-accent group-hover:bg-accent md:h-11 md:w-11 md:text-base"
-          :aria-label="t('homes.view')"
+          class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-base text-white backdrop-blur-md transition duration-200 ease-out group-hover:border-accent group-hover:bg-accent"
+          aria-hidden="true"
         >
-          <span aria-hidden="true">→</span>
+          →
         </span>
       </div>
     </div>

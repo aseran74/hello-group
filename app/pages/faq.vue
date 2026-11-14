@@ -37,16 +37,18 @@ useSeoMeta({
         <li v-for="item in faqs" :key="item.id" class="py-1">
           <button
             type="button"
-            class="flex w-full items-start justify-between gap-4 py-3.5 text-left transition hover:text-black md:items-center md:py-3.5"
+            class="flex min-h-11 w-full cursor-pointer items-start justify-between gap-4 py-3.5 text-left transition duration-200 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:items-center"
             :aria-expanded="openId === item.id"
+            :aria-controls="`faq-panel-${item.id}`"
+            :id="`faq-trigger-${item.id}`"
             @click="toggle(item.id)"
           >
             <span class="min-w-0 font-display text-[0.9375rem] font-semibold leading-snug tracking-tight text-ink md:text-base">
               {{ item.title }}
             </span>
             <span
-              class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-mute transition md:mt-0 md:h-6 md:w-6 md:border-0"
-              :class="openId === item.id && 'rotate-45'"
+              class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-mute motion-safe:transition md:mt-0"
+              :class="openId === item.id && 'rotate-45 border-accent text-accent'"
               aria-hidden="true"
             >
               +
@@ -54,6 +56,9 @@ useSeoMeta({
           </button>
           <div
             v-show="openId === item.id"
+            :id="`faq-panel-${item.id}`"
+            role="region"
+            :aria-labelledby="`faq-trigger-${item.id}`"
             class="pb-4 pr-2 text-sm leading-relaxed text-mute whitespace-pre-line md:pr-8"
           >
             {{ item.message }}

@@ -31,13 +31,19 @@ function onScroll() {
   scrolled.value = window.scrollY > 20
 }
 
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && open.value) open.value = false
+}
+
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('keydown', onKeydown)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('keydown', onKeydown)
 })
 </script>
 
@@ -59,12 +65,12 @@ onUnmounted(() => {
         <BrandLogo size="sm" tone="light" />
       </NuxtLink>
 
-      <nav class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex xl:gap-1">
+      <nav class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex xl:gap-1" aria-label="Principal">
         <NuxtLink
           v-for="house in houseLinks"
           :key="house.to"
           :to="house.to"
-          class="max-w-[7.5rem] truncate rounded-full px-2 py-1.5 text-[13px] font-medium text-white/85 transition hover:bg-white/10 hover:text-white xl:max-w-none xl:px-2.5"
+          class="max-w-[7.5rem] truncate rounded-full px-2 py-2 text-[13px] font-medium text-white/85 transition duration-200 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white xl:max-w-none xl:px-2.5"
         >
           {{ house.label }}
         </NuxtLink>
@@ -75,13 +81,13 @@ onUnmounted(() => {
           v-for="link in secondaryLinks"
           :key="link.to"
           :to="link.to"
-          class="rounded-full px-2.5 py-1.5 text-[13px] font-medium text-white/85 transition hover:bg-white/10 hover:text-white xl:px-3"
+          class="rounded-full px-2.5 py-2 text-[13px] font-medium text-white/85 transition duration-200 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white xl:px-3"
         >
           {{ link.label }}
         </NuxtLink>
         <NuxtLink
           :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-          class="rounded-full bg-accent px-4 py-1.5 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(255,107,53,0.35)] transition hover:bg-accent-deep"
+          class="min-h-9 inline-flex items-center rounded-full bg-accent px-4 py-2 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(255,107,53,0.35)] transition duration-200 hover:bg-accent-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           {{ t('nav.book') }}
         </NuxtLink>
@@ -90,23 +96,29 @@ onUnmounted(() => {
       <div class="ml-auto flex items-center gap-1 lg:ml-0">
         <NuxtLink
           :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-          class="rounded-full bg-accent px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-accent-deep lg:hidden"
+          class="inline-flex min-h-11 items-center rounded-full bg-accent px-3.5 py-2 text-sm font-semibold text-white transition duration-200 hover:bg-accent-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:hidden"
         >
           {{ t('nav.book') }}
         </NuxtLink>
 
-        <div class="hidden items-center gap-0.5 text-[11px] font-semibold uppercase tracking-wider text-white/70 lg:flex">
+        <div
+          class="hidden items-center gap-0.5 text-[11px] font-semibold uppercase tracking-wider text-white/70 lg:flex"
+          role="group"
+          aria-label="Idioma"
+        >
           <NuxtLink
             :to="switchLocalePath('es')"
-            class="rounded-full px-2 py-1 transition"
+            class="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full px-2 py-1 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             :class="locale === 'es' ? 'bg-white/15 text-white' : 'hover:text-white'"
+            :aria-current="locale === 'es' ? 'true' : undefined"
           >
             ES
           </NuxtLink>
           <NuxtLink
             :to="switchLocalePath('en')"
-            class="rounded-full px-2 py-1 transition"
+            class="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full px-2 py-1 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             :class="locale === 'en' ? 'bg-white/15 text-white' : 'hover:text-white'"
+            :aria-current="locale === 'en' ? 'true' : undefined"
           >
             EN
           </NuxtLink>
@@ -114,16 +126,17 @@ onUnmounted(() => {
 
         <button
           type="button"
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10 lg:hidden"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-full text-white transition duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:hidden"
           :aria-expanded="open"
           aria-controls="mobile-nav"
+          aria-haspopup="true"
           @click="open = !open"
         >
           <span class="sr-only">{{ t('nav.menu') }}</span>
-          <span class="flex flex-col gap-1.5">
-            <span class="block h-0.5 w-4 bg-current transition" :class="open && 'translate-y-[7px] rotate-45'" />
-            <span class="block h-0.5 w-4 bg-current transition" :class="open && 'opacity-0'" />
-            <span class="block h-0.5 w-4 bg-current transition" :class="open && '-translate-y-[7px] -rotate-45'" />
+          <span class="flex flex-col gap-1.5" aria-hidden="true">
+            <span class="block h-0.5 w-4 bg-current motion-safe:transition" :class="open && 'translate-y-[7px] rotate-45'" />
+            <span class="block h-0.5 w-4 bg-current motion-safe:transition" :class="open && 'opacity-0'" />
+            <span class="block h-0.5 w-4 bg-current motion-safe:transition" :class="open && '-translate-y-[7px] -rotate-45'" />
           </span>
         </button>
       </div>
@@ -131,19 +144,21 @@ onUnmounted(() => {
 
     <div
       id="mobile-nav"
-      class="pointer-events-auto mx-auto mt-2 max-w-content overflow-hidden transition-all duration-300 lg:hidden"
+      class="pointer-events-auto mx-auto mt-2 max-w-content overflow-hidden motion-safe:transition-all motion-safe:duration-300 lg:hidden"
       :class="open ? 'max-h-[42rem] opacity-100' : 'max-h-0 opacity-0'"
+      :aria-hidden="!open"
     >
       <nav
         class="rounded-[1.75rem] border p-4 text-white shadow-xl backdrop-blur-xl transition-[background-color,border-color] duration-300"
         :class="scrolled ? 'border-white/20 bg-black/55' : 'border-white/15 bg-black/35'"
+        aria-label="Móvil"
       >
         <div class="flex flex-col gap-0.5">
           <NuxtLink
             v-for="house in houseLinks"
             :key="house.to"
             :to="house.to"
-            class="rounded-full px-3 py-2.5 text-sm font-medium transition hover:bg-white/10"
+            class="min-h-11 rounded-full px-3 py-2.5 text-sm font-medium transition duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             @click="open = false"
           >
             {{ house.label }}
@@ -154,22 +169,40 @@ onUnmounted(() => {
             v-for="link in secondaryLinks"
             :key="link.to"
             :to="link.to"
-            class="rounded-full px-3 py-2.5 text-sm font-medium transition hover:bg-white/10"
+            class="min-h-11 rounded-full px-3 py-2.5 text-sm font-medium transition duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             @click="open = false"
           >
             {{ link.label }}
           </NuxtLink>
           <NuxtLink
             :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-            class="rounded-full bg-accent px-3 py-2.5 text-center text-sm font-semibold text-white"
+            class="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-3 py-2.5 text-center text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             @click="open = false"
           >
             {{ t('nav.book') }}
           </NuxtLink>
         </div>
-        <div class="mt-3 flex gap-2 border-t border-white/10 px-2 pt-3 text-xs font-semibold uppercase tracking-wider text-white/80">
-          <NuxtLink :to="switchLocalePath('es')" @click="open = false">ES</NuxtLink>
-          <NuxtLink :to="switchLocalePath('en')" @click="open = false">EN</NuxtLink>
+        <div
+          class="mt-3 flex gap-2 border-t border-white/10 px-2 pt-3 text-xs font-semibold uppercase tracking-wider text-white/80"
+          role="group"
+          aria-label="Idioma"
+        >
+          <NuxtLink
+            :to="switchLocalePath('es')"
+            class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            :aria-current="locale === 'es' ? 'true' : undefined"
+            @click="open = false"
+          >
+            ES
+          </NuxtLink>
+          <NuxtLink
+            :to="switchLocalePath('en')"
+            class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            :aria-current="locale === 'en' ? 'true' : undefined"
+            @click="open = false"
+          >
+            EN
+          </NuxtLink>
         </div>
       </nav>
     </div>

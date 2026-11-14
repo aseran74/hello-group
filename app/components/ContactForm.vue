@@ -56,21 +56,21 @@ async function submit() {
     <div class="grid gap-5 md:grid-cols-2">
       <div>
         <label class="label" for="name">{{ t('contact.name') }}</label>
-        <input id="name" v-model="form.name" class="field" required autocomplete="name">
+        <input id="name" v-model="form.name" class="field" required autocomplete="name" name="name">
       </div>
       <div>
         <label class="label" for="email">{{ t('contact.email') }}</label>
-        <input id="email" v-model="form.email" type="email" class="field" required autocomplete="email">
+        <input id="email" v-model="form.email" type="email" class="field" required autocomplete="email" name="email">
       </div>
     </div>
     <div class="grid gap-5 md:grid-cols-2">
       <div>
         <label class="label" for="phone">{{ t('contact.phone') }}</label>
-        <input id="phone" v-model="form.phone" type="tel" class="field" autocomplete="tel">
+        <input id="phone" v-model="form.phone" type="tel" class="field" autocomplete="tel" name="phone">
       </div>
       <div>
         <label class="label" for="house">{{ t('contact.house') }}</label>
-        <select id="house" v-model="form.houseId" class="field">
+        <select id="house" v-model="form.houseId" class="field" name="house">
           <option value="">{{ t('contact.houseAny') }}</option>
           <option v-for="h in houses" :key="h.id" :value="h.id">{{ h.name }} — {{ h.location }}</option>
         </select>
@@ -78,18 +78,26 @@ async function submit() {
     </div>
     <div>
       <label class="label" for="message">{{ t('contact.message') }}</label>
-      <textarea id="message" v-model="form.message" class="field min-h-36" required rows="5" />
+      <textarea id="message" v-model="form.message" class="field min-h-36" required rows="5" name="message" />
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <button
         type="submit"
         class="btn-primary disabled:cursor-not-allowed disabled:opacity-60"
         :disabled="status === 'sending'"
+        :aria-busy="status === 'sending'"
       >
         {{ status === 'sending' ? t('contact.sending') : t('contact.submit') }}
       </button>
-      <p v-if="status === 'success'" class="text-sm font-medium text-ink">{{ t('contact.success') }}</p>
-      <p v-if="status === 'error'" class="text-sm font-medium text-red-700">{{ t('contact.error') }}</p>
+      <div
+        class="min-h-5 text-sm font-medium"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <p v-if="status === 'success'" class="text-ink">{{ t('contact.success') }}</p>
+        <p v-else-if="status === 'error'" class="text-red-700">{{ t('contact.error') }}</p>
+      </div>
     </div>
   </form>
 </template>

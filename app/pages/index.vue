@@ -128,8 +128,10 @@ useSeoMeta({
         >
           <button
             type="button"
-            class="flex w-full items-start justify-between gap-4 py-5 text-left md:items-center"
+            id="home-faq-toggle"
+            class="flex min-h-11 w-full cursor-pointer items-start justify-between gap-4 py-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:items-center"
             :aria-expanded="faqOpen"
+            aria-controls="home-faq-list"
             @click="toggleFaqSection"
           >
             <span class="min-w-0 pr-2">
@@ -141,7 +143,7 @@ useSeoMeta({
               </span>
             </span>
             <span
-              class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/25 text-mist transition md:mt-0"
+              class="mt-0.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 text-mist motion-safe:transition md:mt-0 md:h-8 md:w-8"
               :class="faqOpen && 'rotate-45 border-accent bg-accent text-white'"
               aria-hidden="true"
             >
@@ -151,20 +153,23 @@ useSeoMeta({
 
           <ul
             v-show="faqOpen"
+            id="home-faq-list"
             class="divide-y divide-white/10 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
           >
             <li v-for="item in homeFaqs" :key="item.id" class="px-4">
               <button
                 type="button"
-                class="flex w-full items-start justify-between gap-4 py-4 text-left md:items-center"
+                class="flex min-h-11 w-full cursor-pointer items-start justify-between gap-4 py-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:items-center"
                 :aria-expanded="openFaqId === item.id"
+                :aria-controls="`home-faq-panel-${item.id}`"
+                :id="`home-faq-trigger-${item.id}`"
                 @click="toggleFaq(item.id)"
               >
                 <span class="min-w-0 font-display text-[0.95rem] font-semibold leading-snug tracking-tight text-mist md:text-sm">
                   {{ item.title }}
                 </span>
                 <span
-                  class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center text-accent-soft transition md:mt-0"
+                  class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center text-accent-soft motion-safe:transition md:mt-0 md:h-6 md:w-6"
                   :class="openFaqId === item.id && 'rotate-45'"
                   aria-hidden="true"
                 >
@@ -173,6 +178,9 @@ useSeoMeta({
               </button>
               <div
                 v-show="openFaqId === item.id"
+                :id="`home-faq-panel-${item.id}`"
+                role="region"
+                :aria-labelledby="`home-faq-trigger-${item.id}`"
                 class="pb-4 pr-2 text-sm leading-relaxed text-white/60 whitespace-pre-line md:pr-8"
               >
                 {{ item.message }}

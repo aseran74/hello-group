@@ -32,7 +32,7 @@ const distances = computed(() => getDistances(props.lat, props.lng))
           :href="item.mapsUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="shrink-0 text-[10px] font-semibold text-mute underline-offset-2 hover:text-ink hover:underline"
+          class="inline-flex min-h-9 min-w-9 shrink-0 items-center justify-center rounded-md px-1.5 text-[10px] font-semibold text-mute underline-offset-2 transition duration-200 hover:bg-paper hover:text-ink hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {{ t('homes.route') }}
         </a>
