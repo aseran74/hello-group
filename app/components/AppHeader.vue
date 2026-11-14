@@ -6,7 +6,9 @@ const route = useRoute()
 const { fetchHouses } = useHouses()
 
 const open = ref(false)
+const moreOpen = ref(false)
 const scrolled = ref(false)
+const moreRef = ref<HTMLElement | null>(null)
 
 const { data: houses } = await useAsyncData('nav-houses', () => fetchHouses())
 
@@ -23,8 +25,13 @@ const secondaryLinks = computed(() => [
   { to: localePath('/contacto'), label: t('nav.contact') },
 ])
 
+const secondaryActive = computed(() =>
+  secondaryLinks.value.some((link) => route.path === link.to || route.path.startsWith(`${link.to}/`)),
+)
+
 watch(() => route.fullPath, () => {
   open.value = false
+  moreOpen.value = false
 })
 
 function onScroll() {
@@ -32,18 +39,27 @@ function onScroll() {
 }
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && open.value) open.value = false
+  if (e.key !== 'Escape') return
+  if (moreOpen.value) moreOpen.value = false
+  if (open.value) open.value = false
+}
+
+function onPointerDown(e: PointerEvent) {
+  if (!moreOpen.value || !moreRef.value) return
+  if (!moreRef.value.contains(e.target as Node)) moreOpen.value = false
 }
 
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKeydown)
+  window.addEventListener('pointerdown', onPointerDown)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('pointerdown', onPointerDown)
 })
 </script>
 
@@ -77,14 +93,48 @@ onUnmounted(() => {
 
         <span class="mx-1 hidden h-4 w-px bg-white/20 xl:block" aria-hidden="true" />
 
-        <NuxtLink
-          v-for="link in secondaryLinks"
-          :key="link.to"
-          :to="link.to"
-          class="rounded-full px-2.5 py-2 text-[13px] font-medium text-white/85 transition duration-200 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white xl:px-3"
-        >
-          {{ link.label }}
-        </NuxtLink>
+        <div ref="moreRef" class="relative">
+          <button
+            type="button"
+            class="inline-flex min-h-9 items-center gap-1 rounded-full px-2.5 py-2 text-[13px] font-medium text-white/85 transition duration-200 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white xl:px-3"
+            :class="(moreOpen || secondaryActive) && 'bg-white/10 text-white'"
+            :aria-expanded="moreOpen"
+            aria-haspopup="menu"
+            aria-controls="nav-more-menu"
+            @click="moreOpen = !moreOpen"
+          >
+            {{ t('nav.more') }}
+            <svg
+              class="size-3.5 opacity-80 motion-safe:transition-transform"
+              :class="moreOpen && 'rotate-180'"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div
+            id="nav-more-menu"
+            role="menu"
+            class="absolute left-1/2 top-full z-50 mt-2 min-w-[11rem] -translate-x-1/2 overflow-hidden rounded-2xl border border-white/15 bg-black/75 p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+            :class="moreOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'"
+            :aria-hidden="!moreOpen"
+          >
+            <NuxtLink
+              v-for="link in secondaryLinks"
+              :key="link.to"
+              :to="link.to"
+              role="menuitem"
+              class="flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-medium text-white/85 transition duration-200 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              @click="moreOpen = false"
+            >
+              {{ link.label }}
+            </NuxtLink>
+          </div>
+        </div>
+
         <NuxtLink
           :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
           class="min-h-9 inline-flex items-center rounded-full bg-accent px-4 py-2 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(255,107,53,0.35)] transition duration-200 hover:bg-accent-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
@@ -164,23 +214,28 @@ onUnmounted(() => {
             {{ house.label }}
           </NuxtLink>
         </div>
-        <div class="mt-3 flex flex-col gap-1 border-t border-white/10 pt-3">
-          <NuxtLink
-            v-for="link in secondaryLinks"
-            :key="link.to"
-            :to="link.to"
-            class="min-h-11 rounded-full px-3 py-2.5 text-sm font-medium transition duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            @click="open = false"
-          >
-            {{ link.label }}
-          </NuxtLink>
-          <NuxtLink
-            :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
-            class="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-3 py-2.5 text-center text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            @click="open = false"
-          >
-            {{ t('nav.book') }}
-          </NuxtLink>
+        <div class="mt-3 border-t border-white/10 pt-3">
+          <p class="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-white/45">
+            {{ t('nav.more') }}
+          </p>
+          <div class="flex flex-col gap-1">
+            <NuxtLink
+              v-for="link in secondaryLinks"
+              :key="link.to"
+              :to="link.to"
+              class="min-h-11 rounded-full px-3 py-2.5 text-sm font-medium transition duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              @click="open = false"
+            >
+              {{ link.label }}
+            </NuxtLink>
+            <NuxtLink
+              :to="localePath({ path: '/contacto', query: { reserva: '1' } })"
+              class="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-3 py-2.5 text-center text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              @click="open = false"
+            >
+              {{ t('nav.book') }}
+            </NuxtLink>
+          </div>
         </div>
         <div
           class="mt-3 flex gap-2 border-t border-white/10 px-2 pt-3 text-xs font-semibold uppercase tracking-wider text-white/80"
